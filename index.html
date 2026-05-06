@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KT78 - For Project Understanding</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>KT78 - Project Understanding Hub</h1>
+  </header>
+
+  <div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h3>Projects</h3>
+      <ul>
+        <li onclick="loadPage('pages/KeySpace.html')">📄 KeySpace</li>
+        <li onclick="loadPage('pages/playwrightLocators.html')">📄 Playwright Locators</li>
+        <li onclick="loadPage('pages/orbis_social_presentation.pdf')">📄 Orbis</li>
+      </ul>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+      <iframe id="viewer" src="" frameborder="0"></iframe>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
