@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goodly by Scribble Labs – Complete System Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d0d12;
+  --paper: #f5f2eb;
+  --cream: #ede9df;
+  --teal: #006d6a;
+  --teal-light: #00a09b;
+  --teal-muted: #e0f2f1;
+  --amber: #c97c1a;
+  --amber-light: #fdf3e0;
+  --red: #b5312c;
+  --red-light: #fdecea;
+  --blue: #1a4f8a;
+  --blue-light: #e8f0fb;
+  --border: #d9d3c7;
+  --muted: #6b6560;
+  --code-bg: #1a1a22;
+  --code-fg: #e2e8d0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Syne', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+/* ── SIDEBAR NAV ── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 280px; height: 100vh;
+  background: var(--ink);
+  overflow-y: auto;
+  z-index: 100;
+  padding: 0 0 40px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--teal) transparent;
+}
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 2px; }
+
+.sidebar-brand {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid #1e1e2a;
+}
+.sidebar-brand .logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.sidebar-brand .sub {
+  font-size: 0.65rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+.sidebar-brand .version {
+  display: inline-block;
+  margin-top: 8px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav-section-title {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: #444;
+  padding: 20px 24px 6px;
+}
+.nav-item {
+  display: block;
+  padding: 7px 24px;
+  font-size: 0.78rem;
+  color: #999;
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover, .nav-item.active {
+  color: #fff;
+  border-left-color: var(--teal);
+  background: rgba(0,109,106,0.1);
+}
+.nav-item.sub { padding-left: 36px; font-size: 0.72rem; color: #666; }
+.nav-item.sub:hover { color: var(--teal-light); }
+
+/* ── MAIN CONTENT ── */
+#main {
+  margin-left: 280px;
+  min-height: 100vh;
+}
+
+/* ── COVER ── */
+#cover {
+  background: var(--ink);
+  color: #fff;
+  padding: 100px 80px 80px;
+  position: relative;
+  overflow: hidden;
+}
+#cover::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(0,160,155,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+#cover::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 200px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(201,124,26,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.cover-eyebrow {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--teal-light);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 20px;
+}
+.cover-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3.8rem;
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  max-width: 700px;
+  margin-bottom: 16px;
+}
+.cover-title em {
+  color: var(--teal-light);
+  font-style: normal;
+}
+.cover-subtitle {
+  font-size: 1rem;
+  color: #888;
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+.cover-meta {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.cover-meta-item label {
+  display: block;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #555;
+  margin-bottom: 4px;
+}
+.cover-meta-item span {
+  font-size: 0.82rem;
+  color: #ccc;
+  font-family: 'JetBrains Mono', monospace;
+}
+.cover-tags {
+  margin-top: 40px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tag {
+  font-size: 0.62rem;
+  padding: 4px 12px;
+  border: 1px solid #2a2a35;
+  border-radius: 2px;
+  color: #666;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── PAGE SECTIONS ── */
+.page-section {
+  padding: 64px 80px;
+  border-bottom: 1px solid var(--border);
+}
+.page-section:last-child { border-bottom: none; }
+.page-section.alt { background: var(--cream); }
+.page-section.dark { background: #0d0d12; color: #ccc; }
+
+/* ── SECTION HEADERS ── */
+.section-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.6rem;
+  letter-spacing: -1px;
+  line-height: 1.12;
+  margin-bottom: 20px;
+  color: var(--ink);
+}
+h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin: 48px 0 16px;
+  color: var(--ink);
+  padding-top: 16px;
+}
+h2:first-of-type { margin-top: 0; }
+h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 32px 0 10px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 24px 0 8px;
+  color: var(--teal);
+}
+p { margin-bottom: 16px; font-size: 0.92rem; color: #2a2a2a; line-height: 1.8; }
+.dark p { color: #aaa; }
+
+/* ── CALLOUT BOXES ── */
+.callout {
+  border-left: 3px solid;
+  padding: 16px 20px;
+  margin: 24px 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.callout.info { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+.callout.warn { border-color: var(--amber); background: var(--amber-light); color: #7a4a00; }
+.callout.danger { border-color: var(--red); background: var(--red-light); color: var(--red); }
+.callout.success { border-color: var(--teal); background: var(--teal-muted); color: var(--teal); }
+.callout strong { font-weight: 700; }
+
+/* ── CODE BLOCKS ── */
+pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  border-radius: 6px;
+  padding: 24px 28px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  margin: 20px 0;
+  border: 1px solid #2a2a35;
+}
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82em;
+  background: #1e1e2a;
+  color: #a8d8a8;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+pre code { background: none; color: inherit; padding: 0; font-size: 1em; }
+.kw { color: #c792ea; }
+.str { color: #c3e88d; }
+.num { color: #f78c6c; }
+.cmt { color: #546e7a; }
+.key { color: #80cbc4; }
+
+/* ── TABLES ── */
+.table-wrap { overflow-x: auto; margin: 20px 0; }
+table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+thead tr { background: var(--ink); color: #fff; }
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:nth-child(even) { background: var(--cream); }
+tbody td { padding: 10px 16px; color: #2a2a2a; vertical-align: top; line-height: 1.5; }
+.dark thead tr { background: #1a1a22; }
+.dark tbody tr { border-color: #2a2a35; }
+.dark tbody tr:nth-child(even) { background: #121218; }
+.dark tbody td { color: #aaa; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge-teal { background: var(--teal-muted); color: var(--teal); }
+.badge-red { background: var(--red-light); color: var(--red); }
+.badge-amber { background: var(--amber-light); color: var(--amber); }
+.badge-blue { background: var(--blue-light); color: var(--blue); }
+.badge-ink { background: #eee; color: #333; }
+
+/* ── FLOW STEPS ── */
+.flow-steps { margin: 24px 0; }
+.flow-step {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 2px;
+  align-items: flex-start;
+}
+.flow-step-num {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  margin-top: 2px;
+}
+.flow-step-content {
+  flex: 1;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  margin-bottom: 2px;
+  background: #fff;
+}
+.flow-step-connector {
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+  color: var(--teal);
+  font-size: 1rem;
+}
+
+/* ── GRID LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 20px 0; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 20px 0; }
+.card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px 24px;
+  background: #fff;
+}
+.card.dark-card {
+  background: #131318;
+  border-color: #2a2a35;
+  color: #ccc;
+}
+.card h4 { margin-top: 0; }
+.card ul { font-size: 0.83rem; color: #444; padding-left: 18px; }
+.card ul li { margin-bottom: 4px; }
+.dark-card ul { color: #888; }
+
+/* ── MERMAID (rendered as styled diagram) ── */
+.diagram-box {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 28px;
+  background: #fff;
+  margin: 20px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: #333;
+}
+.diagram-box .diagram-title {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--teal);
+  margin-bottom: 16px;
+  font-family: 'Syne', sans-serif;
+}
+
+/* ── ARCH DIAGRAM ── */
+.arch-diagram { margin: 24px 0; }
+.arch-layer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.arch-label {
+  width: 160px;
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-align: right;
+}
+.arch-bar {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.arch-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 2px;
+  font-size: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+}
+.arch-arrow { text-align: center; color: #aaa; font-size: 1.2rem; padding-left: 176px; }
+
+/* ── STATUS INDICATOR ── */
+.status-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; font-size: 0.83rem; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-green { background: #22c55e; }
+.dot-yellow { background: #eab308; }
+.dot-red { background: #ef4444; }
+.dot-blue { background: #3b82f6; }
+.dot-purple { background: #a855f7; }
+
+/* ── SEPARATOR ── */
+.sep { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+hr.thick { border-top: 3px solid var(--ink); margin: 48px 0; }
+
+/* ── SCHEMA FIELD ── */
+.schema-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.78rem; }
+.schema-table th { 
+  background: #f0ede6; 
+  padding: 8px 12px; 
+  text-align: left;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--border);
+}
+.schema-table td { 
+  padding: 8px 12px; 
+  border-bottom: 1px solid var(--border); 
+  vertical-align: top;
+}
+.schema-table tr:last-child td { border-bottom: none; }
+.field-type { font-family: 'JetBrains Mono', monospace; color: var(--blue); font-size: 0.75em; }
+.field-phi { color: var(--red); font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; }
+.field-req { color: var(--teal); font-size: 0.65em; }
+
+/* ── TOC ── */
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 24px 0; }
+.toc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 0.82rem;
+  transition: all 0.15s;
+  background: #fff;
+}
+.toc-item:hover { border-color: var(--teal); color: var(--teal); }
+.toc-num { font-family: 'JetBrains Mono', monospace; color: var(--teal); font-size: 0.7rem; width: 20px; flex-shrink: 0; }
+
+/* ── ROLE MATRIX ── */
+.role-matrix table th, .role-matrix table td { text-align: center; }
+.role-matrix table td:first-child { text-align: left; }
+.check { color: #22c55e; font-size: 1rem; }
+.cross { color: #ef4444; font-size: 1rem; }
+.partial { color: #eab308; font-size: 1rem; }
+
+/* ── GLOSSARY ── */
+.glossary-item { 
+  display: grid; 
+  grid-template-columns: 140px 1fr; 
+  gap: 16px; 
+  padding: 12px 0; 
+  border-bottom: 1px solid var(--border); 
+  font-size: 0.85rem;
+}
+.glossary-term { font-family: 'JetBrains Mono', monospace; color: var(--teal); font-weight: 500; }
+
+@media print {
+  #sidebar { display: none; }
+  #main { margin-left: 0; }
+  .page-section { break-inside: avoid; }
+}
+@media (max-width: 1100px) {
+  #sidebar { width: 240px; }
+  #main { margin-left: 240px; }
+  #cover, .page-section { padding-left: 40px; padding-right: 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<nav id="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo">Goodly</div>
+    <div class="sub">by Scribble Labs</div>
+    <div class="version">v1.0 · System Docs</div>
+  </div>
+
+  <div class="nav-section-title">Overview</div>
+  <a href="#cover" class="nav-item">Cover & Metadata</a>
+  <a href="#toc" class="nav-item">Table of Contents</a>
+  <a href="#s1" class="nav-item">1. Product Overview</a>
+
+  <div class="nav-section-title">Architecture</div>
+  <a href="#s2" class="nav-item">2. System Architecture</a>
+  <a href="#s2-pipeline" class="nav-item sub">→ Data Pipeline</a>
+  <a href="#s2-sync" class="nav-item sub">→ Offline / Online Sync</a>
+
+  <div class="nav-section-title">User Flows</div>
+  <a href="#s3" class="nav-item">3. Cross-Platform Flows</a>
+  <a href="#s3-major" class="nav-item sub">→ Major Flows</a>
+  <a href="#s3-minor" class="nav-item sub">→ Minor Flows</a>
+
+  <div class="nav-section-title">Platform Deep Dives</div>
+  <a href="#s4" class="nav-item">4. Web Platform</a>
+  <a href="#s4-dashboard" class="nav-item sub">→ Dashboard</a>
+  <a href="#s4-visits" class="nav-item sub">→ Visit Management</a>
+  <a href="#s4-doc" class="nav-item sub">→ Documentation Review</a>
+  <a href="#s4-dqc" class="nav-item sub">→ Data Quality Console</a>
+  <a href="#s4-roles" class="nav-item sub">→ User & Role Mgmt</a>
+  <a href="#s4-integrations" class="nav-item sub">→ Integration Settings</a>
+  <a href="#s4-audit" class="nav-item sub">→ Audit Logs</a>
+  <a href="#s5" class="nav-item">5. Mobile Platform</a>
+
+  <div class="nav-section-title">Data & AI</div>
+  <a href="#s6" class="nav-item">6. Data Models</a>
+  <a href="#s7" class="nav-item">7. AI / NLP Pipeline</a>
+  <a href="#s8" class="nav-item">8. Validation Engine</a>
+
+  <div class="nav-section-title">QA & Compliance</div>
+  <a href="#s9" class="nav-item">9. Failure Modes</a>
+  <a href="#s10" class="nav-item">10. QA & Test Strategy</a>
+  <a href="#s11" class="nav-item">11. Security & Compliance</a>
+  <a href="#s12" class="nav-item">12. Deployment Notes</a>
+  <a href="#s13" class="nav-item">13. Glossary</a>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<div id="main">
+
+<!-- COVER -->
+<section id="cover">
+  <div class="cover-eyebrow">Scribble Labs · Internal Engineering Documentation</div>
+  <div class="cover-title"><em>Goodly</em> – Complete System Documentation<br>Web + Mobile</div>
+  <div class="cover-subtitle">Ambient clinical intelligence platform — capturing voice, transforming conversation, and delivering regulatory-compliant clinical artifacts into EHR and billing ecosystems.</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><label>Document Version</label><span>1.0.0</span></div>
+    <div class="cover-meta-item"><label>Status</label><span>FINAL DRAFT</span></div>
+    <div class="cover-meta-item"><label>Audience</label><span>Eng · QA · PM · Compliance</span></div>
+    <div class="cover-meta-item"><label>Platform</label><span>iOS · Android · Web</span></div>
+  </div>
+  <div class="cover-tags">
+    <span class="tag">HIPAA</span>
+    <span class="tag">FHIR</span>
+    <span class="tag">OASIS</span>
+    <span class="tag">SOAP</span>
+    <span class="tag">NLP</span>
+    <span class="tag">ASR</span>
+    <span class="tag">NDC</span>
+    <span class="tag">NCPDP</span>
+    <span class="tag">EHR</span>
+    <span class="tag">PHI</span>
+  </div>
+</section>
+
+<!-- TOC -->
+<section id="toc" class="page-section alt">
+  <div class="section-number">Navigation</div>
+  <h1>Table of Contents</h1>
+  <p>This document covers all major and minor system flows, architecture, data models, AI processing, validation, failure modes, QA strategy, security controls, deployment guidance, and glossary.</p>
+  <div class="toc-grid">
+    <a href="#s1" class="toc-item"><span class="toc-num">01</span> Product Overview & Core Value</a>
+    <a href="#s2" class="toc-item"><span class="toc-num">02</span> System Architecture & Data Flow</a>
+    <a href="#s3" class="toc-item"><span class="toc-num">03</span> Cross-Platform User Flows</a>
+    <a href="#s4" class="toc-item"><span class="toc-num">04</span> Web Platform Deep Dive</a>
+    <a href="#s5" class="toc-item"><span class="toc-num">05</span> Mobile Platform Deep Dive</a>
+    <a href="#s6" class="toc-item"><span class="toc-num">06</span> Data Models & Relationships</a>
+    <a href="#s7" class="toc-item"><span class="toc-num">07</span> AI Processing & Clinical NLP</a>
+    <a href="#s8" class="toc-item"><span class="toc-num">08</span> Validation & Rules Engine</a>
+    <a href="#s9" class="toc-item"><span class="toc-num">09</span> Failure Modes & Recovery</a>
+    <a href="#s10" class="toc-item"><span class="toc-num">10</span> QA & Test Strategy</a>
+    <a href="#s11" class="toc-item"><span class="toc-num">11</span> Security & Compliance</a>
+    <a href="#s12" class="toc-item"><span class="toc-num">12</span> Deployment & Implementation</a>
+    <a href="#s13" class="toc-item"><span class="toc-num">13</span> Glossary & Acronyms</a>
+  </div>
+</section>
+
+<!-- ===== S1: PRODUCT OVERVIEW ===== -->
+<section id="s1" class="page-section">
+  <div class="section-number">Section 01</div>
+  <h1>Product Overview & Core Value Proposition</h1>
+
+  <h2>1.1 Elevator Pitch</h2>
+  <p><strong>Goodly</strong> (by Scribble Labs) is an <em>ambient clinical intelligence platform</em> that listens to clinical encounters in real time, extracts structured medical information from natural conversation, and automatically generates regulatory-compliant documentation — eliminating manual charting for home-health and outpatient clinicians.</p>
+
+  <div class="callout success">
+    <strong>Core Promise:</strong> A clinician speaks naturally during a patient visit. Goodly listens, understands, structures, validates, and delivers a complete OASIS/SOAP note — ready for EHR submission — with zero manual data entry.
+  </div>
+
+  <h2>1.2 Strategic Differentiation</h2>
+  <div class="two-col">
+    <div class="card">
+      <h4>🎙️ Ambient Capture (Not Push-to-Talk)</h4>
+      <p style="font-size:0.82rem;color:#444;">Continuous passive recording means clinicians never need to pause, tap, or dictate. The system works in the background while the clinician focuses on the patient.</p>
+    </div>
+    <div class="card">
+      <h4>🧠 Clinical-Grade NLP</h4>
+      <p style="font-size:0.82rem;color:#444;">Entity extraction tuned for medical vocabulary: medications, NDC codes, NCPDP routing numbers, vital signs, OASIS M-codes, ICD-10 diagnoses.</p>
+    </div>
+    <div class="card">
+      <h4>⚙️ Configurable Structuring</h4>
+      <p style="font-size:0.82rem;color:#444;">Outputs are mapped to OASIS, SOAP, or custom templates per agency configuration — not a one-size-fits-all transcript dump.</p>
+    </div>
+    <div class="card">
+      <h4>🔄 Bidirectional EHR Integration</h4>
+      <p style="font-size:0.82rem;color:#444;">FHIR-compatible payload generation with real-time validation against EHR field constraints before submission — reducing rejection rates.</p>
+    </div>
+  </div>
+
+  <h2>1.3 Target Users</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Persona</th><th>Primary Platform</th><th>Core Job</th><th>Critical Needs</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Field Clinician</strong> (RN, PT, OT, SLP)</td><td>Mobile</td><td>Visit capture, quick review, submit</td><td>Low friction, offline mode, accurate drug recognition</td></tr>
+        <tr><td><strong>Clinical Supervisor</strong></td><td>Web + Mobile</td><td>Review flagged documentation, QA audits</td><td>Side-by-side transcript view, batch correction tools</td></tr>
+        <tr><td><strong>Agency Administrator</strong></td><td>Web</td><td>Schedule visits, manage users, configure integrations</td><td>Role management, mapping config, analytics</td></tr>
+        <tr><td><strong>Compliance Auditor</strong></td><td>Web</td><td>Investigate audit trails, verify data accuracy</td><td>Immutable logs, version history, export</td></tr>
+        <tr><td><strong>Billing Analyst</strong></td><td>Web</td><td>Validate documentation before claim submission</td><td>NDC/NCPDP validity, required field completeness</td></tr>
+        <tr><td><strong>IT / Integration Engineer</strong></td><td>Web Admin</td><td>Configure EHR endpoints, troubleshoot sync</td><td>API key management, webhook logs, error traces</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== S2: ARCHITECTURE ===== -->
+<section id="s2" class="page-section alt">
+  <div class="section-number">Section 02</div>
+  <h1>Complete System Architecture</h1>
+
+  <h2>2.1 Layered System Model</h2>
+  <div class="arch-diagram">
+    <div class="arch-layer">
+      <div class="arch-label">A · Edge Capture</div>
+      <div class="arch-bar" style="background:#e8f5e9;">
+        <span class="arch-chip" style="background:#c8e6c9;color:#1b5e20;">Mobile Microphone</span>
+        <span class="arch-chip" style="background:#c8e6c9;color:#1b5e20;">Structured UI Inputs</span>
+        <span class="arch-chip" style="background:#c8e6c9;color:#1b5e20;">Event Timestamps</span>
+        <span class="arch-chip" style="background:#c8e6c9;color:#1b5e20;">GPS / Visit Context</span>
+      </div>
+    </div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-layer">
+      <div class="arch-label">B · Preprocessing</div>
+      <div class="arch-bar" style="background:#e3f2fd;">
+        <span class="arch-chip" style="background:#bbdefb;color:#0d47a1;">Audio Chunking (2–10s)</span>
+        <span class="arch-chip" style="background:#bbdefb;color:#0d47a1;">Noise Suppression</span>
+        <span class="arch-chip" style="background:#bbdefb;color:#0d47a1;">Speaker Diarization</span>
+        <span class="arch-chip" style="background:#bbdefb;color:#0d47a1;">Gain Normalization</span>
+      </div>
+    </div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-layer">
+      <div class="arch-label">C · AI Processing</div>
+      <div class="arch-bar" style="background:#f3e5f5;">
+        <span class="arch-chip" style="background:#e1bee7;color:#4a148c;">ASR Engine</span>
+        <span class="arch-chip" style="background:#e1bee7;color:#4a148c;">Clinical NLP</span>
+        <span class="arch-chip" style="background:#e1bee7;color:#4a148c;">Entity Extraction</span>
+        <span class="arch-chip" style="background:#e1bee7;color:#4a148c;">Structuring Engine</span>
+        <span class="arch-chip" style="background:#e1bee7;color:#4a148c;">Confidence Scorer</span>
+      </div>
+    </div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-layer">
+      <div class="arch-label">D · Validation</div>
+      <div class="arch-bar" style="background:#fff8e1;">
+        <span class="arch-chip" style="background:#ffecb3;color:#e65100;">Field Rules Engine</span>
+        <span class="arch-chip" style="background:#ffecb3;color:#e65100;">Business Logic</span>
+        <span class="arch-chip" style="background:#ffecb3;color:#e65100;">NDC/NCPDP Validator</span>
+        <span class="arch-chip" style="background:#ffecb3;color:#e65100;">Cross-Field Checks</span>
+      </div>
+    </div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-layer">
+      <div class="arch-label">E · Storage</div>
+      <div class="arch-bar" style="background:#e8eaf6;">
+        <span class="arch-chip" style="background:#c5cae9;color:#1a237e;">Local Cache (SQLite)</span>
+        <span class="arch-chip" style="background:#c5cae9;color:#1a237e;">Cloud PHI Store (Encrypted)</span>
+        <span class="arch-chip" style="background:#c5cae9;color:#1a237e;">Audit Log DB</span>
+        <span class="arch-chip" style="background:#c5cae9;color:#1a237e;">Media Blob Store</span>
+      </div>
+    </div>
+    <div class="arch-arrow">↓</div>
+    <div class="arch-layer">
+      <div class="arch-label">F · Integration</div>
+      <div class="arch-bar" style="background:#fce4ec;">
+        <span class="arch-chip" style="background:#f8bbd0;color:#880e4f;">EHR API (FHIR/HL7)</span>
+        <span class="arch-chip" style="background:#f8bbd0;color:#880e4f;">Billing System</span>
+        <span class="arch-chip" style="background:#f8bbd0;color:#880e4f;">Analytics Pipeline</span>
+        <span class="arch-chip" style="background:#f8bbd0;color:#880e4f;">Webhook Dispatcher</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+  <h2 id="s2-pipeline">2.2 Data Pipeline Detail</h2>
+  <p>The following table defines every transformation step from raw microphone audio to a validated EHR-ready payload:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Stage</th><th>Input</th><th>Transform</th><th>Output</th><th>Failure Mode</th></tr></thead>
+      <tbody>
+        <tr><td>1. Raw Capture</td><td>PCM 16-bit 16kHz mono stream</td><td>Buffer + chunk</td><td>2–10s audio segments</td><td>Mic permission denied, silent clip</td></tr>
+        <tr><td>2. Preprocessing</td><td>Raw audio segment</td><td>RNNoise suppression, VAD gating</td><td>Clean audio segment</td><td>Over-suppression drops speech</td></tr>
+        <tr><td>3. ASR</td><td>Clean audio</td><td>Medical LM + acoustic model</td><td>Partial + final transcripts</td><td>Hallucination, OOV drug names</td></tr>
+        <tr><td>4. NLP Entity Extraction</td><td>Raw transcript</td><td>NER + relation model</td><td>Annotated entity JSON</td><td>Missed entity, wrong class</td></tr>
+        <tr><td>5. Structuring</td><td>Entity JSON + template config</td><td>Field mapper + inference</td><td>Structured clinical record draft</td><td>Unmapped field, template mismatch</td></tr>
+        <tr><td>6. Validation</td><td>Structured draft</td><td>Rules engine pass</td><td>Validation report + annotated draft</td><td>Regex fail on NDC, missing required field</td></tr>
+        <tr><td>7. Clinician Review</td><td>Annotated draft</td><td>Human edit (mobile/web)</td><td>Reviewed + signed record</td><td>Clinician skips required fields</td></tr>
+        <tr><td>8. Sync + Submission</td><td>Signed record</td><td>FHIR mapping + HTTP POST</td><td>EHR acknowledgement / claim</td><td>Network timeout, EHR rejection</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="s2-sync">2.3 Offline / Online Sync Mechanics</h2>
+  <div class="two-col">
+    <div class="card">
+      <h4>Offline Mode (Mobile)</h4>
+      <ul>
+        <li>All capture happens on-device into local SQLite queue</li>
+        <li>Audio blobs stored in encrypted local FS</li>
+        <li>ASR can run on-device (compressed model) or queue for cloud</li>
+        <li>SyncQueue table stores pending operations with retry counters</li>
+        <li>UI shows "Offline · N visits pending sync" banner</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Sync Strategy</h4>
+      <ul>
+        <li>Optimistic local writes; conflict resolution on sync</li>
+        <li>Last-write-wins for non-PHI metadata fields</li>
+        <li>Clinician manual resolution for clinical field conflicts</li>
+        <li>Exponential backoff: 5s → 30s → 2m → 10m → 1h</li>
+        <li>Max retries: 7; after that, manual re-trigger required</li>
+        <li>All sync events logged in AuditEvent table</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <strong>Conflict Resolution Rule:</strong> If two edits to the same structured field arrive from different devices within the same sync window, the system presents a diff to the clinician for manual resolution. Auto-merge is never applied to PHI clinical fields.
+  </div>
+</section>
+
+<!-- ===== S3: USER FLOWS ===== -->
+<section id="s3" class="page-section">
+  <div class="section-number">Section 03</div>
+  <h1>Cross-Platform User Flows</h1>
+
+  <h2 id="s3-major">3.1 Major Flows</h2>
+
+  <h3>Flow 1 — Scheduling a Visit (Web + Mobile Sync)</h3>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-content"><strong>[Web · Admin]</strong> Admin opens Visit Management → clicks "New Visit". Selects patient from patient lookup (search by name/MRN). Picks clinician from active roster. Sets visit type (SOC, ROC, Follow-up, Discharge). Assigns scheduled date/time window. Saves draft.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-content"><strong>[Server]</strong> Visit record created in DB with status <code>SCHEDULED</code>. Push notification enqueued for assigned clinician. Visit appears in clinician's queue immediately if online, or on next sync if offline.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-content"><strong>[Mobile · Clinician]</strong> Clinician opens app → Today's Visits list refreshes. New visit appears with patient name, visit type, and scheduled window. Clinician can tap to pre-load patient context (demographics, prior visit summary, active medications).</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">4</div>
+      <div class="flow-step-content"><strong>[Mobile]</strong> If offline when scheduled: visit data cached locally on next successful sync. Banner shows "X new visits synced" on reconnection.</div>
+    </div>
+  </div>
+
+  <h3>Flow 2 — Executing a Live Visit (Mobile)</h3>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-content"><strong>Clinician taps visit → "Start Visit".</strong> App requests microphone permission if not granted. Records GPS-stamped visit start event. Visit status → <code>IN_PROGRESS</code>.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-content"><strong>Recording begins.</strong> Audio stream chunked every 5 seconds. Preprocessing applied per chunk. ASR processes in near-real-time (partial results appear). Live transcript scrolls on screen.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-content"><strong>Real-time entity tagging.</strong> Detected medications highlighted in teal, vitals in amber, symptoms underlined. Clinician can tap highlighted items to confirm or correct. Manual structured entries also available via form overlay.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">4</div>
+      <div class="flow-step-content"><strong>Interruption handling.</strong> Incoming call → app pauses recording, stores buffer. On return: prompt "Resume recording?" or "Visit was interrupted – continue from last position". Interruption timestamps logged.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">5</div>
+      <div class="flow-step-content"><strong>Clinician taps "End Visit".</strong> GPS-stamped end event recorded. Final ASR pass over full audio. Draft generated and displayed. Visit status → <code>DRAFT</code>.</div>
+    </div>
+  </div>
+
+  <h3>Flow 3 — Reviewing & Editing Documentation</h3>
+  <div class="two-col">
+    <div class="card">
+      <h4>📱 Mobile Quick-Edit</h4>
+      <ul>
+        <li>Structured field list (scrollable)</li>
+        <li>Tap field → inline text/picker edit</li>
+        <li>Red border on validation errors</li>
+        <li>Swipe-right on field → accept AI suggestion</li>
+        <li>"Review complete" button enabled only after required fields satisfied</li>
+        <li>Auto-save every 30 seconds</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>🌐 Web Advanced Editor</h4>
+      <ul>
+        <li>Left panel: Raw transcript with speaker labels</li>
+        <li>Right panel: Structured clinical form</li>
+        <li>Hover transcript segment → highlights corresponding field</li>
+        <li>Inline editing with validation on blur</li>
+        <li>Version compare: current vs previous save</li>
+        <li>Comment threads on individual fields</li>
+        <li>Supervisor override capability with reason code</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Flow 4 — Finalizing and Syncing to EHR / Billing</h3>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-content"><strong>Clinician clicks "Submit for Review" (mobile) or "Finalize" (web).</strong> Final validation pass runs. Any blocking errors shown (required fields, invalid NDC). Non-blocking warnings listed but do not prevent submission.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-content"><strong>Supervisor review (if workflow configured).</strong> Supervisor notified via push/email. Reviews in web editor. Approves or sends back with comments. Status → <code>APPROVED</code> or <code>REVISION_REQUIRED</code>.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-content"><strong>EHR sync initiated.</strong> FHIR resource bundle constructed. POST to configured EHR endpoint. Response parsed: success → status <code>SYNCED</code>. Rejection → error code stored, notification sent, status <code>SYNC_FAILED</code>.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">4</div>
+      <div class="flow-step-content"><strong>Billing payload generated</strong> (if billing integration enabled). CMS-1500 / UB-04 fields populated from visit record. Submitted to billing endpoint. ERA response reconciled and linked to visit record.</div>
+    </div>
+  </div>
+
+  <h3>Flow 5 — Admin Batch Audit & Correction (Web)</h3>
+  <p>Admins and supervisors managing high-volume operations require bulk tooling on the web platform.</p>
+  <div class="flow-steps">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <div class="flow-step-content">Admin opens Data Quality Console. Applies filters: date range, clinician, error type (e.g., "Invalid NDC"), status. Grid shows matching visits with error summaries.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <div class="flow-step-content">Selects multiple visits → "Batch Correct" or opens individual visit for inline fix. For known systematic errors (e.g., all NCPDP codes zero), uses bulk find-replace tool with confirmation dialog.</div>
+    </div>
+    <div class="flow-step-connector">↓</div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <div class="flow-step-content">Each correction auto-logs: who changed, what changed, from/to values, timestamp. Corrections trigger re-validation. On pass: status updated; on fail: new error type recorded.</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+  <h2 id="s3-minor">3.2 Minor Flows</h2>
+
+  <h3>Flow 6 — User Role Management & Permission Changes</h3>
+  <p>Performed by Admin in the web User Management module. Admin selects user → "Edit Role" → selects new role from dropdown (Clinician, Supervisor, Admin, Auditor, Billing Analyst) → confirms. Role change takes effect on next user session. Downgrade from Admin requires second admin confirmation. All role changes logged in AuditEvent.</p>
+
+  <h3>Flow 7 — Mapping Configuration (NDC, NCPDP, Custom Fields)</h3>
+  <p>Admin navigates to Integration Settings → Mapping Tables. Can import CSV mapping files (drug name → NDC, pharmacy chain → NCPDP). System validates format on upload — shows row-level errors. Published mappings apply to all new visit validations immediately. Existing visits must be re-validated via "Re-validate Affected Visits" action.</p>
+
+  <h3>Flow 8 — Exporting Reports / Analytics</h3>
+  <p>From the Dashboard or Visit Management grid: click "Export" → choose format (CSV, XLSX, PDF). Select date range and columns. Large exports (>10k rows) queued as background jobs; user notified via email with download link. All export events logged (who, what, when, IP address) for HIPAA audit purposes.</p>
+
+  <h3>Flow 9 — Handling Sync Conflicts (Manual Resolution)</h3>
+  <p>When a conflict is detected (concurrent edits from mobile + web): system places visit in <code>CONFLICT</code> state. Notifies both users. Web shows side-by-side diff (version A from mobile, version B from web). Clinician selects winning value per field or manually types merged value. Resolution event logged. Visit re-validated and status returns to <code>DRAFT</code>.</p>
+
+  <h3>Flow 10 — Multi-Visit Day Batch Review</h3>
+  <p>At end of shift, clinician opens "Day Summary" view on mobile: all visits listed with completion percentage and error count. Bulk-accept AI suggestions for low-confidence fields. Submit all approved visits in a single tap. Visits with unresolved errors highlighted — cannot bulk-submit until resolved.</p>
+
+  <h3>Flow 11 — Manual Data Override & Re-Validation</h3>
+  <p>Supervisor or Admin can apply a "Manual Override" to any field on a finalized visit. Override requires: new value, reason code (from standardized list), and free-text justification. Override creates new FieldVersion record. Visit re-validated against rules with override values. Overrides are immutable — cannot be deleted, only superseded by a newer override.</p>
+
+  <h3>Flow 12 — Audit Log Exploration</h3>
+  <p>Compliance Auditor opens Audit & Compliance Logs. Filters by: event type (login, edit, export, override, sync), user, patient ID, date range. Each entry shows: timestamp, actor, action, target entity ID, IP address, change summary (field before/after). Logs are read-only — no edit or delete capability. Export to CSV or PDF available, itself logged as an export event.</p>
+</section>
+
+<!-- ===== S4: WEB PLATFORM ===== -->
+<section id="s4" class="page-section alt">
+  <div class="section-number">Section 04</div>
+  <h1>Web Platform Deep Dive</h1>
+
+  <h2 id="s4-dashboard">4.1 Dashboard</h2>
+  <p>The dashboard is the primary entry point for admins, supervisors, and analysts. It provides at-a-glance KPIs and drill-down capability.</p>
+
+  <h4>KPI Cards (Top Row)</h4>
+  <div class="three-col">
+    <div class="card"><h4>Visits Today</h4><p style="font-size:0.82rem;color:#444;">Count with status breakdown: completed, in-progress, not-started. Clickable → filters Visit Grid.</p></div>
+    <div class="card"><h4>Documentation Rate</h4><p style="font-size:0.82rem;color:#444;">% of visits with SYNCED status vs total. Trend sparkline (7-day). Red if below agency threshold.</p></div>
+    <div class="card"><h4>Validation Errors</h4><p style="font-size:0.82rem;color:#444;">Count of visits with open validation errors. Breakdown by error type. Clickable → Data Quality Console.</p></div>
+  </div>
+
+  <h4>Filter Controls</h4>
+  <div class="callout info">
+    Filters: Date range (presets: Today, This Week, This Month, Custom), Clinician (multi-select), Region/Branch (if multi-site), Visit Type, Status. All filters are persisted per user session.
+  </div>
+
+  <h4>Charts</h4>
+  <ul style="font-size:0.85rem;color:#333;padding-left:20px;margin-bottom:16px;">
+    <li>Bar chart: visits completed per day (last 14 days)</li>
+    <li>Donut: documentation status distribution</li>
+    <li>Line chart: average AI confidence score trend</li>
+    <li>Heat map: error rate by clinician (anonymizable for privacy mode)</li>
+  </ul>
+
+  <h2 id="s4-visits">4.2 Visit Management Grid</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Column</th><th>Content</th><th>Sortable</th><th>Filterable</th></tr></thead>
+      <tbody>
+        <tr><td>Patient Name</td><td>Last, First + MRN badge</td><td>✓</td><td>Search</td></tr>
+        <tr><td>Clinician</td><td>Name + avatar initials</td><td>✓</td><td>Multi-select</td></tr>
+        <tr><td>Visit Date</td><td>Date + time (local TZ)</td><td>✓</td><td>Date range</td></tr>
+        <tr><td>Visit Type</td><td>SOC / ROC / F/U / D/C badge</td><td>✓</td><td>Multi-select</td></tr>
+        <tr><td>Status</td><td>Color-coded badge (see UI States table)</td><td>✓</td><td>Multi-select</td></tr>
+        <tr><td>Completion %</td><td>Progress bar + percentage</td><td>✓</td><td>Range slider</td></tr>
+        <tr><td>Errors</td><td>Red count badge (0 = hidden)</td><td>✓</td><td>Has errors / no errors</td></tr>
+        <tr><td>Actions</td><td>View · Edit · Reassign · Archive</td><td>–</td><td>–</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Pagination: 25/50/100 rows per page. Virtual scroll enabled for >1000 visits. Bulk actions: export selected, reassign clinician, batch re-validate, archive.</p>
+
+  <h2 id="s4-doc">4.3 Documentation Review Panel</h2>
+  <p>Accessed by clicking any visit row. Full-screen panel with three zones:</p>
+  <div class="two-col">
+    <div class="card">
+      <h4>Left: Raw Transcript View</h4>
+      <ul>
+        <li>Full verbatim transcript with speaker labels (Clinician, Patient, Other)</li>
+        <li>Timestamps every 30 seconds</li>
+        <li>Color highlights: medication mention (teal), vital (amber), symptom (purple), date/time (grey)</li>
+        <li>Click any span → jumps to corresponding structured field on right</li>
+        <li>Audio playback controls (if audio retained per policy)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Right: Structured Output Form</h4>
+      <ul>
+        <li>Grouped by clinical section (Vitals, Medications, Diagnoses, Goals, etc.)</li>
+        <li>Inline editable fields; validation on blur</li>
+        <li>Error icon + tooltip on invalid fields</li>
+        <li>AI confidence indicator on each field (shown as subtle color)</li>
+        <li>Field-level comment thread (@ mention users)</li>
+        <li>"Accept AI suggestion" button for fields with suggestions</li>
+      </ul>
+    </div>
+  </div>
+  <h4>Version Comparison</h4>
+  <p>Toggle "Compare Versions" → split view: left shows previous version, right shows current. Changed fields highlighted in yellow. Metadata shows editor name, timestamp, and change reason.</p>
+
+  <h2 id="s4-dqc">4.4 Data Quality Console (Critical Module)</h2>
+  <p>This module surfaces systemic data quality issues — the most operationally critical module for billing and compliance teams.</p>
+
+  <h4>Issue Categories Tracked</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Issue Type</th><th>Description</th><th>Example</th><th>Blocking?</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-red">CRITICAL</span> Missing Required Field</td><td>A mandatory field contains no value</td><td>Fill Date absent on medication record</td><td>Yes — blocks EHR sync</td></tr>
+        <tr><td><span class="badge badge-red">CRITICAL</span> Invalid NDC Format</td><td>Drug code fails 10/11-digit regex</td><td>"NDC: 12345" (too short)</td><td>Yes</td></tr>
+        <tr><td><span class="badge badge-red">CRITICAL</span> NCPDP 0% Valid</td><td>All pharmacy routing numbers invalid — usually mapping config bug</td><td>Field shows "000000000"</td><td>Yes</td></tr>
+        <tr><td><span class="badge badge-amber">WARNING</span> Low Confidence Field</td><td>AI confidence score below threshold</td><td>Medication name confidence: 0.42</td><td>No</td></tr>
+        <tr><td><span class="badge badge-amber">WARNING</span> Cross-field Inconsistency</td><td>Two related fields contradict each other</td><td>Dose frequency "BID" but supply "90-day" on acute med</td><td>No</td></tr>
+        <tr><td><span class="badge badge-ink">INFO</span> Unmapped Custom Field</td><td>Template field has no mapping in integration config</td><td>Agency field "Wound Stage" → no EHR mapping</td><td>No</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Bulk Resolution Tools</h4>
+  <ul style="font-size:0.85rem;color:#333;padding-left:20px;margin-bottom:16px;">
+    <li><strong>Find & Replace:</strong> For systematic errors (e.g., all fill dates missing for one clinician on a date range), enter value and apply to all matching records after confirmation.</li>
+    <li><strong>Re-Validate All:</strong> Triggers fresh validation pass on all selected visits after mapping config update.</li>
+    <li><strong>Export Error Report:</strong> Downloads CSV of all open issues with visit ID, field path, issue description, and suggested fix.</li>
+  </ul>
+
+  <h2 id="s4-roles">4.5 User & Role Management</h2>
+  <div class="role-matrix">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Permission</th><th>Clinician</th><th>Supervisor</th><th>Admin</th><th>Auditor</th><th>Billing</th></tr></thead>
+        <tbody>
+          <tr><td>View own visits</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr><td>View all clinicians' visits</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="partial">~</span></td></tr>
+          <tr><td>Edit own visit documentation</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>Override finalized visits</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>Manage users/roles</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>Configure integrations</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>Access audit logs</td><td><span class="cross">✗</span></td><td><span class="partial">~</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>Export PHI data</td><td><span class="cross">✗</span></td><td><span class="partial">~</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="partial">~</span></td></tr>
+          <tr><td>Billing validation</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.75rem;color:#666;margin-top:8px;">✓ Full · ~ Partial/Scoped · ✗ None</p>
+  </div>
+
+  <h2 id="s4-integrations">4.6 Integration Settings</h2>
+  <h4>API Configuration Panel</h4>
+  <pre><code><span class="cmt">// Example Integration Config Structure</span>
+{
+  <span class="key">"ehr_endpoint"</span>: <span class="str">"https://ehr.agency.com/fhir/r4"</span>,
+  <span class="key">"ehr_api_key"</span>: <span class="str">"sk_live_..."</span>,  <span class="cmt">// stored encrypted, masked in UI</span>
+  <span class="key">"billing_endpoint"</span>: <span class="str">"https://billing.clearinghouse.com/api/v2"</span>,
+  <span class="key">"webhook_url"</span>: <span class="str">"https://agency.com/hooks/goodly"</span>,
+  <span class="key">"sync_mode"</span>: <span class="str">"realtime"</span>,  <span class="cmt">// or "batch_nightly"</span>
+  <span class="key">"ndc_mapping_version"</span>: <span class="str">"2024-Q4"</span>,
+  <span class="key">"ncpdp_mapping_version"</span>: <span class="str">"2024-Q4"</span>,
+  <span class="key">"custom_field_map"</span>: { <span class="str">"wound_stage"</span>: <span class="str">"OASIS_M1340"</span> }
+}</code></pre>
+
+  <h4>Mapping Tables</h4>
+  <p>Admins upload CSV files with drug-name-to-NDC and pharmacy-to-NCPDP mappings. System validates on import and shows row-level errors. Effective date and expiry date configurable per mapping version.</p>
+
+  <h2 id="s4-audit">4.7 Audit & Compliance Logs</h2>
+  <p>Every user action in Goodly generates an immutable AuditEvent record. The web Audit Log module exposes these with full-text search and export.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Event Category</th><th>Example Events</th></tr></thead>
+      <tbody>
+        <tr><td>Authentication</td><td>login_success, login_failed, logout, password_changed, mfa_enrolled</td></tr>
+        <tr><td>Visit Lifecycle</td><td>visit_created, visit_started, recording_started, recording_stopped, visit_submitted, visit_approved, visit_rejected</td></tr>
+        <tr><td>Documentation</td><td>field_edited (before/after), override_applied, draft_saved, version_restored</td></tr>
+        <tr><td>Data Quality</td><td>validation_run, validation_passed, validation_failed, bulk_correction</td></tr>
+        <tr><td>Integration</td><td>ehr_sync_success, ehr_sync_failed, billing_submission, sync_conflict_detected, sync_conflict_resolved</td></tr>
+        <tr><td>Admin Actions</td><td>user_created, role_changed, mapping_uploaded, api_key_rotated, user_deactivated</td></tr>
+        <tr><td>Exports</td><td>data_export_initiated, data_export_completed (filename, row count, requester)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== S5: MOBILE ===== -->
+<section id="s5" class="page-section">
+  <div class="section-number">Section 05</div>
+  <h1>Mobile Platform Deep Dive</h1>
+
+  <h2>5.1 Screen-by-Screen Walkthrough</h2>
+
+  <h3>Screen 1: Login / Authentication</h3>
+  <p>Biometric (Face ID / Fingerprint) after initial password login. JWT access token (15min expiry) + refresh token (7-day, stored in secure keychain). Auto-logout after 30min inactivity.</p>
+
+  <h3>Screen 2: Today's Visit List</h3>
+  <ul style="font-size:0.85rem;color:#333;padding-left:20px;margin-bottom:16px;">
+    <li>Sorted by scheduled time. Overdue visits shown at top with red indicator.</li>
+    <li>Each card: patient name (masked last name unless tapped), visit type, scheduled time, status badge.</li>
+    <li>Pull-to-refresh triggers sync.</li>
+    <li>Tab bar: Today | All Visits | Settings.</li>
+    <li>Offline banner: persistent if no network, dismissible if on cellular (with data-usage warning).</li>
+  </ul>
+
+  <h3>Screen 3: Visit Detail (Pre-Start)</h3>
+  <p>Patient demographics summary, prior visit summary (last 3 visits), active medication list, care plan goals, and "Start Visit" button. Pre-load data cached for offline access.</p>
+
+  <h3>Screen 4: Recording Screen</h3>
+  <ul style="font-size:0.85rem;color:#333;padding-left:20px;margin-bottom:16px;">
+    <li>Prominent waveform visualizer showing audio level.</li>
+    <li>Elapsed time counter. Visit type and patient name in header.</li>
+    <li>Scrolling live transcript below waveform.</li>
+    <li>Entity chips appear in real-time (teal pills for meds, amber for vitals).</li>
+    <li>Pause/Resume button — creates interruption event in audit log.</li>
+    <li>Manual entry overlay (+ button) — add structured data explicitly.</li>
+    <li>End Visit button (swipe-to-confirm to prevent accidental tap).</li>
+  </ul>
+
+  <h3>Screen 5: Draft Review (Mobile)</h3>
+  <p>List of structured sections. Expandable per section. Required incomplete fields shown with red asterisk. Confidence indicators: green (>0.85), amber (0.6–0.85), red (<0.6). Swipe-right on field to accept AI suggestion. Tap to manually edit (full keyboard or voice re-dictate). "Submit" button enabled when all required fields satisfied.</p>
+
+  <h3>Screen 6: Settings</h3>
+  <ul style="font-size:0.85rem;color:#333;padding-left:20px;margin-bottom:16px;">
+    <li>Audio quality: WiFi-only sync, cellular data limit</li>
+    <li>Notification preferences</li>
+    <li>Offline storage usage + clear cache</li>
+    <li>Sync log (last 20 sync events)</li>
+    <li>App version, device ID (for support)</li>
+  </ul>
+
+  <h2>5.2 Edge Behavior</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Edge Condition</th><th>Detection</th><th>Behavior</th><th>Recovery</th></tr></thead>
+      <tbody>
+        <tr><td>No network (airplane/dead zone)</td><td>NetworkMonitor callback</td><td>Offline mode; all data to local SQLite; banner shown</td><td>Auto-sync on reconnect</td></tr>
+        <tr><td>Network degrades mid-recording</td><td>Upload timeout >10s</td><td>Chunks queued locally; ASR queued for cloud after reconnect</td><td>Seamless; no clinician action needed</td></tr>
+        <tr><td>Battery < 15%</td><td>UIDevice.batteryLevel</td><td>Reduce audio buffer interval (higher CPU efficiency); warn user; disable optional real-time features</td><td>Charge device; full features restored</td></tr>
+        <tr><td>Battery < 5%</td><td>UIDevice.batteryLevel</td><td>Save current draft immediately; prompt "Low battery – save and exit?"</td><td>Draft preserved; reopen on charge</td></tr>
+        <tr><td>Incoming phone call</td><td>CallKit / TelephonyManager</td><td>Auto-pause recording; log interruption event; record call duration as gap</td><td>Prompt "Resume?" on call end</td></tr>
+        <tr><td>App backgrounded</td><td>applicationWillResignActive</td><td>Continue recording in background (background audio mode); visual indicator in status bar</td><td>Auto-resume when foregrounded</td></tr>
+        <tr><td>App killed by OS</td><td>applicationWillTerminate</td><td>Flush audio buffer to disk; save partial transcript to draft</td><td>On relaunch: "Incomplete visit found – resume or discard?"</td></tr>
+        <tr><td>Microphone permission revoked</td><td>AVAudioSession failure</td><td>Recording stops; error alert with deep-link to Settings</td><td>Re-grant permission; restart visit</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>5.3 Sensor & Permission Access</h2>
+  <div class="two-col">
+    <div class="card">
+      <h4>iOS Permissions</h4>
+      <ul>
+        <li>NSMicrophoneUsageDescription — required for recording</li>
+        <li>NSLocationWhenInUseUsageDescription — GPS-stamp visit start/end</li>
+        <li>NSFaceIDUsageDescription — biometric auth</li>
+        <li>Background audio mode: UIBackgroundModes → audio</li>
+        <li>Push notifications — visit assignments, sync alerts</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Android Permissions</h4>
+      <ul>
+        <li>RECORD_AUDIO — required</li>
+        <li>ACCESS_FINE_LOCATION — GPS stamp</li>
+        <li>FOREGROUND_SERVICE — background recording</li>
+        <li>RECEIVE_BOOT_COMPLETED — restart sync service</li>
+        <li>USE_BIOMETRIC — fingerprint auth</li>
+        <li>POST_NOTIFICATIONS (API 33+)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S6: DATA MODELS ===== -->
+<section id="s6" class="page-section alt">
+  <div class="section-number">Section 06</div>
+  <h1>Data Models & Relationships</h1>
+
+  <h2>6.1 Entity Relationship Overview</h2>
+  <pre><code>Patient (1) ──── (N) Visit (1) ──── (N) Observation
+                     │                        │
+                     │                        └── (N) StructuredField
+                     │
+                     ├── (N) Medication
+                     ├── (1) Clinician
+                     └── (N) AuditEvent
+
+Visit (1) ──── (N) SyncQueue
+Visit (1) ──── (N) FieldVersion</code></pre>
+
+  <h2>6.2 Patient Schema</h2>
+  <table class="schema-table">
+    <thead><tr><th>Field</th><th>Type</th><th>Constraints</th><th>PHI</th></tr></thead>
+    <tbody>
+      <tr><td>id</td><td class="field-type">UUID</td><td>PK, NOT NULL</td><td></td></tr>
+      <tr><td>mrn</td><td class="field-type">VARCHAR(20)</td><td>UNIQUE per agency, NOT NULL</td><td class="field-phi">PHI</td></tr>
+      <tr><td>first_name</td><td class="field-type">VARCHAR(100)</td><td>NOT NULL</td><td class="field-phi">PHI</td></tr>
+      <tr><td>last_name</td><td class="field-type">VARCHAR(100)</td><td>NOT NULL</td><td class="field-phi">PHI</td></tr>
+      <tr><td>date_of_birth</td><td class="field-type">DATE</td><td>NOT NULL, ≤ today</td><td class="field-phi">PHI</td></tr>
+      <tr><td>gender</td><td class="field-type">ENUM(M,F,X,U)</td><td>NOT NULL</td><td class="field-phi">PHI</td></tr>
+      <tr><td>address</td><td class="field-type">JSONB</td><td>street, city, state, zip</td><td class="field-phi">PHI</td></tr>
+      <tr><td>insurance_id</td><td class="field-type">VARCHAR(50)</td><td>Nullable</td><td class="field-phi">PHI</td></tr>
+      <tr><td>ehr_patient_id</td><td class="field-type">VARCHAR(100)</td><td>External ref, nullable</td><td></td></tr>
+      <tr><td>agency_id</td><td class="field-type">UUID</td><td>FK → Agency, NOT NULL</td><td></td></tr>
+      <tr><td>created_at</td><td class="field-type">TIMESTAMPTZ</td><td>NOT NULL, auto</td><td></td></tr>
+      <tr><td>deleted_at</td><td class="field-type">TIMESTAMPTZ</td><td>Soft delete, nullable</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h2>6.3 Visit Schema</h2>
+  <table class="schema-table">
+    <thead><tr><th>Field</th><th>Type</th><th>Constraints</th><th>PHI</th></tr></thead>
+    <tbody>
+      <tr><td>id</td><td class="field-type">UUID</td><td>PK</td><td></td></tr>
+      <tr><td>patient_id</td><td class="field-type">UUID</td><td>FK → Patient</td><td class="field-phi">PHI ref</td></tr>
+      <tr><td>clinician_id</td><td class="field-type">UUID</td><td>FK → Clinician</td><td></td></tr>
+      <tr><td>visit_type</td><td class="field-type">ENUM(SOC,ROC,FOLLOWUP,DISCHARGE)</td><td>NOT NULL</td><td></td></tr>
+      <tr><td>status</td><td class="field-type">ENUM(SCHEDULED,IN_PROGRESS,DRAFT,REVIEW,APPROVED,REVISION_REQUIRED,SYNCED,SYNC_FAILED,CONFLICT,ARCHIVED)</td><td>NOT NULL</td><td></td></tr>
+      <tr><td>scheduled_at</td><td class="field-type">TIMESTAMPTZ</td><td>NOT NULL</td><td></td></tr>
+      <tr><td>started_at</td><td class="field-type">TIMESTAMPTZ</td><td>Nullable</td><td class="field-phi">PHI</td></tr>
+      <tr><td>ended_at</td><td class="field-type">TIMESTAMPTZ</td><td>Nullable</td><td class="field-phi">PHI</td></tr>
+      <tr><td>gps_start</td><td class="field-type">POINT</td><td>Nullable</td><td class="field-phi">PHI</td></tr>
+      <tr><td>gps_end</td><td class="field-type">POINT</td><td>Nullable</td><td class="field-phi">PHI</td></tr>
+      <tr><td>raw_transcript_url</td><td class="field-type">TEXT</td><td>Encrypted S3 URL</td><td class="field-phi">PHI</td></tr>
+      <tr><td>audio_url</td><td class="field-type">TEXT</td><td>Encrypted S3 URL, nullable per policy</td><td class="field-phi">PHI</td></tr>
+      <tr><td>template_id</td><td class="field-type">UUID</td><td>FK → DocumentTemplate</td><td></td></tr>
+      <tr><td>validation_status</td><td class="field-type">ENUM(PENDING,PASS,FAIL)</td><td>NOT NULL</td><td></td></tr>
+      <tr><td>confidence_avg</td><td class="field-type">FLOAT(4)</td><td>0.0–1.0</td><td></td></tr>
+      <tr><td>ehr_submission_id</td><td class="field-type">VARCHAR(100)</td><td>Nullable, EHR-assigned</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h2>6.4 Medication Schema</h2>
+  <table class="schema-table">
+    <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>id</td><td class="field-type">UUID</td><td>PK</td></tr>
+      <tr><td>visit_id</td><td class="field-type">UUID</td><td>FK → Visit</td></tr>
+      <tr><td>drug_name</td><td class="field-type">VARCHAR(200)</td><td>As transcribed</td></tr>
+      <tr><td>ndc_code</td><td class="field-type">CHAR(11)</td><td>Pattern: <code>^\d{5}-\d{4}-\d{2}$</code> or <code>^\d{11}$</code></td></tr>
+      <tr><td>ncpdp_code</td><td class="field-type">CHAR(7)</td><td>Pattern: <code>^\d{7}$</code></td></tr>
+      <tr><td>dose_value</td><td class="field-type">DECIMAL(10,3)</td><td>Numeric part of dose</td></tr>
+      <tr><td>dose_unit</td><td class="field-type">VARCHAR(20)</td><td>mg, mcg, mL, etc.</td></tr>
+      <tr><td>frequency</td><td class="field-type">VARCHAR(50)</td><td>QD, BID, TID, PRN, etc.</td></tr>
+      <tr><td>route</td><td class="field-type">VARCHAR(50)</td><td>Oral, IV, SubQ, Topical, etc.</td></tr>
+      <tr><td>fill_date</td><td class="field-type">DATE</td><td>Required for billing</td></tr>
+      <tr><td>days_supply</td><td class="field-type">INTEGER</td><td>1–365</td></tr>
+      <tr><td>prescriber_npi</td><td class="field-type">CHAR(10)</td><td>Pattern: <code>^\d{10}$</code></td></tr>
+      <tr><td>confidence_score</td><td class="field-type">FLOAT(4)</td><td>0.0–1.0, from NLP pipeline</td></tr>
+      <tr><td>source</td><td class="field-type">ENUM(AI_EXTRACTED,MANUAL_ENTRY,IMPORTED)</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h2>6.5 AuditEvent Schema</h2>
+  <table class="schema-table">
+    <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>id</td><td class="field-type">UUID</td><td>PK</td></tr>
+      <tr><td>timestamp</td><td class="field-type">TIMESTAMPTZ</td><td>Immutable server time</td></tr>
+      <tr><td>actor_id</td><td class="field-type">UUID</td><td>FK → User</td></tr>
+      <tr><td>actor_ip</td><td class="field-type">INET</td><td>Client IP at time of action</td></tr>
+      <tr><td>event_type</td><td class="field-type">VARCHAR(100)</td><td>e.g., field_edited, ehr_sync_failed</td></tr>
+      <tr><td>entity_type</td><td class="field-type">VARCHAR(50)</td><td>Visit, Medication, User, etc.</td></tr>
+      <tr><td>entity_id</td><td class="field-type">UUID</td><td>Target record ID</td></tr>
+      <tr><td>change_data</td><td class="field-type">JSONB</td><td>{field, before, after} — encrypted at rest</td></tr>
+      <tr><td>session_id</td><td class="field-type">UUID</td><td>Links events within same session</td></tr>
+    </tbody>
+  </table>
+
+  <h2>6.6 SyncQueue Schema</h2>
+  <pre><code>{
+  <span class="key">"id"</span>: <span class="str">"UUID"</span>,
+  <span class="key">"entity_type"</span>: <span class="str">"Visit | Medication | StructuredField"</span>,
+  <span class="key">"entity_id"</span>: <span class="str">"UUID"</span>,
+  <span class="key">"operation"</span>: <span class="str">"CREATE | UPDATE | DELETE"</span>,
+  <span class="key">"payload"</span>: <span class="str">"JSONB (encrypted)"</span>,
+  <span class="key">"status"</span>: <span class="str">"PENDING | IN_FLIGHT | SUCCESS | FAILED | CONFLICT"</span>,
+  <span class="key">"attempt_count"</span>: <span class="num">0</span>,
+  <span class="key">"max_attempts"</span>: <span class="num">7</span>,
+  <span class="key">"next_retry_at"</span>: <span class="str">"TIMESTAMPTZ"</span>,
+  <span class="key">"error_detail"</span>: <span class="str">"last error message"</span>,
+  <span class="key">"created_at"</span>: <span class="str">"TIMESTAMPTZ"</span>
+}</code></pre>
+</section>
+
+<!-- ===== S7: AI PIPELINE ===== -->
+<section id="s7" class="page-section">
+  <div class="section-number">Section 07</div>
+  <h1>AI Processing & Clinical NLP Pipeline</h1>
+
+  <h2>7.1 ASR — Speech-to-Text Engine</h2>
+  <div class="two-col">
+    <div class="card">
+      <h4>Acoustic Model</h4>
+      <ul>
+        <li>Base: large transformer (Whisper-class or equivalent)</li>
+        <li>Fine-tuned on clinical encounter data (home health + outpatient)</li>
+        <li>Accent adaptation: training corpus includes diverse US regional accents</li>
+        <li>Noise robustness: trained with augmented home environment noise profiles</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Language Model</h4>
+      <ul>
+        <li>Medical vocabulary bias: RxNorm drug names, SNOMED CT terms, ICD-10</li>
+        <li>N-gram boost for medication names at prediction time</li>
+        <li>Temporal phrase recognition (e.g., "three times daily", "two weeks ago")</li>
+        <li>Disfluency handling: "uh", "um" filtered; false starts handled</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>7.2 Clinical NLP Entity Extraction</h2>
+  <p>The NLP pipeline uses a multi-label Named Entity Recognition (NER) model with relation extraction:</p>
+
+  <h4>Entity Types & Examples</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Entity Type</th><th>Example Utterance</th><th>Extracted Value</th><th>Confidence</th></tr></thead>
+      <tbody>
+        <tr><td>MEDICATION</td><td>"patient is taking metoprolol"</td><td>{drug: "Metoprolol", rxnorm: "866514"}</td><td>0.94</td></tr>
+        <tr><td>DOSE</td><td>"twenty-five milligrams"</td><td>{value: 25, unit: "mg"}</td><td>0.97</td></tr>
+        <tr><td>FREQUENCY</td><td>"twice a day"</td><td>{frequency: "BID", normalized: "every 12 hours"}</td><td>0.98</td></tr>
+        <tr><td>VITAL_SIGN</td><td>"blood pressure one-twenty over eighty"</td><td>{type: "BP", systolic: 120, diastolic: 80, unit: "mmHg"}</td><td>0.99</td></tr>
+        <tr><td>SYMPTOM</td><td>"complaining of shortness of breath"</td><td>{symptom: "dyspnea", snomed: "230145002", severity: "unspecified"}</td><td>0.88</td></tr>
+        <tr><td>TEMPORAL</td><td>"started about three weeks ago"</td><td>{relative_start: "-21d", from_context_date: "visit_date"}</td><td>0.82</td></tr>
+        <tr><td>BODY_LOCATION</td><td>"pain in the right lower extremity"</td><td>{location: "right lower leg", laterality: "right"}</td><td>0.91</td></tr>
+        <tr><td>WOUND</td><td>"stage two pressure injury on sacrum"</td><td>{stage: 2, type: "pressure_injury", location: "sacrum"}</td><td>0.87</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>7.3 Structuring Engine — Template Mapping</h2>
+  <p>Extracted entities are mapped to structured form fields using a configurable mapping registry. Three built-in templates are provided:</p>
+
+  <div class="three-col">
+    <div class="card">
+      <h4>OASIS-E Template</h4>
+      <ul>
+        <li>M0010–M2401 data items</li>
+        <li>SOC/ROC/FU/D/C variants</li>
+        <li>Clinical section grouping</li>
+        <li>CMS skip logic enforced</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>SOAP Note Template</h4>
+      <ul>
+        <li>Subjective: CC, HPI, ROS</li>
+        <li>Objective: vitals, exam findings</li>
+        <li>Assessment: diagnoses (ICD-10)</li>
+        <li>Plan: medications, follow-up</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Custom Template</h4>
+      <ul>
+        <li>Agency-defined fields</li>
+        <li>JSON Schema definition</li>
+        <li>Mapped to EHR extension fields</li>
+        <li>Validation rules configurable</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>7.4 Confidence Scoring & Fallback Strategies</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Confidence Band</th><th>Score Range</th><th>UI Treatment</th><th>Action Required</th></tr></thead>
+      <tbody>
+        <tr><td>High Confidence</td><td>0.85 – 1.00</td><td>Green indicator; auto-populated</td><td>Optional review</td></tr>
+        <tr><td>Medium Confidence</td><td>0.60 – 0.84</td><td>Amber indicator; pre-populated with prompt</td><td>Clinician confirm or edit</td></tr>
+        <tr><td>Low Confidence</td><td>0.40 – 0.59</td><td>Red indicator; blank field with suggestion shown</td><td>Clinician must explicitly accept or enter</td></tr>
+        <tr><td>No Extraction</td><td>0.00 – 0.39</td><td>Empty field; no suggestion</td><td>Manual entry required</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Fallback strategy for low-confidence medication names: system presents top-3 candidates with scores for clinician selection rather than forcing a single value.</p>
+</section>
+
+<!-- ===== S8: VALIDATION ===== -->
+<section id="s8" class="page-section alt">
+  <div class="section-number">Section 08</div>
+  <h1>Validation & Rules Engine</h1>
+
+  <h2>8.1 Field-Level Validation Rules</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Field</th><th>Rule Type</th><th>Pattern / Constraint</th><th>Error Message</th></tr></thead>
+      <tbody>
+        <tr><td>NDC Code</td><td>Regex</td><td><code>^(\d{5}-\d{4}-\d{2}|\d{11})$</code></td><td>"Invalid NDC format. Expected 10-digit hyphenated or 11-digit plain."</td></tr>
+        <tr><td>NCPDP Code</td><td>Regex</td><td><code>^\d{7}$</code></td><td>"NCPDP must be exactly 7 digits."</td></tr>
+        <tr><td>NPI Number</td><td>Regex + Luhn</td><td><code>^\d{10}$</code> + Luhn check digit</td><td>"Invalid NPI. Must be 10 digits and pass Luhn validation."</td></tr>
+        <tr><td>ICD-10 Code</td><td>Regex + Lookup</td><td><code>^[A-Z]\d{2}(\.\d{1,4})?$</code> + active code list</td><td>"ICD-10 code not recognized in current code set."</td></tr>
+        <tr><td>Fill Date</td><td>Required + Range</td><td>NOT NULL; ≤ today; ≥ prescription_date</td><td>"Fill date is required and must not be in the future."</td></tr>
+        <tr><td>Days Supply</td><td>Integer Range</td><td>1 ≤ value ≤ 365</td><td>"Days supply must be between 1 and 365."</td></tr>
+        <tr><td>Visit Duration</td><td>Business Rule</td><td>ended_at − started_at ≥ 5 minutes</td><td>"Visit duration appears too short. Please verify times."</td></tr>
+        <tr><td>Date of Birth</td><td>Date + Range</td><td>Valid date; ≤ today; ≥ 1900-01-01</td><td>"Date of birth is invalid or out of range."</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>8.2 Business Rules (Visit Level)</h2>
+  <div class="callout warn">
+    <strong>Visit Completeness Threshold:</strong> A visit must have all required OASIS M-items populated for its visit type (SOC vs. ROC vs. D/C) before it can be submitted. Missing items are enumerated with OASIS item numbers in the validation report.
+  </div>
+
+  <pre><code><span class="cmt">// Example: Cross-field medication rule</span>
+<span class="kw">RULE</span> medication_acute_supply_check:
+  <span class="kw">WHEN</span> medication.frequency <span class="kw">IN</span> [<span class="str">"QD"</span>, <span class="str">"BID"</span>, <span class="str">"TID"</span>]
+    <span class="kw">AND</span> medication.days_supply > <span class="num">30</span>
+    <span class="kw">AND</span> visit.visit_type = <span class="str">"SOC"</span>
+  <span class="kw">THEN</span> WARNING(<span class="str">"Acute visit with >30 day supply. Verify if chronic medication."</span>)
+
+<span class="cmt">// NDC/NCPDP cross-validation</span>
+<span class="kw">RULE</span> ncpdp_not_zero:
+  <span class="kw">WHEN</span> medication.ncpdp_code = <span class="str">"0000000"</span>
+  <span class="kw">THEN</span> ERROR(<span class="str">"NCPDP code is all zeros — likely missing mapping configuration."</span>)
+
+<span class="cmt">// Wound stage progression</span>
+<span class="kw">RULE</span> wound_stage_regression:
+  <span class="kw">WHEN</span> current_visit.wound.stage > previous_visit.wound.stage
+    <span class="kw">AND</span> (current_visit.date - previous_visit.date) < <span class="num">7</span> <span class="cmt">// days</span>
+  <span class="kw">THEN</span> WARNING(<span class="str">"Wound stage worsened within 7 days. Clinical documentation required."</span>)</code></pre>
+</section>
+
+<!-- ===== S9: FAILURE MODES ===== -->
+<section id="s9" class="page-section">
+  <div class="section-number">Section 09</div>
+  <h1>Failure Modes & Recovery</h1>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Component</th><th>Symptom</th><th>Root Cause(s)</th><th>UI Indicator</th><th>User Action</th><th>Automated Recovery</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Microphone</strong></td>
+          <td>Silent recording; blank transcript</td>
+          <td>Permission denied; hardware muted; Bluetooth audio routing conflict</td>
+          <td>Red waveform, "No audio detected" toast</td>
+          <td>Check device mic, re-grant permission, switch audio route</td>
+          <td>VAD alert after 10s silence; auto-switch to device mic from BT</td>
+        </tr>
+        <tr>
+          <td><strong>ASR Engine</strong></td>
+          <td>Transcript contains nonsense or medical term substitutions</td>
+          <td>Background noise overload; OOV drug name; poor audio quality</td>
+          <td>Low confidence flags on affected fields</td>
+          <td>Clinician manually corrects; re-dictate specific section</td>
+          <td>N-best alternatives presented; LM fallback to phonetic lookup</td>
+        </tr>
+        <tr>
+          <td><strong>NLP Entity Extraction</strong></td>
+          <td>Missing fill date; medication not captured; wrong drug name</td>
+          <td>Drug name not in RxNorm index; unusual pronunciation; transcript corruption</td>
+          <td>Empty field with red asterisk; low-confidence amber indicator</td>
+          <td>Manually enter value; select from suggested alternatives</td>
+          <td>Top-3 candidate suggestions presented</td>
+        </tr>
+        <tr>
+          <td><strong>NDC Mapping</strong></td>
+          <td>Invalid NDC format; NDC shows as empty</td>
+          <td>Drug name not in mapping table; outdated mapping version; extraction error</td>
+          <td>Red "Invalid NDC" badge in Data Quality Console</td>
+          <td>Update mapping table; manually enter NDC; re-validate</td>
+          <td>Fuzzy match fallback; flag for mapping table update</td>
+        </tr>
+        <tr>
+          <td><strong>NCPDP Mapping</strong></td>
+          <td>0% NCPDP valid; all codes show "0000000"</td>
+          <td><strong>Mapping configuration bug</strong>; pharmacy lookup table not uploaded; wrong version</td>
+          <td>"NCPDP 0% Valid" critical alert in Data Quality Console</td>
+          <td>Upload correct NCPDP mapping CSV in Integration Settings; re-validate</td>
+          <td>None — requires human config fix</td>
+        </tr>
+        <tr>
+          <td><strong>Sync (Mobile → Cloud)</strong></td>
+          <td>Visit stuck in PENDING sync; data not visible on web</td>
+          <td>Network timeout; auth token expired; server 5xx</td>
+          <td>Sync error badge on visit card; error detail in Settings → Sync Log</td>
+          <td>Manual "Retry Sync"; re-authenticate if token expired</td>
+          <td>Exponential backoff retry (7 attempts); token auto-refresh</td>
+        </tr>
+        <tr>
+          <td><strong>EHR API</strong></td>
+          <td>Visit status stuck at SYNC_FAILED; EHR not updated</td>
+          <td>EHR endpoint down; invalid FHIR payload; auth credential expired; field constraint violation</td>
+          <td>"EHR Sync Failed" status badge; error code + EHR response in visit detail</td>
+          <td>Review error code; fix payload issue; rotate API key if auth expired; retry</td>
+          <td>3 automatic retries with 5min interval; alert to admin on 3rd failure</td>
+        </tr>
+        <tr>
+          <td><strong>Partial Save / App Kill</strong></td>
+          <td>Draft data partially lost; visit incomplete on reopen</td>
+          <td>iOS/Android killed app under memory pressure during recording</td>
+          <td>"Incomplete visit found" prompt on relaunch</td>
+          <td>Choose "Resume" to continue from last saved state; "Discard" to start over</td>
+          <td>Auto-flush to disk every 30s; WAL journal on SQLite</td>
+        </tr>
+        <tr>
+          <td><strong>Billing Submission</strong></td>
+          <td>Claim rejected; ERA shows denial</td>
+          <td>Missing required billing field; invalid diagnosis code; payer rule violation</td>
+          <td>Red "Claim Denied" badge; ERA detail panel with denial reason code</td>
+          <td>Billing analyst corrects field; resubmits; documents correction in audit log</td>
+          <td>None — billing denials require human review per CMS rules</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== S10: QA ===== -->
+<section id="s10" class="page-section alt">
+  <div class="section-number">Section 10</div>
+  <h1>QA & Test Strategy</h1>
+
+  <h2>10.1 Data Validation Test Suite</h2>
+  <pre><code><span class="cmt">// Example: NDC regex validation test</span>
+<span class="kw">describe</span>(<span class="str">"NDC Validator"</span>, () => {
+  <span class="kw">it</span>(<span class="str">"accepts 11-digit plain format"</span>, () => {
+    expect(validateNDC(<span class="str">"12345678901"</span>)).toBe(<span class="kw">true</span>);
+  });
+  <span class="kw">it</span>(<span class="str">"accepts 10-digit hyphenated format"</span>, () => {
+    expect(validateNDC(<span class="str">"12345-6789-01"</span>)).toBe(<span class="kw">true</span>);
+  });
+  <span class="kw">it</span>(<span class="str">"rejects too-short code"</span>, () => {
+    expect(validateNDC(<span class="str">"12345"</span>)).toBe(<span class="kw">false</span>);
+  });
+  <span class="kw">it</span>(<span class="str">"rejects alpha characters"</span>, () => {
+    expect(validateNDC(<span class="str">"1234X-6789-01"</span>)).toBe(<span class="kw">false</span>);
+  });
+});</code></pre>
+
+  <h2>10.2 AI Accuracy Testing</h2>
+  <div class="two-col">
+    <div class="card">
+      <h4>ASR Benchmarks</h4>
+      <ul>
+        <li>Word Error Rate (WER) target: &lt;8% on medical holdout set</li>
+        <li>Medical term accuracy (drug names): &gt;95%</li>
+        <li>Accent-stratified WER testing (6 regional accent groups)</li>
+        <li>Noise robustness testing at -5dB SNR</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>NLP Entity F1 Targets</h4>
+      <ul>
+        <li>Medication name extraction: F1 &gt; 0.92</li>
+        <li>Dose extraction: F1 &gt; 0.95</li>
+        <li>Vital sign extraction: F1 &gt; 0.97</li>
+        <li>Temporal expression: F1 &gt; 0.88</li>
+        <li>Holdout set: 500 de-identified clinical encounters</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>10.3 Integration Testing</h2>
+  <ul style="font-size:0.85rem;color:#333;padding-left:20px;margin-bottom:16px;">
+    <li>EHR mock server with configurable failure injection (5xx, 401, 422 with invalid field)</li>
+    <li>FHIR payload validation against R4 schema before and after EHR mock submission</li>
+    <li>Billing clearinghouse sandbox with test payer IDs</li>
+    <li>Webhook delivery tests: verify retry behavior on 500 responses</li>
+    <li>NDC/NCPDP mapping import: valid CSV, malformed CSV, empty file, encoding edge cases</li>
+  </ul>
+
+  <h2>10.4 Performance Testing</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Scenario</th><th>Target</th><th>Tool</th></tr></thead>
+      <tbody>
+        <tr><td>Web visit grid with 10,000 rows</td><td>Initial load &lt;3s; scroll &lt;16ms/frame</td><td>Lighthouse + k6</td></tr>
+        <tr><td>Dashboard with 90-day date range</td><td>Chart render &lt;2s</td><td>k6</td></tr>
+        <tr><td>Mobile: 2-hour recording session</td><td>Battery drain &lt;20%; CPU &lt;30% avg</td><td>Xcode Instruments, Android Profiler</td></tr>
+        <tr><td>Bulk sync: 50 visits offline</td><td>Sync complete &lt;3min on WiFi</td><td>Custom test harness</td></tr>
+        <tr><td>Concurrent EHR sync: 100 visits</td><td>Server p95 response &lt;500ms</td><td>k6 load test</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>10.5 Edge Case Inventory</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Edge Case</th><th>Test Scenario</th><th>Expected Behavior</th></tr></thead>
+      <tbody>
+        <tr><td>Interrupted visit</td><td>Kill app mid-recording; relaunch</td><td>Partial draft preserved; "Resume" prompt shown</td></tr>
+        <tr><td>Multi-language input</td><td>Spanish medication names spoken</td><td>Phonetic fallback; low-confidence flag; top-3 candidates shown</td></tr>
+        <tr><td>Duplicate patient</td><td>Same MRN submitted twice</td><td>UNIQUE constraint violation; error displayed; merge workflow offered</td></tr>
+        <tr><td>Partial save mid-edit</td><td>Close browser tab on web editor</td><td>Auto-save triggered; "Unsaved changes" confirmation shown</td></tr>
+        <tr><td>Zero-duration visit</td><td>Start and immediately end visit</td><td>Business rule warning; visit marked incomplete; cannot submit</td></tr>
+        <tr><td>Visit exceeding 4 hours</td><td>Recording left running overnight</td><td>Auto-pause after 4h; alert to clinician; manual resume or end</td></tr>
+        <tr><td>Network change mid-sync</td><td>Switch WiFi→Cellular during sync</td><td>In-flight request completes; subsequent chunks use new interface</td></tr>
+        <tr><td>NDC mapping version mismatch</td><td>Visit mapped with old NDC; new version uploaded</td><td>Old visits not auto-updated; "Re-validate" action shows change count</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== S11: SECURITY ===== -->
+<section id="s11" class="page-section">
+  <div class="section-number">Section 11</div>
+  <h1>Security & Compliance</h1>
+
+  <h2>11.1 HIPAA Controls</h2>
+  <div class="two-col">
+    <div class="card">
+      <h4>Technical Safeguards</h4>
+      <ul>
+        <li>Encryption at rest: AES-256 (database fields, S3 objects, local SQLite via SQLCipher)</li>
+        <li>Encryption in transit: TLS 1.2+ for all API calls; certificate pinning on mobile</li>
+        <li>PHI field-level encryption in database (separate KMS key per agency)</li>
+        <li>Automatic session timeout (30min inactivity on web; configurable)</li>
+        <li>MFA required for admin and auditor roles; optional for others</li>
+        <li>API keys hashed (SHA-256) before storage; never logged in plaintext</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Organizational Safeguards</h4>
+      <ul>
+        <li>BAA (Business Associate Agreement) required for all agency customers</li>
+        <li>Data residency: PHI stored in US-East AWS regions only (configurable)</li>
+        <li>Breach notification workflow: automated alerting within 1 hour of anomaly detection</li>
+        <li>Annual penetration testing + SOC 2 Type II audit</li>
+        <li>Employee PHI access: role-based; audit logged; quarterly access review</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>11.2 Data Retention & Purge</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Data Type</th><th>Retention Period</th><th>Purge Method</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Audio recordings</td><td>30 days (configurable: 0–90)</td><td>Secure delete from blob store + CDN invalidation</td><td>Optional; agencies may opt out of audio retention</td></tr>
+        <tr><td>Raw transcripts</td><td>7 years</td><td>Cryptographic shredding (destroy KMS key)</td><td>Required for HIPAA documentation</td></tr>
+        <tr><td>Structured clinical records</td><td>7 years (or state minimum if longer)</td><td>Same as above</td><td></td></tr>
+        <tr><td>Audit logs</td><td>7 years (immutable)</td><td>Never deleted; archived to cold storage after 2 years</td><td>HIPAA requires 6 years; best practice is 7</td></tr>
+        <tr><td>User account data</td><td>Active + 2 years post-deactivation</td><td>Anonymization (not full delete to preserve audit FK integrity)</td><td></td></tr>
+        <tr><td>Analytics (aggregated, de-identified)</td><td>Indefinite</td><td>N/A</td><td>Not PHI once de-identified per HIPAA Safe Harbor</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>11.3 Vulnerability & Incident Response</h2>
+  <ul style="font-size:0.85rem;color:#333;padding-left:20px;margin-bottom:16px;">
+    <li>SAST (static analysis) integrated in CI/CD pipeline — blocks merge on critical findings</li>
+    <li>Dependency scanning (Snyk/Dependabot) with automatic PRs for security patches</li>
+    <li>WAF in front of all public endpoints; rate limiting: 100 req/min per authenticated user</li>
+    <li>Intrusion detection alerts for: bulk data export, >10 failed logins, off-hours admin actions</li>
+    <li>Incident runbook: detect → contain → notify (DPA/customers within 72h if HIPAA breach) → remediate → review</li>
+  </ul>
+</section>
+
+<!-- ===== S12: DEPLOYMENT ===== -->
+<section id="s12" class="page-section alt">
+  <div class="section-number">Section 12</div>
+  <h1>Implementation & Deployment Notes</h1>
+
+  <h2>12.1 Required Environment Variables</h2>
+  <pre><code><span class="cmt"># Core</span>
+<span class="key">DATABASE_URL</span>=<span class="str">postgresql://user:pass@host:5432/goodly_prod</span>
+<span class="key">REDIS_URL</span>=<span class="str">redis://host:6379/0</span>
+<span class="key">SECRET_KEY</span>=<span class="str">... (256-bit random)</span>
+
+<span class="cmt"># AWS / Storage</span>
+<span class="key">AWS_REGION</span>=<span class="str">us-east-1</span>
+<span class="key">S3_PHI_BUCKET</span>=<span class="str">goodly-phi-prod</span>
+<span class="key">S3_AUDIO_BUCKET</span>=<span class="str">goodly-audio-prod</span>
+<span class="key">KMS_PHI_KEY_ARN</span>=<span class="str">arn:aws:kms:us-east-1:...</span>
+
+<span class="cmt"># AI Services</span>
+<span class="key">ASR_API_KEY</span>=<span class="str">...</span>
+<span class="key">ASR_ENDPOINT</span>=<span class="str">https://asr.internal.goodly.ai/v1</span>
+<span class="key">NLP_MODEL_PATH</span>=<span class="str">/models/clinical-ner-v4</span>
+<span class="key">CONFIDENCE_THRESHOLD_HIGH</span>=<span class="num">0.85</span>
+<span class="key">CONFIDENCE_THRESHOLD_LOW</span>=<span class="num">0.60</span>
+
+<span class="cmt"># Default EHR (overridden per agency in DB)</span>
+<span class="key">EHR_DEFAULT_ENDPOINT</span>=<span class="str">https://fhir.default-ehr.com/r4</span>
+<span class="key">EHR_DEFAULT_CLIENT_ID</span>=<span class="str">...</span>
+
+<span class="cmt"># Observability</span>
+<span class="key">SENTRY_DSN</span>=<span class="str">https://...@sentry.io/...</span>
+<span class="key">DATADOG_API_KEY</span>=<span class="str">...</span>
+<span class="key">LOG_LEVEL</span>=<span class="str">info</span></code></pre>
+
+  <h2>12.2 Mobile Build Pipeline</h2>
+  <div class="two-col">
+    <div class="card">
+      <h4>iOS</h4>
+      <ul>
+        <li>Xcode 15+; Swift 5.9+; minimum iOS 16</li>
+        <li>CI: GitHub Actions → Fastlane → TestFlight</li>
+        <li>Background audio entitlement required (provisioning profile)</li>
+        <li>SQLCipher pod for encrypted local storage</li>
+        <li>App Transport Security: enforced (no HTTP)</li>
+        <li>App Review note: explain microphone background usage</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Android</h4>
+      <ul>
+        <li>Android Studio Hedgehog+; Kotlin; minSdk 26 (Android 8)</li>
+        <li>CI: GitHub Actions → Gradle → Firebase App Distribution</li>
+        <li>Foreground Service for recording (required Android 9+)</li>
+        <li>SQLCipher for Android (Room integration)</li>
+        <li>Network Security Config: cleartext disabled</li>
+        <li>ProGuard/R8 obfuscation enabled for release</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>12.3 Web Hosting & Scaling</h2>
+  <ul style="font-size:0.85rem;color:#333;padding-left:20px;margin-bottom:16px;">
+    <li>Web frontend: Next.js on Vercel or containerized NGINX; CDN for static assets</li>
+    <li>API: Node.js / Python FastAPI behind AWS ALB; Auto Scaling Group (min 2, max 20)</li>
+    <li>Database: RDS PostgreSQL 15 Multi-AZ; read replicas for analytics queries</li>
+    <li>Background jobs (sync processing, bulk re-validation): SQS + ECS Fargate workers</li>
+    <li>AI inference: GPU instances (g4dn.xlarge or higher) in isolated VPC; autoscaled via custom metric</li>
+    <li>Monitoring: Datadog APM + custom dashboards; PagerDuty for P1/P2 incidents</li>
+  </ul>
+</section>
+
+<!-- ===== S13: GLOSSARY ===== -->
+<section id="s13" class="page-section">
+  <div class="section-number">Section 13</div>
+  <h1>Glossary & Acronyms</h1>
+
+  <div class="glossary-item"><div class="glossary-term">ASR</div><div>Automatic Speech Recognition — converts spoken audio to text. In Goodly, tuned for medical vocabulary and home-health encounter audio.</div></div>
+  <div class="glossary-item"><div class="glossary-term">BAA</div><div>Business Associate Agreement — HIPAA-required contract between a covered entity (agency) and a service provider (Scribble Labs) handling PHI.</div></div>
+  <div class="glossary-item"><div class="glossary-term">D/C</div><div>Discharge visit — the final home health visit type; requires specific OASIS items documenting patient status at discharge.</div></div>
+  <div class="glossary-item"><div class="glossary-term">EHR</div><div>Electronic Health Record — the clinical system of record for patient data. Goodly integrates via FHIR/HL7 APIs.</div></div>
+  <div class="glossary-item"><div class="glossary-term">ERA</div><div>Electronic Remittance Advice — payer response to a billing claim indicating payment, denial, or adjustment.</div></div>
+  <div class="glossary-item"><div class="glossary-term">FHIR</div><div>Fast Healthcare Interoperability Resources (HL7 standard, R4) — the API format used for EHR data exchange in Goodly integrations.</div></div>
+  <div class="glossary-item"><div class="glossary-term">HL7</div><div>Health Level 7 — the standards organization behind FHIR, V2, and V3 healthcare messaging formats.</div></div>
+  <div class="glossary-item"><div class="glossary-term">ICD-10</div><div>International Classification of Diseases, 10th Revision — standardized diagnosis codes used in clinical documentation and billing.</div></div>
+  <div class="glossary-item"><div class="glossary-term">NDC</div><div>National Drug Code — FDA-assigned 10 or 11-digit identifier for specific drug products. Required for billing and medication documentation.</div></div>
+  <div class="glossary-item"><div class="glossary-term">NCPDP</div><div>National Council for Prescription Drug Programs — standards body; their 7-digit routing codes identify pharmacies in claims processing.</div></div>
+  <div class="glossary-item"><div class="glossary-term">NER</div><div>Named Entity Recognition — NLP task of identifying and classifying named entities (medications, vitals, etc.) in text.</div></div>
+  <div class="glossary-item"><div class="glossary-term">NLP</div><div>Natural Language Processing — AI/ML techniques for understanding and extracting meaning from human language. Core of Goodly's AI processing layer.</div></div>
+  <div class="glossary-item"><div class="glossary-term">NPI</div><div>National Provider Identifier — 10-digit number assigned to healthcare providers in the US. Required on billing claims.</div></div>
+  <div class="glossary-item"><div class="glossary-term">OASIS</div><div>Outcome and Assessment Information Set — CMS-mandated standardized assessment tool for home health agencies. Defines M-item data elements.</div></div>
+  <div class="glossary-item"><div class="glossary-term">PHI</div><div>Protected Health Information — any individually identifiable health information subject to HIPAA privacy and security rules.</div></div>
+  <div class="glossary-item"><div class="glossary-term">ROC</div><div>Resumption of Care — OASIS visit type performed when a patient returns to home health service after a hospitalization.</div></div>
+  <div class="glossary-item"><div class="glossary-term">RxNorm</div><div>NLM standardized drug nomenclature system used to normalize medication names across drug databases.</div></div>
+  <div class="glossary-item"><div class="glossary-term">SNOMED CT</div><div>Systematized Nomenclature of Medicine Clinical Terms — comprehensive clinical terminology used for symptoms, conditions, and procedures.</div></div>
+  <div class="glossary-item"><div class="glossary-term">SOAP</div><div>Subjective, Objective, Assessment, Plan — standard clinical note format used in outpatient and ambulatory care settings.</div></div>
+  <div class="glossary-item"><div class="glossary-term">SOC</div><div>Start of Care — the initial OASIS visit when a patient begins a home health episode. Most comprehensive visit type.</div></div>
+  <div class="glossary-item"><div class="glossary-term">VAD</div><div>Voice Activity Detection — algorithm that distinguishes speech from silence or noise, used to gate ASR processing.</div></div>
+  <div class="glossary-item"><div class="glossary-term">WAL</div><div>Write-Ahead Log — SQLite journaling mode ensuring data integrity and crash recovery for local mobile database.</div></div>
+  <div class="glossary-item"><div class="glossary-term">WER</div><div>Word Error Rate — primary ASR accuracy metric: (substitutions + deletions + insertions) / total reference words.</div></div>
+
+  <hr class="sep">
+  <div class="callout info" style="margin-top:32px;">
+    <strong>Document End.</strong> This is version 1.0.0 of the Goodly System Documentation. For updates, corrections, or additions, submit a PR to the <code>docs/system</code> directory in the internal engineering repository, or contact the Platform Team via <code>#goodly-platform</code>.
+  </div>
+</section>
+
+</div><!-- /main -->
+</body>
+</html>
