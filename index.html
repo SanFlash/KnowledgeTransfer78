@@ -2,36 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>KT78 - For Project Understanding</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KT78 - Project Understanding</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
     <h1>KT78 - Project Understanding Hub</h1>
   </header>
 
   <div class="container">
 
     <!-- Sidebar -->
-    <div class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <h3>Projects</h3>
       <ul>
         <li onclick="loadPage('pages/KeySpace.html')">📄 KeySpace</li>
         <li onclick="loadPage('pages/playwrightLocators.html')">📄 Playwright Locators</li>
         <li onclick="loadPage('pages/orbis_social_presentation.pdf')">📄 Orbis</li>
         <li onclick="loadPage('pages/goodly_documentation.html')">📄 Goodly</li>
-        
       </ul>
-    </div>
+    </aside>
 
-    <!-- Content Area -->
-    <div class="content">
-      <iframe id="viewer" src="" frameborder="0"></iframe>
-    </div>
+    <!-- Content -->
+    <main class="content">
+      <iframe id="viewer" src=""></iframe>
+    </main>
 
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+
+    function loadPage(page) {
+      document.getElementById("viewer").src = page;
+
+      // auto close sidebar on mobile after click
+      if (window.innerWidth < 768) {
+        document.getElementById("sidebar").classList.remove("active");
+      }
+    }
+  </script>
+
 </body>
 </html>
