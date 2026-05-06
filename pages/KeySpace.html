@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KeySpace — QA Tester Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --bg: #f4f2ee;
+    --surface: #ffffff;
+    --muted: #6b7280;
+    --accent: #1a56db;
+    --accent-light: #e8effe;
+    --green: #0d7a4e;
+    --green-light: #d1fae5;
+    --red: #b91c1c;
+    --red-light: #fee2e2;
+    --amber: #b45309;
+    --amber-light: #fef3c7;
+    --purple: #6d28d9;
+    --purple-light: #ede9fe;
+    --border: #e5e1d8;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    color: #fff;
+    padding: 72px 48px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 80% 50%, #1a56db22 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 10% 80%, #6d28d914 0%, transparent 50%);
+  }
+  .hero-inner { position: relative; max-width: 900px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px; padding: 6px 14px; font-size: 12px;
+    font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(255,255,255,0.8); margin-bottom: 28px;
+  }
+  .hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(38px, 5vw, 64px);
+    line-height: 1.1;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+  .hero h1 em { font-style: italic; color: #93c5fd; }
+  .hero-meta {
+    display: flex; gap: 32px; flex-wrap: wrap;
+    margin-top: 32px; padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 13px; color: rgba(255,255,255,0.6);
+  }
+  .hero-meta strong { color: #fff; display: block; font-size: 14px; }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 960px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* ── NAV (TOC) ── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 48px;
+    box-shadow: var(--shadow);
+  }
+  .toc-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin-bottom: 20px;
+  }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 32px; }
+  .toc a {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--ink); text-decoration: none; font-size: 14px;
+    font-weight: 500; padding: 5px 0; border-bottom: 1px solid transparent;
+    transition: color 0.15s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500; color: var(--muted);
+    min-width: 22px;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section { margin-bottom: 56px; }
+  .section-header {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 28px; padding-bottom: 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .section-num {
+    font-family: 'DM Serif Display', serif; font-size: 48px;
+    line-height: 1; color: var(--border); flex-shrink: 0;
+    margin-top: -4px; min-width: 56px;
+  }
+  .section-title-group h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px; font-weight: 400; line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .section-title-group p { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px;
+    box-shadow: var(--shadow); margin-bottom: 16px;
+  }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 16px; }
+  .card-title { font-weight: 700; font-size: 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .card-title .icon { font-size: 18px; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: var(--radius); padding: 18px 20px;
+    border-left: 4px solid; margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .callout-title { font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .callout.critical { background: var(--red-light); border-color: var(--red); color: #7f1d1d; }
+  .callout.warning { background: var(--amber-light); border-color: var(--amber); color: #78350f; }
+  .callout.info { background: var(--accent-light); border-color: var(--accent); color: #1e3a8a; }
+  .callout.success { background: var(--green-light); border-color: var(--green); color: #064e3b; }
+  .callout.purple { background: var(--purple-light); border-color: var(--purple); color: #3b0764; }
+
+  /* ── TABLES ── */
+  .tbl-wrap { overflow-x: auto; margin-bottom: 20px; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--surface); }
+  thead th {
+    background: var(--ink); color: #fff;
+    font-weight: 600; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 11px 14px; text-align: left;
+  }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #fafaf8; }
+  td code, th code { font-family: 'DM Mono', monospace; font-size: 12px; background: #f1f0ec; padding: 2px 5px; border-radius: 3px; }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 3px 9px; border-radius: 100px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .badge.p0 { background: #fef2f2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .badge.p1 { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+  .badge.p2 { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+  .badge.critical { background: #fef2f2; color: #b91c1c; }
+  .badge.high { background: #fff7ed; color: #c2410c; }
+  .badge.medium { background: #fefce8; color: #a16207; }
+  .badge.low { background: #f0fdf4; color: #166534; }
+  .badge.starter { background: #f0f9ff; color: #0369a1; border: 1px solid #7dd3fc; }
+  .badge.growth { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+  .badge.pro { background: var(--purple-light); color: var(--purple); border: 1px solid #c4b5fd; }
+  .badge.enterprise { background: #fdf4ff; color: #7e22ce; border: 1px solid #d8b4fe; }
+
+  /* ── SCENARIO BLOCKS ── */
+  .scenario {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 14px;
+    overflow: hidden; box-shadow: var(--shadow);
+  }
+  .scenario-head {
+    padding: 14px 18px; display: flex; align-items: center;
+    gap: 12px; cursor: pointer; user-select: none;
+    background: #fafaf8;
+    border-bottom: 1px solid var(--border);
+  }
+  .scenario-head:hover { background: #f5f4f0; }
+  .scenario-id {
+    font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 600;
+    color: var(--accent); min-width: 40px;
+  }
+  .scenario-title { font-weight: 600; font-size: 14px; flex: 1; }
+  .scenario-body { padding: 18px; display: none; }
+  .scenario.open .scenario-body { display: block; }
+  .scenario.open .scenario-head { background: var(--accent-light); }
+  .chevron { color: var(--muted); font-size: 12px; transition: transform 0.2s; }
+  .scenario.open .chevron { transform: rotate(180deg); }
+
+  /* Steps */
+  .steps { list-style: none; counter-reset: step; }
+  .steps li {
+    counter-increment: step; display: flex; gap: 12px;
+    margin-bottom: 10px; font-size: 14px; align-items: flex-start;
+  }
+  .steps li::before {
+    content: counter(step);
+    display: flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--ink); color: #fff;
+    font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* Expected result */
+  .expected {
+    background: var(--green-light); border: 1px solid #6ee7b7;
+    border-radius: 8px; padding: 12px 16px; margin-top: 14px;
+    font-size: 13px; color: #064e3b;
+  }
+  .expected-label { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 18px; height: 18px; border: 2px solid var(--border);
+    border-radius: 4px; flex-shrink: 0; margin-top: 2px;
+    background: var(--surface);
+  }
+
+  /* ── CODE BLOCK ── */
+  pre {
+    background: #1e1e2e; color: #cdd6f4; border-radius: var(--radius);
+    padding: 18px 20px; font-family: 'DM Mono', monospace;
+    font-size: 13px; line-height: 1.6; overflow-x: auto; margin-bottom: 16px;
+  }
+  code { font-family: 'DM Mono', monospace; }
+  .inline-code {
+    background: #f1f0ec; border-radius: 4px; padding: 2px 6px;
+    font-family: 'DM Mono', monospace; font-size: 13px; color: #c2410c;
+  }
+
+  /* ── TWO-COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (max-width: 640px) { .two-col, .card-grid, .toc-grid { grid-template-columns: 1fr; } }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  /* ── PRIORITY CHART ── */
+  .priority-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 600px) { .priority-grid { grid-template-columns: repeat(2, 1fr); } }
+  .priority-card {
+    border-radius: var(--radius); padding: 18px; text-align: center;
+    border: 1px solid var(--border);
+  }
+  .priority-card .emoji { font-size: 28px; margin-bottom: 8px; }
+  .priority-card .pname { font-weight: 800; font-size: 16px; }
+  .priority-card .pdesc { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ── SUITE HEADER ── */
+  .suite-header {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--ink); color: #fff;
+    border-radius: var(--radius); padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .suite-letter {
+    font-family: 'DM Serif Display', serif; font-size: 32px;
+    width: 48px; height: 48px; background: rgba(255,255,255,0.12);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .suite-info h3 { font-size: 16px; font-weight: 700; }
+  .suite-info p { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+  /* ── PROGRESS-STYLE TIMELINE ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 8px; top: 6px; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .timeline-item { position: relative; margin-bottom: 20px; }
+  .timeline-dot {
+    position: absolute; left: -24px; top: 4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); border: 3px solid var(--bg);
+  }
+  .timeline-item h4 { font-weight: 700; font-size: 14px; }
+  .timeline-item p { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    text-align: center; padding: 40px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 13px; margin-top: 32px;
+  }
+
+  /* ── SHOW MORE ── */
+  .show-more-btn {
+    display: block; width: 100%; padding: 12px;
+    background: none; border: 1px dashed var(--border);
+    border-radius: var(--radius); color: var(--muted);
+    font-family: 'Manrope', sans-serif; font-size: 13px;
+    font-weight: 600; cursor: pointer; margin-top: 8px;
+    transition: all 0.15s;
+  }
+  .show-more-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+
+  p { margin-bottom: 12px; }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; margin-top: 20px; }
+  ul { padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 5px; }
+  strong { font-weight: 700; }
+
+  /* Tag groups */
+  .tag-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag {
+    display: inline-flex; align-items: center;
+    background: #f1f0ec; border-radius: 6px;
+    padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--ink);
+  }
+
+  /* Bug template */
+  .bug-template {
+    background: #1e1e2e; color: #cdd6f4;
+    border-radius: var(--radius); padding: 20px 24px;
+    font-family: 'DM Mono', monospace; font-size: 13px;
+    line-height: 1.8; margin-bottom: 16px;
+  }
+  .bug-key { color: #89b4fa; }
+  .bug-val { color: #a6e3a1; }
+  .bug-comment { color: #6c7086; }
+
+  /* Daily report */
+  .report-template {
+    background: #0f1117; color: #e2e8f0;
+    border-radius: var(--radius); padding: 20px 24px;
+    font-family: 'DM Mono', monospace; font-size: 13px;
+    line-height: 2; border-left: 4px solid var(--accent);
+  }
+
+  /* Status badges for matrix */
+  .status-pass { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 12px; }
+  .status-fail { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 12px; }
+  .status-blocked { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 12px; }
+  .status-na { background: #f3f4f6; color: #6b7280; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 12px; }
+
+  .big-number { font-family: 'DM Serif Display', serif; font-size: 42px; line-height: 1; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="dot"></span> Staging Only — Confidential</div>
+    <h1>KeySpace QA Tester<br><em>Complete Reference Guide</em></h1>
+    <p style="font-size:17px;color:rgba(255,255,255,0.65);max-width:560px;margin-top:12px;">
+      Your end-to-end manual for onboarding, test scenarios, bug reporting, and daily operations on the KeySpace B2B inventory SaaS platform.
+    </p>
+    <div class="hero-meta">
+      <div><strong>Author</strong>Andre Rodriguez</div>
+      <div><strong>Last Updated</strong>April 15, 2026</div>
+      <div><strong>Launch Date</strong>April 29, 2026</div>
+      <div><strong>Environment</strong>Staging Only</div>
+      <div><strong>Contract</strong>3–4 Weeks</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ══════════════════════════════════════════
+     TABLE OF CONTENTS
+══════════════════════════════════════════ -->
+<div class="toc">
+  <div class="toc-title">📋 Table of Contents</div>
+  <div class="toc-grid">
+    <a href="#s1"><span class="toc-num">01</span> The Engagement & What "Done" Looks Like</a>
+    <a href="#s2"><span class="toc-num">02</span> What Key Space Is — Product Overview</a>
+    <a href="#s3"><span class="toc-num">03</span> Product Map (Web / Mobile / API)</a>
+    <a href="#s4"><span class="toc-num">04</span> Environment Setup</a>
+    <a href="#s5"><span class="toc-num">05</span> How to Think About Testing</a>
+    <a href="#s6"><span class="toc-num">06</span> Test Scenario Catalog (All Suites)</a>
+    <a href="#s7"><span class="toc-num">07</span> Priority & Severity Legend</a>
+    <a href="#s8"><span class="toc-num">08</span> Bug Report Template</a>
+    <a href="#s9"><span class="toc-num">09</span> Daily Reporting Format</a>
+    <a href="#s10"><span class="toc-num">10</span> Test Matrix Spreadsheet</a>
+    <a href="#s11"><span class="toc-num">11</span> Acceptance Criteria for Payment</a>
+    <a href="#s12"><span class="toc-num">12</span> Out of Scope — Do Not Test</a>
+    <a href="#s13"><span class="toc-num">13</span> Day-1 Checklist</a>
+    <a href="#s14"><span class="toc-num">14</span> Manual Tests Requiring Human Judgment</a>
+    <a href="#s15"><span class="toc-num">15</span> Communication & Escalation</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 1 — THE ENGAGEMENT
+══════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title-group">
+      <h2>The Engagement & What "Done" Looks Like</h2>
+      <p>Scope, contract structure, and completion criteria</p>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span> Your Role</div>
+      <p style="font-size:14px;">You are a <strong>manual QA tester</strong> for Key Space. You will exercise the web app, mobile app, and backend API on a staging environment, check off test scenarios, file clear reproducible bug reports, and send a daily status update.</p>
+      <div class="tag-group">
+        <span class="tag">No code required</span>
+        <span class="tag">Browser + DevTools</span>
+        <span class="tag">iPhone + Android</span>
+        <span class="tag">Postman (click Send)</span>
+        <span class="tag">Google Sheet tracking</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📅</span> Contract Structure</div>
+      <ul style="font-size:14px;">
+        <li><strong>Duration:</strong> 3–4 weeks</li>
+        <li><strong>Weeks 1–2:</strong> Launch-critical (launch: April 29, 2026)</li>
+        <li><strong>Weeks 3–4:</strong> Post-launch regression & patch verification</li>
+        <li><strong>Remote, async.</strong> Work in your own timezone</li>
+        <li><strong>Deliverable-based pay:</strong> Half up front, half on sign-off</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-title">✅ Definition of "Done" — Second Payment Released When:</div>
+    <ul style="font-size:14px;">
+      <li><strong>100%</strong> of P0 scenarios run across all applicable roles and plan tiers</li>
+      <li><strong>≥ 80%</strong> of P1 scenarios run</li>
+      <li>Every filed bug is reproducible by Andre from your template alone, <em>first try</em></li>
+      <li>Daily report submitted every working day — no silent gaps</li>
+      <li>Suite M (regression hotlist) fully signed off within first <strong>3 working days</strong></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2 — WHAT KEY SPACE IS
+══════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title-group">
+      <h2>What Key Space Is</h2>
+      <p>Product overview, key vocabulary, and three clients</p>
+    </div>
+  </div>
+
+  <p>Key Space is a <strong>B2B inventory, warehouse, and order management SaaS</strong> for small and mid-sized businesses. Customers use it to track products across multiple warehouses, receive purchase orders, fulfill customer orders (synced from Shopify, Amazon, WooCommerce, etc.), manage lot numbers and expiration dates, and scan barcodes on the warehouse floor via mobile.</p>
+
+  <h3>Key Vocabulary</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Organization</strong></td><td>A customer's company account. All data is scoped to an org.</td></tr>
+        <tr><td><strong>User</strong></td><td>A person who logs in. One user can belong to multiple organizations.</td></tr>
+        <tr><td><strong>Role</strong></td><td>Admin, Manager, User, or Viewer — controls what actions a person can take within an org.</td></tr>
+        <tr><td><strong>Plan Tier</strong></td><td>Starter / Growth / Pro / Enterprise — controls which features the org can access and how many items/warehouses/orders they get.</td></tr>
+        <tr><td><strong>Inventory Item</strong></td><td>A specific SKU in a specific warehouse (quantity, location, etc.).</td></tr>
+        <tr><td><strong>Product</strong></td><td>The catalog entry (name, description, images, cost). Products have inventory items.</td></tr>
+        <tr><td><strong>Lot</strong></td><td>A batch of product with an expiration date — used for food, pharma, cosmetics.</td></tr>
+        <tr><td><strong>Warehouse Location</strong></td><td>A named bin, shelf, or aisle within a warehouse (Growth+ only).</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Three Clients</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title"><span class="icon">🌐</span> Web App</div>
+      <p style="font-size:13px;color:var(--muted);">Admin, setup, analytics, integrations, billing</p>
+      <code class="inline-code">https://staging.app.keyspaceops.com</code>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📱</span> Mobile App</div>
+      <p style="font-size:13px;color:var(--muted);">Floor operations — scan, adjust, count, receive</p>
+      <code class="inline-code">TestFlight / APK (see Section 4)</code>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">⚡</span> API</div>
+      <p style="font-size:13px;color:var(--muted);">Server-side — exercised via the Postman collection (click Send, read response)</p>
+      <code class="inline-code">https://staging.api.keyspaceops.com/api/v1</code>
+    </div>
+  </div>
+
+  <h3>Plan Tiers</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Tier</th><th>Test Org</th><th>Key Features</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge enterprise">Enterprise</span></td>
+          <td><strong>TechFlow Solutions</strong></td>
+          <td>All features unlocked. Largest dataset — use for large-list scenarios.</td>
+        </tr>
+        <tr>
+          <td><span class="badge pro">Pro</span></td>
+          <td><strong>Pacific Traders</strong></td>
+          <td>5 users (Admin/Manager×2/User/Viewer). Cycle counts, serial numbers, API keys, webhooks, routing.</td>
+        </tr>
+        <tr>
+          <td><span class="badge growth">Growth</span></td>
+          <td><strong>GreenLeaf Manufacturing</strong></td>
+          <td>5 users. Lots, FEFO, traceability, POs, warehouse locations, inventory snapshots, shipping labels.</td>
+        </tr>
+        <tr>
+          <td><span class="badge starter">Starter</span></td>
+          <td><strong>Alpine Logistics</strong></td>
+          <td>4 users. 1 warehouse, 500 products, 2000 items, 500 orders/mo, 1 integration — use for "upgrade required" scenarios.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 3 — PRODUCT MAP
+══════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title-group">
+      <h2>Product Map</h2>
+      <p>What's available on each platform — critical design decisions</p>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ Important Design Decision</div>
+    The mobile app is <strong>intentionally a floor-operations tool</strong>, not an admin tool. A warehouse picker does not create products or place orders — that happens on the web. <strong>Do NOT file "cannot create a product on mobile" as a bug.</strong>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Feature Area</th><th>Web App</th><th>Mobile App</th><th>API / Postman</th></tr></thead>
+      <tbody>
+        <tr><td>Auth — signup, signin, forgot/reset, invitations</td><td>Full CRUD</td><td>Full (no MFA UI yet)</td><td>—</td></tr>
+        <tr><td>Organizations — create, edit, members, roles</td><td>Full CRUD</td><td>Switch active org only</td><td>—</td></tr>
+        <tr><td>Dashboard + onboarding checklist</td><td>Full</td><td>Home stats only</td><td>—</td></tr>
+        <tr><td>Products, variants, folders, bundles, BOM</td><td>Full CRUD</td><td>Browse only (by design)</td><td>—</td></tr>
+        <tr><td>Inventory items — browse, search, filter</td><td>Full</td><td>Full</td><td>—</td></tr>
+        <tr><td>Inventory adjustments + movement history</td><td>Full CRUD</td><td>Write (adjust screen)</td><td>—</td></tr>
+        <tr><td>Barcode scan</td><td>Web camera (ZXing)</td><td>Device camera</td><td>—</td></tr>
+        <tr><td>Orders + shipping + returns</td><td>Full CRUD</td><td>Browse only (by design)</td><td>—</td></tr>
+        <tr><td>Purchase orders</td><td>Full CRUD</td><td>Browse + Receive (write)</td><td>—</td></tr>
+        <tr><td>Lots, FEFO, traceability, expiration alerts</td><td>Full CRUD (Growth+)</td><td>Browse only (by design)</td><td>Expiration-check trigger</td></tr>
+        <tr><td>Serial numbers</td><td>Full CRUD (Pro+)</td><td>—</td><td>—</td></tr>
+        <tr><td>Cycle counts</td><td>Full CRUD (Pro+)</td><td>Walk-the-warehouse (write)</td><td>—</td></tr>
+        <tr><td>ML analytics — forecast, reorder, anomalies, COGS</td><td>Full</td><td>Dead stock only</td><td>—</td></tr>
+        <tr><td>Integrations (Shopify, Amazon, QuickBooks, etc.)</td><td>Full (plan-limited)</td><td>—</td><td>—</td></tr>
+        <tr><td>Billing — plans, usage, Stripe portal</td><td>Full</td><td>Trial banner only</td><td>Stripe webhook</td></tr>
+        <tr><td>Offline sync + queued mutations + DLQ</td><td>—</td><td>Full</td><td>—</td></tr>
+        <tr><td>Push notifications</td><td>—</td><td>Full</td><td>Token register/revoke</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 4 — ENVIRONMENT SETUP
+══════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title-group">
+      <h2>Environment Setup</h2>
+      <p>Complete before running any scenario — do not start testing until every item is confirmed</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="icon">🌐</span> Web App Setup</div>
+      <p style="font-size:14px;">URL: <code class="inline-code">https://staging.app.keyspaceops.com</code></p>
+      <p style="font-size:14px;">Staging uses a separate Cognito user pool and database from production. <strong>You cannot accidentally damage production data.</strong></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📱</span> Mobile App Setup</div>
+      <ul style="font-size:14px;">
+        <li><strong>iOS:</strong> Install via TestFlight — Andre will send invite link</li>
+        <li><strong>Android:</strong> Install APK from EAS build page — Andre provides link</li>
+        <li><strong>Expo Go will not work</strong> — app uses native camera and notification modules</li>
+        <li>No in-app environment switcher — staging build always points to staging</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="icon">📮</span> Postman Setup</div>
+      <ol style="font-size:14px;padding-left:18px;">
+        <li>Open Postman → Import → paste link Andre gives you</li>
+        <li>Select the <strong>"KeySpace Staging"</strong> environment</li>
+        <li>Run <code class="inline-code">01 — Auth — Sign in (nwatson)</code> → confirm 200 response with tokens</li>
+      </ol>
+      <p style="font-size:13px;color:var(--muted);">You will not write any Postman requests — only click Send and read the response.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">💳</span> Stripe Test Cards</div>
+      <div class="tbl-wrap" style="margin-bottom:0">
+        <table style="font-size:13px;">
+          <thead><tr><th>Scenario</th><th>Card Number</th></tr></thead>
+          <tbody>
+            <tr><td>Successful payment</td><td><code>4242 4242 4242 4242</code></td></tr>
+            <tr><td>Card declined</td><td><code>4000 0000 0000 0002</code></td></tr>
+            <tr><td>3DS authentication</td><td><code>4000 0027 6000 3184</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px;">Any future expiry, any 3-digit CVC, any ZIP.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📧</span> Email Inboxes Required</div>
+    <p style="font-size:14px;">You need access to at least <strong>three inboxes</strong> for email delivery testing:</p>
+    <div class="tag-group">
+      <span class="tag">✉ Gmail</span>
+      <span class="tag">✉ Outlook</span>
+      <span class="tag">✉ Any third (ProtonMail, iCloud, etc.)</span>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:8px;">Use an alias if preferred (e.g., <code>yourname+keyspace-test@gmail.com</code>). Andre must create staging Cognito users tied to these addresses.</p>
+  </div>
+
+  <h3>Browser / Device Matrix</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Browser / Device</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>Chrome (Windows or Mac)</td><td><span class="badge p0">P0 — primary</span></td></tr>
+        <tr><td>Edge (Windows)</td><td><span class="badge p0">P0</span></td></tr>
+        <tr><td>iOS Safari (iPhone)</td><td><span class="badge p0">P0</span></td></tr>
+        <tr><td>Android Chrome</td><td><span class="badge p0">P0</span></td></tr>
+        <tr><td>Safari (macOS)</td><td><span class="badge p1">P1</span></td></tr>
+        <tr><td>Firefox (Windows or Mac)</td><td><span class="badge p1">P1</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:14px;">Viewport sizes: <strong>375 / 768 / 1024 / 1280 / 1920px</strong>. Minimum devices: one iPhone with notch (Face ID) + one Android phone.</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 5 — HOW TO THINK ABOUT TESTING
+══════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title-group">
+      <h2>How to Think About Testing</h2>
+      <p>Four principles that make you a better tester for this product</p>
+    </div>
+  </div>
+
+  <div class="callout critical">
+    <div class="callout-title">🔴 Principle 1 — Tenant Isolation Is the #1 Risk</div>
+    Every piece of data belongs to an organization. A user in Alpine Logistics must <strong>never</strong> be able to see, search, or access data from Pacific Traders — even if they know a valid ID from that org. Finding a way to cross that boundary (URL manipulation, API call, etc.) is a <strong>Critical bug</strong> regardless of how contrived the path is.<br><br>
+    <strong>How to probe:</strong> When viewing something in Org A (e.g., <code>/products/some-uuid</code>), copy that UUID, log in as a user in Org B, and try to access <code>/products/that-uuid</code>. You should get a 404 or 403 — not the data.
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ Principle 2 — Role Permissions Are Enforced Twice</div>
+    The UI hides or disables things a user cannot do. But the server also rejects those requests. <strong>Both must agree.</strong> A Viewer should not see a "Delete" button AND if somehow they trigger the delete, the server should refuse it with a 403.<br><br>
+    <strong>How to probe:</strong> Log in as a Viewer. Right-click a disabled button → Inspect Element → try removing the <code>disabled</code> attribute in DevTools and clicking it. The server should block it with a 403. If deletion succeeds → High bug.
+  </div>
+
+  <div class="callout purple">
+    <div class="callout-title">🔒 Principle 3 — Plan Gates Are Enforced Twice Too</div>
+    Same pattern: Starter-plan UI shows a lock/upgrade overlay on Growth features. But calling the Growth feature directly via Postman as a Starter user should return a 403 with the required plan in the response. If it returns data instead → High bug.
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">ℹ️ Principle 4 — "Works on My Machine" Is the Enemy</div>
+    Every bug report must include: browser + OS + viewport + account + organization + plan tier + exact steps. A bug you cannot reproduce from your own report is useless.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 6 — TEST SCENARIO CATALOG
+══════════════════════════════════════════ -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-title-group">
+      <h2>Test Scenario Catalog</h2>
+      <p>Suites A through S — click any scenario to expand its full details</p>
+    </div>
+  </div>
+
+  <!-- Suite M FIRST -->
+  <div class="callout critical">
+    <div class="callout-title">🚨 Run Suite M FIRST — Regression Hotlist (P0)</div>
+    Suite M targets behavior changed in the last two weeks. Run it <strong>before all other suites</strong> within the first 3 working days. If any of these fail, file a bug immediately and notify Andre.
+  </div>
+
+  <div class="suite-header">
+    <div class="suite-letter">M</div>
+    <div class="suite-info">
+      <h3>Suite M — Regression Hotlist</h3>
+      <p><span class="badge p0">P0</span> &nbsp; 10 scenarios &nbsp; Run within first 3 days</p>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>What to Test</th><th>Why It's a Regression Risk</th></tr></thead>
+      <tbody>
+        <tr><td><strong>M1</strong></td><td>Full sign-in → use app a few minutes → sign out → sign back in. No logout loop. No stuck loading state.</td><td>The entire auth flow was rewritten in the most recent release.</td></tr>
+        <tr><td><strong>M2</strong></td><td>Open DevTools → Application → delete access token (leave refresh token). Without refreshing, navigate to a new section. App must silently recover.</td><td>Token refresh path is new (same auth rewrite).</td></tr>
+        <tr><td><strong>M3</strong></td><td>Via Postman: <code>GET /billing/usage</code>. Verify response includes warehouses, products, inventoryItems, monthlyOrders, integrations — each with current count + limit.</td><td>Brand new endpoint — verify shape and accuracy.</td></tr>
+        <tr><td><strong>M4</strong></td><td>Sign in as Alpine Logistics Admin (Starter). Via Postman, call a Growth-only endpoint (e.g., <code>GET /lots</code>). Response must include <code>currentPlan</code>, <code>requiredPlan</code>, and <code>upgradeUrl</code>.</td><td>Plan-information-in-blocked-responses logic was recently updated.</td></tr>
+        <tr><td><strong>M5</strong></td><td>Trigger Shopify reconciliation, inspect raw API response. Verify it includes a discrepancy list and summary object (not a flat array).</td><td>Reconciliation response structure changed — UI may break silently on old shape.</td></tr>
+        <tr><td><strong>M6</strong></td><td>Sign in as Alice Chen (User, Pacific Traders). Via Postman: <code>PATCH /organizations/&lt;pacific-traders-id&gt;</code> with any body. Expect 403.</td><td>New restriction added for non-admin users editing org settings via API.</td></tr>
+        <tr><td><strong>M7</strong></td><td>On mobile: sign in, use 5 mins, sign out cleanly. Confirm via network tab that "revoke push token" request was sent. Verify no notification arrives after sign-out.</td><td>Push notifications are a new feature — sign-out cleanup path needs verification.</td></tr>
+        <tr><td><strong>M8</strong></td><td>Open marketing landing page (<code>/</code>). Verify HubSpot early-access form renders, can be filled in, and submits without errors. All pricing tier cards display correctly.</td><td>Landing page was refreshed in the last release.</td></tr>
+        <tr><td><strong>M9</strong></td><td>Navigate to every top-level section: Dashboard, Products, Inventory, Orders, Warehouses, Analytics (all 6 pages), Reports, Integrations, Billing, Account. Each must load without 404, blank screen, or crash.</td><td>Routing configuration was refactored in last release.</td></tr>
+        <tr><td><strong>M10</strong></td><td>Web app → Inventory → Reconciliation tab. Run a reconciliation. Verify UI shows discrepancy list and status correctly (not blank panel or raw JSON).</td><td>Data shape the UI reads from changed — may cause silent display failures.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Suite A -->
+  <div class="suite-header">
+    <div class="suite-letter">A</div>
+    <div class="suite-info">
+      <h3>Suite A — Authentication &amp; Session</h3>
+      <p><span class="badge p0">P0</span> &nbsp; 20 scenarios &nbsp; Use throwaway email unless specified</p>
+    </div>
+  </div>
+
+  <div class="scenario open" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">A1</span>
+      <span class="scenario-title">Self-serve signup (new user)</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Open the web app in an Incognito window</li>
+        <li>Navigate to <code class="inline-code">/auth/signup</code></li>
+        <li>Enter a new email address, a display name, and a password meeting the requirements</li>
+        <li>Click "Create account"</li>
+        <li>Check the inbox for a confirmation email</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        Confirmation email arrives within 60 seconds. Clicking the link verifies the account. User is redirected to the app and prompted to create an organization. No duplicate account is created if the same email is used twice.
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">A2</span>
+      <span class="scenario-title">Sign-in with valid credentials</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Open the web app → navigate to <code class="inline-code">/auth/signin</code></li>
+        <li>Enter valid email and password (use Nathan Watson, Pacific Traders Admin)</li>
+        <li>Click "Sign in"</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        Redirected to the app dashboard. Organization badge shows "Pacific Traders." Role badge shows "Admin." No console errors.
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">A3</span>
+      <span class="scenario-title">Sign-in with wrong password</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Navigate to <code class="inline-code">/auth/signin</code></li>
+        <li>Enter a valid email but incorrect password</li>
+        <li>Click "Sign in"</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        Error message shown — does not reveal whether the email exists. No crash or server 500 error.
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">A13</span>
+      <span class="scenario-title">Mobile: sign in</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Open the staging mobile app</li>
+        <li>Sign in with <code class="inline-code">nwatson</code> (Nathan Watson, Pacific Traders Admin) — note: mobile uses the Cognito username, not email</li>
+        <li>Observe the Home screen</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        Dashboard loads, organization shows "Pacific Traders," stats visible.
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">A15</span>
+      <span class="scenario-title">Mobile: account deletion</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Sign in on mobile as a throwaway test account (not a seeded user — ask Andre to create one)</li>
+        <li>Go to More → Account → Delete account</li>
+        <li>Confirm deletion</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        Account deleted, returned to sign-in screen. Attempting to sign in again fails. In Cognito console (Andre verifies), user is gone. In DB (Andre verifies), user record is anonymized.
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">A20</span>
+      <span class="scenario-title">Web: "no active organization" state</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Create a fresh account (no org yet)</li>
+        <li>Sign in</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        <code>RequireActiveOrganization</code> guard shows a clear "Welcome / no organization" state with a button to create one or switch accounts. Not a blank screen or crash.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Suite B -->
+  <div class="suite-header">
+    <div class="suite-letter">B</div>
+    <div class="suite-info">
+      <h3>Suite B — Organizations &amp; Multi-Tenancy</h3>
+      <p><span class="badge p0">P0</span> &nbsp; Data isolation is the most important test in this suite</p>
+    </div>
+  </div>
+
+  <div class="scenario open" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">B3</span>
+      <span class="scenario-title">Data isolation test — <strong>Do not skip</strong></span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <div class="callout critical" style="margin-bottom:14px">
+        <div class="callout-title">🔴 Critical — Most Important in Suite B</div>
+        If this test FAILS, file a Critical bug immediately and ping Andre. Do not continue testing until acknowledged.
+      </div>
+      <ol class="steps">
+        <li>Sign in as Admin in Pacific Traders</li>
+        <li>Open a product and copy its UUID from the URL: <code class="inline-code">/app/products/&lt;uuid&gt;</code></li>
+        <li>Switch to <code class="inline-code">[QA-TEST] Isolation Corp</code></li>
+        <li>Navigate directly to <code class="inline-code">/app/products/&lt;uuid&gt;</code> (paste into address bar)</li>
+        <li>Repeat step 4 for: an order, a purchase order, a lot, a warehouse</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        <strong>404 or 403 page for all attempts.</strong> You must NOT see the Pacific Traders data under any circumstances.
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">B4</span>
+      <span class="scenario-title">API-level isolation test (via Postman)</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Authenticate in Postman as Alice Chen (User, Pacific Traders)</li>
+        <li>Find an Alpine Logistics org UUID from the seeded data (Andre's credentials doc)</li>
+        <li>Call <code class="inline-code">GET /api/v1/inventory-items?organizationId=&lt;alpine-org-id&gt;</code> with Pacific Traders auth token</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        403 (Forbidden) or empty result scoped to Pacific Traders — NOT Alpine Logistics inventory items.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Suite C -->
+  <div class="suite-header">
+    <div class="suite-letter">C</div>
+    <div class="suite-info">
+      <h3>Suite C — Role Permission Matrix</h3>
+      <p><span class="badge p0">P0</span> &nbsp; Use Pacific Traders (Pro) — all 4 roles seeded</p>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">ℹ️ Accounts for Suite C</div>
+    Nathan Watson (Admin) · Karen Park (Manager) · Alice Chen (User) · Ben Kumar (Viewer)<br>
+    For each blocked action, verify BOTH: (1) UI hides/disables the element AND (2) direct API call via Postman returns 403 with a meaningful error body.
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Domain</th><th>Action</th><th>Minimum Role</th></tr></thead>
+      <tbody>
+        <tr><td>Orders</td><td>Create / Update</td><td>User</td></tr>
+        <tr><td>Orders</td><td>Delete / Bulk update / Import</td><td>Manager</td></tr>
+        <tr><td>Orders</td><td>Export / View history</td><td>Viewer (read-only)</td></tr>
+        <tr><td>Warehouses</td><td>View</td><td>Viewer</td></tr>
+        <tr><td>Warehouses</td><td>Create / Update / Manage staff</td><td>Manager</td></tr>
+        <tr><td>Warehouses</td><td>Delete</td><td>Admin</td></tr>
+        <tr><td>Inventory</td><td>View</td><td>Viewer</td></tr>
+        <tr><td>Inventory</td><td>Create item / Adjust</td><td>User</td></tr>
+        <tr><td>Inventory</td><td>Delete / Bulk operations</td><td>Manager</td></tr>
+        <tr><td>Products</td><td>Create / Update / Manage images</td><td>User</td></tr>
+        <tr><td>Products</td><td>Delete / View analytics / Import</td><td>Manager</td></tr>
+        <tr><td>Billing</td><td>View</td><td>Viewer</td></tr>
+        <tr><td>Billing</td><td>Manage (upgrade, cancel)</td><td>Admin</td></tr>
+        <tr><td>API Keys / Webhooks / Integrations</td><td>Create/revoke/configure</td><td>Admin</td></tr>
+        <tr><td>Organization</td><td>Edit name/settings</td><td>Admin</td></tr>
+        <tr><td>Members</td><td>Invite / Remove / Change role</td><td>Admin</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Suite D -->
+  <div class="suite-header">
+    <div class="suite-letter">D</div>
+    <div class="suite-info">
+      <h3>Suite D — Plan Gate Matrix</h3>
+      <p><span class="badge p0">P0</span> &nbsp; Use Alpine (Starter), GreenLeaf (Growth), Pacific Traders (Pro)</p>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Feature</th><th>Free</th><th>Starter</th><th>Growth</th><th>Pro</th></tr></thead>
+      <tbody>
+        <tr><td>Basic reports</td><td>—</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Lot tracking / FEFO / Traceability</td><td>🔒</td><td>🔒</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Purchase orders</td><td>🔒</td><td>🔒</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Warehouse locations</td><td>🔒</td><td>🔒</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Inventory snapshots</td><td>🔒</td><td>🔒</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Shipping labels</td><td>🔒</td><td>🔒</td><td>✅</td><td>✅</td></tr>
+        <tr><td>Serial numbers / Cycle counts / Routing</td><td>🔒</td><td>🔒</td><td>🔒</td><td>✅</td></tr>
+        <tr><td>API keys / Outbound webhooks</td><td>🔒</td><td>🔒</td><td>🔒</td><td>✅</td></tr>
+        <tr><td>Integrations (count limit)</td><td>0</td><td>1</td><td>3</td><td>Unlimited</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Usage Limit Tests (Alpine Logistics — Starter)</div>
+    <ul style="font-size:14px;">
+      <li><strong>D-L1:</strong> Try to create a 2nd warehouse → expect 403 with <code>suggestedPlan</code></li>
+      <li><strong>D-L2:</strong> Try to create product #501 → expect 403</li>
+      <li><strong>D-L3:</strong> Try to create inventory item #2001 → expect 403</li>
+      <li><strong>D-L4:</strong> Try to connect a 2nd integration → expect 403</li>
+      <li><strong>D-L5:</strong> Call <code class="inline-code">GET /billing/usage</code> → verify counts and limits match Starter plan config</li>
+    </ul>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Suite E -->
+  <div class="suite-header">
+    <div class="suite-letter">E</div>
+    <div class="suite-info">
+      <h3>Suite E — Core Inventory Lifecycle</h3>
+      <p><span class="badge p0">P0</span> &nbsp; Use GreenLeaf Manufacturing (Growth) unless otherwise noted</p>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">E1</span>
+      <span class="scenario-title">Create product → create inventory item → adjust → view history</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Create a new product <code class="inline-code">[QA-TEST] Blue Widget</code> with SKU <code class="inline-code">QA-BW-001</code> and cost $5.00</li>
+        <li>Create an inventory item for it in GreenLeaf's first warehouse, quantity 100</li>
+        <li>Perform an adjustment: increase by 25 (reason: "found stock")</li>
+        <li>View the movement history for that item</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        Quantity shows <strong>125</strong>. Movement history shows two entries: initial creation (quantity 100) and the adjustment (+25).
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">E2</span>
+      <span class="scenario-title">Bundle availability math</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Ensure three products exist with known quantities: A (100 units), B (50 units), C (200 units)</li>
+        <li>Create a bundle <code class="inline-code">[QA-TEST] Starter Kit</code> requiring 2× A, 1× B, 3× C</li>
+        <li>View the bundle detail</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        Available bundle quantity = min(100/2, 50/1, 200/3) = min(50, 50, 66) = <strong>50</strong>. Verify the UI shows 50.
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">E4</span>
+      <span class="scenario-title">FEFO allocation</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Create two lots for the same product: Lot A (expires in 10 days, qty 50) and Lot B (expires in 30 days, qty 50)</li>
+        <li>Trigger a FEFO pick/allocation for that product (quantity 30) via Postman (<code class="inline-code">POST /api/v1/fefo/allocate</code> or equivalent)</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        The 30 units are allocated from <strong>Lot A</strong> (expires sooner), not Lot B.
+      </div>
+    </div>
+  </div>
+
+  <div class="scenario" onclick="toggleScenario(this)">
+    <div class="scenario-head">
+      <span class="scenario-id">E6</span>
+      <span class="scenario-title">Cycle count (Pacific Traders — Pro)</span>
+      <span class="badge p0">P0</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="scenario-body">
+      <ol class="steps">
+        <li>Navigate to <code class="inline-code">/app/cycle-counts</code> → start a new session</li>
+        <li>Count a product (enter counted quantity — intentionally mismatch by 5)</li>
+        <li>Close the cycle count session</li>
+        <li>View the inventory item</li>
+      </ol>
+      <div class="expected">
+        <div class="expected-label">✓ Expected Result</div>
+        Inventory quantity adjusted to match the counted quantity. A movement entry explains the variance.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Suite F, G, H, I summary cards -->
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title"><span class="icon">📦</span> Suite F — Orders &amp; Fulfillment <span class="badge p0">P0</span></div>
+      <p style="font-size:13px;">Tests: order creation end-to-end, bulk operations (Manager+), purchase order lifecycle (partial receive), returns/RMA, shipping rate quotes &amp; label purchase.</p>
+      <p style="font-size:13px;color:var(--muted);">Use: TechFlow Solutions (Enterprise) for orders; GreenLeaf for purchase orders.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🔗</span> Suite G — Integrations</div>
+      <p style="font-size:13px;"><span class="badge p0">P0</span> Shopify, Amazon, QuickBooks<br><span class="badge p1">P1</span> Xero, WooCommerce, Square, Etsy, BigCommerce, eBay, Zapier</p>
+      <p style="font-size:13px;color:var(--muted);">Each integration: connect → sync → view logs → disconnect/reconnect → simulate failure mid-sync.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">💰</span> Suite H — Billing Lifecycle <span class="badge p0">P0</span></div>
+      <p style="font-size:13px;">Tests: upgrade Free→Growth→Pro, usage endpoint verification, cancel/reactivate, coupon application, downgrade blocked by usage, trial banner, Stripe payment failure path.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📱</span> Suite I — Mobile-Specific <span class="badge p0">P0</span></div>
+      <p style="font-size:13px;">Tests: fresh install + first-launch permissions, barcode scan (all platforms), offline mode (airplane toggle), notification permission &amp; deep links, background app management.</p>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title"><span class="icon">🔑</span> Suite J — API Keys &amp; Webhooks <span class="badge p0">P0</span></div>
+      <p style="font-size:13px;">Tests: create/use/revoke API keys (Pro+), outbound webhook subscription CRUD, HMAC signature validation, DLQ retry behavior, event log.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span> Suite K — Analytics &amp; Reports <span class="badge p1">P1</span></div>
+      <p style="font-size:13px;">Tests: ML forecast model, reorder alerts, dead stock detection, inventory anomaly, COGS tracking, promotions analysis, all 5 fixed report types with export.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📧</span> Suite L — Email Delivery <span class="badge p0">P0</span></div>
+      <p style="font-size:13px;">Tests: signup confirmation, invitation email, forgot-password email, lot expiration alert email, order shipped notification — across Gmail, Outlook, ProtonMail/iCloud.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">♿</span> Suite N — Accessibility <span class="badge p1">P1</span></div>
+      <p style="font-size:13px;">Screen reader smoke test (VoiceOver / NVDA / TalkBack). Sign-in form labels, dashboard KPI cards, table headers, modal focus trap, command palette (Ctrl+K).</p>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏷️</span> Suite O — Labels <span class="badge p1">P1</span></div>
+      <p style="font-size:13px;">Barcode label PDF generation, template selection, batch generation for 10 items, multi-bin label assignment, QR code scanning.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🔔</span> Suite P — Push Notifications <span class="badge p1">P1</span></div>
+      <p style="font-size:13px;">Permission prompt, foreground notification rendering, background tap → correct screen, token registration, low stock notification trigger.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">⚡</span> Suite Q — Background Jobs <span class="badge p1">P1</span></div>
+      <p style="font-size:13px;">Expiration check job, stale reservation cleanup, recall recall notification trigger, inventory reconciliation job — all triggered via Postman.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🏎️</span> Suite R — Performance Feel <span class="badge p1">P1</span></div>
+      <p style="font-size:13px;">Large org list page load, inventory search response time, mobile scroll on 500+ items, 10,000-row CSV import with progress indicator.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🖨️</span> Suite S — Physical Device &amp; Printing <span class="badge p2">P2</span> — Conditional on hardware</div>
+    <p style="font-size:14px;">Thermal label printing (DYMO or Zebra printer required), USB barcode scanner input (keyboard-emulation type). Skip if hardware not available.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 7 — PRIORITY & SEVERITY
+══════════════════════════════════════════ -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div class="section-title-group">
+      <h2>Priority &amp; Severity Legend</h2>
+      <p>You inherit priority from the scenario. You assign severity to the bugs you file.</p>
+    </div>
+  </div>
+
+  <div class="priority-grid">
+    <div class="priority-card" style="border-color:#fca5a5;background:#fef2f2">
+      <div class="emoji">🔴</div>
+      <div class="pname" style="color:#b91c1c">P0</div>
+      <div class="pdesc">Must work for launch. Bug = launch blocker.</div>
+    </div>
+    <div class="priority-card" style="border-color:#fcd34d;background:#fef3c7">
+      <div class="emoji">🟡</div>
+      <div class="pname" style="color:#92400e">P1</div>
+      <div class="pdesc">Should work. Fix in first patch week.</div>
+    </div>
+    <div class="priority-card" style="border-color:#86efac;background:#f0fdf4">
+      <div class="emoji">🟢</div>
+      <div class="pname" style="color:#166534">P2</div>
+      <div class="pdesc">Polish. Goes to backlog.</div>
+    </div>
+    <div class="priority-card" style="border-color:var(--border);background:var(--surface)">
+      <div class="emoji">⚡</div>
+      <div class="pname">P0+High</div>
+      <div class="pdesc">File immediately + ping Andre. Don't wait for daily report.</div>
+    </div>
+  </div>
+
+  <h3>Bug Severity Definitions</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Severity</th><th>Definition</th><th>Examples</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge critical">Critical</span></td>
+          <td>Data loss, tenant data leak, auth bypass, wrong charge, app crashes on launch</td>
+          <td>User A can see User B's data; signup charges real money; app crashes on open</td>
+        </tr>
+        <tr>
+          <td><span class="badge high">High</span></td>
+          <td>P0 scenario fails but has a workaround; feature completely broken for one role/plan</td>
+          <td>Viewer can delete via API; bulk order update silently fails for Manager</td>
+        </tr>
+        <tr>
+          <td><span class="badge medium">Medium</span></td>
+          <td>Edge case fails; visual regression on primary screen; intermittent</td>
+          <td>Bundle math wrong for edge-case quantity; chart blank in dark mode intermittently</td>
+        </tr>
+        <tr>
+          <td><span class="badge low">Low</span></td>
+          <td>Cosmetic; dark-mode glitch; copy typo</td>
+          <td>Button label has a typo; footer icon misaligned by 2px</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 8 — BUG REPORT TEMPLATE
+══════════════════════════════════════════ -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <div class="section-title-group">
+      <h2>Bug Report Template</h2>
+      <p>One file per bug in the shared Google Drive folder. Filename: <code>YYYY-MM-DD-&lt;short-slug&gt;.md</code></p>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-title">⚠️ Rules</div>
+    <ul style="font-size:14px;">
+      <li>One file = one bug. Do not group multiple bugs into one file.</li>
+      <li>Include a screenshot or screen recording for <strong>every</strong> bug.</li>
+      <li>A bug without visual evidence has a much lower chance of being triaged quickly.</li>
+    </ul>
+  </div>
+
+  <div class="bug-template">
+    <span class="bug-comment"># Example filename: 2026-04-17-signout-loop-on-mobile.md</span><br><br>
+    <span class="bug-key"># [BUG]</span> <span class="bug-val">&lt;one-line summary&gt;</span><br><br>
+    <span class="bug-key">**Scenario ID:**</span> <span class="bug-val">M1 — or "unscripted" if found outside a scenario</span><br>
+    <span class="bug-key">**Severity:**</span> <span class="bug-val">Critical / High / Medium / Low</span><br>
+    <span class="bug-key">**Surface:**</span> <span class="bug-val">Web / Mobile iOS / Mobile Android / API</span><br>
+    <span class="bug-key">**Environment:**</span> <span class="bug-val">Staging</span><br>
+    <span class="bug-key">**Build/version:**</span> <span class="bug-val">web: git SHA from /health; mobile: Settings → About; API: GET /health build field</span><br>
+    <span class="bug-key">**Account used:**</span> <span class="bug-val">karen.park@pacifictraders.com (Manager, Pacific Traders, Pro)</span><br>
+    <span class="bug-key">**Browser/device:**</span> <span class="bug-val">Chrome 124 / macOS 14.4 / 1440×900 — OR — iPhone 15 Pro / iOS 17.4 / build v1.0.0 (42)</span><br><br>
+    <span class="bug-key">## Steps to reproduce</span><br>
+    <span class="bug-val">1. [first step]</span><br>
+    <span class="bug-val">2. [second step]</span><br>
+    <span class="bug-val">3. [...</span>]<br><br>
+    <span class="bug-key">## Expected result</span><br>
+    <span class="bug-val">[what should have happened]</span><br><br>
+    <span class="bug-key">## Actual result</span><br>
+    <span class="bug-val">[what actually happened]</span><br><br>
+    <span class="bug-key">## Screenshot or screen recording</span><br>
+    <span class="bug-val">[paste image or Loom link]</span><br><br>
+    <span class="bug-key">## Console / network errors</span><br>
+    <span class="bug-val">[DevTools console output, failing request URL, HTTP status, response body]</span><br><br>
+    <span class="bug-key">## Reproducibility</span><br>
+    <span class="bug-val">Always / 3/5 attempts / Once — cannot repro again</span><br><br>
+    <span class="bug-key">## Notes</span><br>
+    <span class="bug-val">[related bugs, workarounds found, suspected cause]</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 9 — DAILY REPORTING
+══════════════════════════════════════════ -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <div class="section-title-group">
+      <h2>Daily Reporting Rubric</h2>
+      <p>Post this exact format every working day — it is how Andre tracks velocity without asking you</p>
+    </div>
+  </div>
+
+  <div class="report-template">
+    <strong style="color:#93c5fd;">## QA Day N — YYYY-MM-DD</strong><br>
+    Hours worked: Xh<br>
+    Suites worked: A (12/20 complete), M (10/10 complete)<br>
+    Scenarios run today: 28<br>
+    Cumulative: <span style="color:#86efac;">Pass 64</span> / <span style="color:#f87171;">Fail 8</span> / <span style="color:#fcd34d;">Blocked 3</span> / Not tested 125<br>
+    Bugs filed today: BUG-001, BUG-002, BUG-003 (1 Critical, 1 High, 1 Medium)<br>
+    Blockers: Suite G-Shopify OAuth blocked — awaiting sandbox credentials from Andre<br>
+    Tomorrow: finish Suite G, start Suite H
+  </div>
+
+  <div class="card-grid" style="margin-top:16px">
+    <div class="card">
+      <div class="card-title">Timing Rules</div>
+      <ul style="font-size:14px;">
+        <li>Post within 30 minutes of ending your workday</li>
+        <li>If you are blocked: flag in the daily report <strong>AND</strong> ping Andre directly that same day</li>
+        <li>If you won't work the next day: say so in the report</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Critical Bug Rule</div>
+      <p style="font-size:14px;">Do not accumulate bugs for the daily report. <strong>Critical/High bugs get filed and pinged to Andre immediately upon discovery</strong> — not at end-of-day.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 10 — TEST MATRIX
+══════════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <div class="section-title-group">
+      <h2>Test Matrix Spreadsheet</h2>
+      <p>Andre maintains the Google Sheet — you fill it in real-time as you go</p>
+    </div>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Suite</th><th>ID</th><th>Title</th><th>Priority</th><th>Status</th><th>Tester</th><th>Browser / Device</th><th>Account</th><th>Org</th><th>Plan</th><th>Date run</th><th>Bug IDs</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>M</td><td>M1</td><td>Auth flow regression</td><td><span class="badge p0">P0</span></td><td><span class="status-pass">PASS</span></td><td>You</td><td>Chrome / Win</td><td>nwatson</td><td>Pacific Traders</td><td>Pro</td><td>2026-04-16</td><td>—</td><td>—</td></tr>
+        <tr><td>B</td><td>B3</td><td>Data isolation test</td><td><span class="badge p0">P0</span></td><td><span class="status-fail">FAIL</span></td><td>You</td><td>Chrome / Win</td><td>nwatson</td><td>Pacific Traders</td><td>Pro</td><td>2026-04-16</td><td>BUG-007</td><td>Cross-org data visible</td></tr>
+        <tr><td>D</td><td>D-L1</td><td>Starter: 2nd warehouse blocked</td><td><span class="badge p0">P0</span></td><td><span class="status-blocked">BLOCKED</span></td><td>You</td><td>—</td><td>admin@alpine</td><td>Alpine Logistics</td><td>Starter</td><td>—</td><td>—</td><td>Alpine org not seeded yet</td></tr>
+        <tr><td>S</td><td>S1</td><td>Thermal label printing</td><td><span class="badge p2">P2</span></td><td><span class="status-na">N/A</span></td><td>You</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>No label printer available</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">ℹ️ Status Values</div>
+    <div class="tag-group">
+      <span class="tag" style="background:#f3f4f6">NT — Not tested yet</span>
+      <span class="tag" style="background:#d1fae5;color:#065f46">PASS — Works as expected</span>
+      <span class="tag" style="background:#fee2e2;color:#991b1b">FAIL — Bug filed</span>
+      <span class="tag" style="background:#fef3c7;color:#92400e">BLOCKED — Cannot test (explain in Notes)</span>
+      <span class="tag" style="background:#f3f4f6;color:#6b7280">N/A — Wrong plan/role/out of scope</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Rules</div>
+    <ul style="font-size:14px;">
+      <li>Update the sheet <strong>in real time</strong>, not at the end of the day</li>
+      <li>Mark PASS only when <strong>all</strong> expected results are verified</li>
+      <li>If you deviate from the prescribed steps, note it in the Notes column</li>
+      <li>Do not leave rows blank — every row must have a Status</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 11 — ACCEPTANCE CRITERIA
+══════════════════════════════════════════ -->
+<div class="section" id="s11">
+  <div class="section-header">
+    <div class="section-num">11</div>
+    <div class="section-title-group">
+      <h2>Acceptance Criteria</h2>
+      <p>The engagement is complete and second half of payment is released when all 6 criteria are met</p>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <h4>Coverage</h4>
+      <p>100% of P0 scenarios have a non-NT status; ≥ 80% of P1 scenarios have a non-NT status</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <h4>Suite M Regression</h4>
+      <p>All 10 regression scenarios signed off within the first 3 working days</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <h4>Bug Quality</h4>
+      <p>Andre can reproduce &gt; 90% of filed bugs on first attempt from the bug report alone (no additional questions)</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <h4>Velocity</h4>
+      <p>Average ≥ 20 scenarios run per full working day</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <h4>Reporting</h4>
+      <p>Daily report submitted every working day with no silent gaps</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <h4>Final Sign-Off</h4>
+      <p>30-minute call or async summary reviewing all BLOCKED scenarios and unresolved bugs</p>
+    </div>
+  </div>
+
+  <div class="callout success">
+    <div class="callout-title">✅ Note on Open Bugs</div>
+    If bugs are still open when you submit the matrix, that is fine — bugs are triaged and fixed by engineering. Your job is to <strong>find</strong> them, not fix them. The matrix just needs to be complete.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 12 — OUT OF SCOPE
+══════════════════════════════════════════ -->
+<div class="section" id="s12">
+  <div class="section-header">
+    <div class="section-num">12</div>
+    <div class="section-title-group">
+      <h2>Out of Scope — Do Not Test</h2>
+      <p>Do not file bugs for any of these — they are intentional design decisions or features not yet built</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="callout warning">
+      <div class="callout-title">🚫 Not Implemented Yet (Design Docs Only)</div>
+      <ul style="font-size:14px;">
+        <li><strong>Work orders</strong> — no <code>/work-orders</code> route exists</li>
+        <li><strong>Custom report builder</strong> — only 5 fixed report types exist</li>
+        <li><strong>Multi-currency</strong> — all prices in a single currency</li>
+        <li><strong>Barcode label visual editor</strong> — canvas template editor is a design doc. However, <code>POST /labels/generate</code> and <code>GET /labels/formats</code> DO work and ARE in scope</li>
+      </ul>
+    </div>
+    <div class="callout warning">
+      <div class="callout-title">🚫 Intentional Mobile Design Decisions</div>
+      <ul style="font-size:14px;">
+        <li>Cannot create products, orders, warehouses, lots, bundles from mobile</li>
+        <li>No integrations management on mobile</li>
+        <li>No billing management on mobile (beyond the trial banner)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-title">ℹ️ Not in 1.0 Scope</div>
+    <ul style="font-size:14px;">
+      <li>Biometric login on mobile (Face ID / Touch ID) — not implemented</li>
+      <li>Photo upload on mobile — not implemented</li>
+      <li>Offline mode on web — no service worker; web app requires internet</li>
+      <li>PWA install / add to home screen behavior — manifest exists but no service worker</li>
+      <li>Dev-only endpoints (<code>/auth/debug/*</code>, <code>/dev/*</code>) — do not exist in staging</li>
+      <li>Automated WCAG compliance testing (Axe, Lighthouse a11y score) — not part of this engagement; Section N covers manual screen reader smoke only</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 13 — DAY-1 CHECKLIST
+══════════════════════════════════════════ -->
+<div class="section" id="s13">
+  <div class="section-header">
+    <div class="section-num">13</div>
+    <div class="section-title-group">
+      <h2>Day-1 Checklist</h2>
+      <p>Complete before running any test scenarios — do not proceed until all items are checked</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <ul class="checklist">
+      <li><span class="check-box"></span> Received and read Andre's credentials document (test user emails, Cognito usernames, passwords)</li>
+      <li><span class="check-box"></span> Successfully signed in to web app as all four Pacific Traders users: Nathan Watson, Karen Park, Alice Chen, Ben Kumar</li>
+      <li><span class="check-box"></span> Confirmed the organization and role badge for each user match the credentials doc</li>
+      <li><span class="check-box"></span> Installed the staging mobile build on at least one iOS device and one Android device</li>
+      <li><span class="check-box"></span> Successfully signed in to mobile as <code class="inline-code">nwatson</code> (Nathan Watson)</li>
+      <li><span class="check-box"></span> Imported Andre's Postman collection, selected "KeySpace Staging" environment, ran "01 — Auth — Sign in (nwatson)" request, got a 200 response with tokens</li>
+      <li><span class="check-box"></span> Opened the Google Sheet test matrix, set your display name in "Tester" column, confirmed edit access</li>
+      <li><span class="check-box"></span> Located the shared Google Drive bug reports folder and confirmed write access</li>
+      <li><span class="check-box"></span> Received sandbox integration credentials (Shopify, Amazon SP-API, QuickBooks sandbox) from Andre</li>
+      <li><span class="check-box"></span> Set up at least two email inboxes (Gmail + one other) for email delivery testing</li>
+      <li><span class="check-box"></span> Run a 10-scenario smoke test (one per suite from Suites A, B, D, E, F, G, H, I) — all must pass before going deeper</li>
+      <li><span class="check-box"></span> Filed one deliberate dummy bug (<code>[DUMMY] Test bug — ignore</code>) using the template in Section 8 — Andre will review the format and confirm it's correct</li>
+      <li><span class="check-box"></span> Posted the first daily report using the format in Section 9</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 14 — MANUAL TESTS (HUMAN REQUIRED)
+══════════════════════════════════════════ -->
+<div class="section" id="s14">
+  <div class="section-header">
+    <div class="section-num">14</div>
+    <div class="section-title-group">
+      <h2>Manual Tests Requiring Human Judgment</h2>
+      <p>Tests that genuinely require eyes on screen, hands on device, or subjective visual/UX judgment</p>
+    </div>
+  </div>
+
+  <h3>Visual UI Verification (Web)</h3>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title"><span class="icon">🖥️</span> 1.1 Landing Page (<code>/</code>)</div>
+      <ul style="font-size:13px;">
+        <li>Hero section looks correct — background, typography, spacing</li>
+        <li>Pricing cards render correctly — toggle animates, "Most Popular" badge visible on Growth</li>
+        <li>Feature cards have working images (not broken placeholders)</li>
+        <li>FAQ accordions expand/collapse with smooth animation</li>
+        <li>Footer social icons are recognizable SVGs (not broken)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🌙</span> 1.2 Dark Mode</div>
+      <ul style="font-size:13px;">
+        <li>Toggle dark mode → all text readable against backgrounds</li>
+        <li>No invisible text, missing borders, or unreadable contrast</li>
+        <li>Modals, sidebars, navbars, empty states all adapt</li>
+        <li>Charts/graphs remain visible in dark mode</li>
+        <li>Status badges still have correct color semantics</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📐</span> 1.3 Responsive Design</div>
+      <ul style="font-size:13px;">
+        <li><strong>~375px:</strong> Hamburger menu works, tables scroll horizontally, no horizontal overflow on forms</li>
+        <li><strong>~768px:</strong> Sidebars usable, modals centered</li>
+        <li><strong>1280px+:</strong> Full-width tables, all 5 pricing tiers in a row</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">✨</span> 1.5 Toasts, Loaders &amp; Error States</div>
+      <ul style="font-size:13px;">
+        <li>Success toasts appear after create/update/delete and auto-dismiss</li>
+        <li>Error toasts show actionable text (not raw error codes)</li>
+        <li>Page loaders appear within ~300ms on slow network (throttle in DevTools)</li>
+        <li>Empty states show clear messaging with appropriate illustrations</li>
+        <li>404 page shows NotFoundPage design</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Cross-Browser Testing</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Browser</th><th>Priority</th><th>What to Test</th></tr></thead>
+      <tbody>
+        <tr><td>Chrome / Edge</td><td><span class="badge p0">P0</span></td><td>Full staging walkthrough: auth + dashboard + orders + inventory</td></tr>
+        <tr><td>Firefox</td><td><span class="badge p0">P0</span></td><td>Auth flow + order creation + inventory adjustment</td></tr>
+        <tr><td>Safari (macOS)</td><td><span class="badge p1">P1</span></td><td>Auth flow + dashboard + one CRUD operation</td></tr>
+        <tr><td>Safari (iOS)</td><td><span class="badge p1">P1</span></td><td>Landing page + sign-in + dashboard on iPhone</td></tr>
+        <tr><td>Samsung Internet</td><td><span class="badge p2">P2</span></td><td>Landing page renders correctly</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Physical Device Tests</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="icon">📷</span> Barcode Scanner (Physical Camera Required)</div>
+      <div class="tbl-wrap" style="margin:0">
+        <table style="font-size:13px;">
+          <thead><tr><th>#</th><th>Test</th><th>Expected</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>First launch camera permission</td><td>Clear dialog appears</td></tr>
+            <tr><td>2</td><td>Deny camera permission</td><td>Explanation shown, path to Settings</td></tr>
+            <tr><td>3</td><td>Scan known barcode</td><td>Correct product/inventory opens</td></tr>
+            <tr><td>4</td><td>Scan unknown code</td><td>"Not found" message (not silent failure)</td></tr>
+            <tr><td>5</td><td>Low light scanning</td><td>Acceptable behavior or torch toggle</td></tr>
+            <tr><td>6</td><td>Exit scanner → return to tabs</td><td>Camera released, no freeze</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">✈️</span> Offline Behavior (Airplane Mode)</div>
+      <div class="tbl-wrap" style="margin:0">
+        <table style="font-size:13px;">
+          <thead><tr><th>#</th><th>Test</th><th>Expected</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Airplane mode ON</td><td>Offline banner within 2–3 seconds</td></tr>
+            <tr><td>2</td><td>Airplane mode OFF</td><td>Banner disappears, app recovers</td></tr>
+            <tr><td>3</td><td>Browse while offline</td><td>Cached lists visible (TanStack Query)</td></tr>
+            <tr><td>4</td><td>Attempt mutation offline</td><td>Error message, no crash</td></tr>
+            <tr><td>5</td><td>Reconnect</td><td>Pending actions flush, data matches server</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <h3>Legal &amp; Compliance</h3>
+  <div class="callout warning">
+    <div class="callout-title">⚠️ Store Requirement — Account Deletion</div>
+    Both Apple App Store and Google Play Store <strong>require</strong> a working in-app account deletion flow. Verify: initiation from mobile profile → confirmation dialog → returns to sign-in → cannot sign in with deleted credentials → DB shows user anonymized → Cognito shows user deleted.
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Launch Phase</th><th>Tests to Complete</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Must Complete Before Launch</strong></td>
+          <td>Web full flow walkthrough (§7.1) · Mobile full flow (§7.2) · Cross-platform data consistency (§7.3) · Account deletion (§6.2) · Privacy &amp; terms pages live (§6.1) · Stripe billing test (§5.1) · Landing page visual (§1.1) · Barcode scanner on physical device (§4.1) · Key pages visual spot check (§1.4)</td>
+        </tr>
+        <tr>
+          <td><strong>Should Complete Before Launch</strong></td>
+          <td>Dark mode visual check (§1.2) · Responsive at 375px + 1280px (§1.3) · Firefox + Safari quick check (§2) · Offline mode on device (§4.2) · Platform-specific iOS + Android (§4.3) · Deep linking (§4.4) · Cookie consent (§6.4) · Social media URLs resolve (§5.4) · Toasts, loaders, error states (§1.5)</td>
+        </tr>
+        <tr>
+          <td><strong>Complete Post-Launch</strong></td>
+          <td>Full screen reader audit (§3) · Integration OAuth flows with sandboxes (§5.2) · AWS service verification (§5.3) · App Store assets + listings (§6.3) · Samsung Internet (§2) · Push notifications (§4.5) · Performance feel on low-end device (§4.6)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 15 — COMMUNICATION
+══════════════════════════════════════════ -->
+<div class="section" id="s15">
+  <div class="section-header">
+    <div class="section-num">15</div>
+    <div class="section-title-group">
+      <h2>Communication &amp; Escalation</h2>
+      <p>How and when to communicate with Andre</p>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title"><span class="icon">📅</span> Daily Status</div>
+      <p style="font-size:14px;">Post the daily report (Section 9 format) at the end of each working day in the agreed Slack channel or shared document.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🚨</span> Critical Bugs</div>
+      <p style="font-size:14px;"><strong>Do not wait for the daily report.</strong> File the bug and ping Andre immediately in the shared Slack channel or via direct message.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🚧</span> Blockers</div>
+      <p style="font-size:14px;">If you cannot proceed with a scenario (missing credentials, feature not deployed, environment down): mark as BLOCKED in the matrix with an explanation, include it in the daily report, <strong>and</strong> ping Andre the same day. Do not silently skip and mark NT.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">❓</span> Questions About Scope</div>
+      <p style="font-size:14px;">If a behavior is unclear and you're not sure whether to file a bug, ask — include a screenshot. <strong>Never assume "that's probably fine."</strong></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🌐</span> Environment Issues</div>
+      <p style="font-size:14px;">If staging appears to be down or returning unexpected errors across multiple unrelated scenarios, <strong>stop testing and notify Andre immediately</strong> rather than filing many unrelated bugs that may all trace to the same root cause.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🏁</span> Wrapping Up</div>
+      <p style="font-size:14px;">At the end of the engagement, schedule a 30-minute sign-off call (or async summary) reviewing: all open bugs, all BLOCKED scenarios, any patterns you noticed, and your overall quality assessment of the product.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<div class="doc-footer">
+  <p><strong>KeySpace QA Complete Reference Guide</strong></p>
+  <p style="margin-top:4px;">Compiled from <code>QA_TESTER_ONBOARDING.md</code> and <code>QA_MANUAL_TESTS.md</code> · Last updated April 15, 2026 · Author: Andre Rodriguez</p>
+  <p style="margin-top:8px;">Staging only · Confidential — do not share outside this engagement</p>
+</div>
+
+</div><!-- /page -->
+
+<script>
+function toggleScenario(el) {
+  el.classList.toggle('open');
+}
+
+// Auto-open first scenario in each suite on load is already handled by the .open class
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playwright Locators Masterclass</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #111827;
+    --bg3: #1a2236;
+    --surface: #1e2d45;
+    --surface2: #243350;
+    --border: rgba(99,179,237,0.15);
+    --border2: rgba(99,179,237,0.3);
+    --accent: #45e3b8;
+    --accent2: #3b9eff;
+    --accent3: #f87c52;
+    --accent4: #a78bfa;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #64748b;
+    --danger: #f87171;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --code-bg: #0d1117;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── Header ── */
+  .hero {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1e3a 50%, #0a1628 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 60px 48px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(69,227,184,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(59,158,255,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(69,227,184,0.1);
+    border: 1px solid rgba(69,227,184,0.25);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 46px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 18px;
+    max-width: 700px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    font-size: 16px;
+    color: var(--text2);
+    max-width: 580px;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .hero-stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-stat-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .hero-stat-icon.g { background: rgba(69,227,184,0.12); }
+  .hero-stat-icon.b { background: rgba(59,158,255,0.12); }
+  .hero-stat-icon.p { background: rgba(167,139,250,0.12); }
+  .hero-stat-label { font-size: 13px; color: var(--text2); }
+  .hero-stat-val { font-size: 14px; font-weight: 600; color: var(--text); }
+
+  /* ── Layout ── */
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar / TOC ── */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 28px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface2) transparent;
+  }
+  .sidebar-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 0 20px 12px;
+  }
+  .toc-phase {
+    margin-bottom: 4px;
+  }
+  .toc-phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text3);
+    transition: color 0.15s;
+  }
+  .toc-phase-header:hover { color: var(--text2); }
+  .toc-phase-num {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+  .toc-item {
+    display: block;
+    padding: 8px 20px 8px 50px;
+    font-size: 13px;
+    color: var(--text3);
+    text-decoration: none;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    margin-left: 0;
+  }
+  .toc-item:hover {
+    color: var(--text2);
+    background: rgba(255,255,255,0.03);
+  }
+  .toc-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(69,227,184,0.05);
+  }
+
+  /* ── Main content ── */
+  .main {
+    flex: 1;
+    padding: 52px 60px;
+    max-width: 900px;
+    overflow-x: hidden;
+  }
+
+  /* ── Phase headers ── */
+  .phase-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .phase-tag.p1 { background: rgba(69,227,184,0.12); color: var(--accent); }
+  .phase-tag.p2 { background: rgba(59,158,255,0.12); color: var(--accent2); }
+  .phase-tag.p3 { background: rgba(248,124,82,0.12); color: var(--accent3); }
+  .phase-tag.p4 { background: rgba(167,139,250,0.12); color: var(--accent4); }
+  .phase-tag.p5 { background: rgba(251,191,36,0.12); color: var(--warning); }
+  .phase-tag.p6 { background: rgba(52,211,153,0.12); color: var(--success); }
+
+  .section {
+    margin-bottom: 80px;
+    scroll-margin-top: 32px;
+  }
+
+  h2 {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 36px 0 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent2);
+    margin: 24px 0 10px;
+  }
+
+  p { color: var(--text2); margin-bottom: 14px; }
+  strong { color: var(--text); font-weight: 600; }
+
+  .section-intro {
+    font-size: 16px;
+    color: var(--text2);
+    margin-bottom: 28px;
+    line-height: 1.75;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── Info cards ── */
+  .card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    margin: 20px 0;
+  }
+  .card.accent-g { border-left: 3px solid var(--accent); }
+  .card.accent-b { border-left: 3px solid var(--accent2); }
+  .card.accent-o { border-left: 3px solid var(--accent3); }
+  .card.accent-p { border-left: 3px solid var(--accent4); }
+  .card.accent-r { border-left: 3px solid var(--danger); }
+  .card.accent-y { border-left: 3px solid var(--warning); }
+
+  .callout {
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 18px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .callout.tip { background: rgba(69,227,184,0.07); border: 1px solid rgba(69,227,184,0.2); }
+  .callout.warn { background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.2); }
+  .callout.danger { background: rgba(248,113,113,0.07); border: 1px solid rgba(248,113,113,0.2); }
+  .callout.info { background: rgba(59,158,255,0.07); border: 1px solid rgba(59,158,255,0.2); }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; }
+  .callout-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .callout.tip .callout-title { color: var(--accent); }
+  .callout.warn .callout-title { color: var(--warning); }
+  .callout.danger .callout-title { color: var(--danger); }
+  .callout.info .callout-title { color: var(--accent2); }
+  .callout p { margin: 0; font-size: 14px; }
+
+  /* ── Code blocks ── */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid rgba(99,179,237,0.1);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 18px 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .code-lang {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .code-lang-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent2);
+  }
+  .code-label {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: 'Sora', sans-serif;
+  }
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #cdd9e5;
+  }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  p code, li code {
+    background: rgba(99,179,237,0.1);
+    border: 1px solid rgba(99,179,237,0.15);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #7dd3fc;
+    font-size: 12.5px;
+  }
+
+  /* syntax highlight classes */
+  .k { color: #ff7b72; } /* keyword */
+  .s { color: #a5d6ff; } /* string */
+  .c { color: #8b949e; font-style: italic; } /* comment */
+  .fn { color: #d2a8ff; } /* function */
+  .v { color: #79c0ff; } /* variable */
+  .n { color: #ffa657; } /* number/special */
+  .t { color: #56d364; } /* type/tag */
+  .p { color: #45e3b8; } /* playwright-specific */
+
+  /* ── Comparison tables ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .compare-col {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .compare-col-header {
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .compare-col-header.bad { background: rgba(248,113,113,0.1); color: var(--danger); }
+  .compare-col-header.good { background: rgba(69,227,184,0.1); color: var(--accent); }
+  .compare-col pre { padding: 14px 16px; font-size: 12.5px; }
+
+  /* ── Locator API cards ── */
+  .locator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .locator-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .locator-card:hover {
+    border-color: var(--border2);
+    transform: translateY(-1px);
+  }
+  .locator-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .locator-desc {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+  .locator-tag {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tag-recommended { background: rgba(69,227,184,0.12); color: var(--accent); }
+  .tag-useful { background: rgba(59,158,255,0.12); color: var(--accent2); }
+  .tag-avoid { background: rgba(248,113,113,0.12); color: var(--danger); }
+
+  /* ── Exercise boxes ── */
+  .exercise {
+    background: rgba(167,139,250,0.05);
+    border: 1px solid rgba(167,139,250,0.2);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    margin: 28px 0;
+  }
+  .exercise-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .exercise-badge {
+    background: rgba(167,139,250,0.15);
+    color: var(--accent4);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .exercise-title { font-size: 16px; font-weight: 600; color: var(--text); }
+  .exercise ol, .exercise ul {
+    padding-left: 20px;
+    color: var(--text2);
+    font-size: 14px;
+  }
+  .exercise li { margin-bottom: 10px; line-height: 1.65; }
+
+  /* ── Checklist ── */
+  .checklist {
+    list-style: none;
+    margin: 16px 0;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--text2);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border2);
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── Anti-pattern / best-practice cards ── */
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .pattern-card {
+    border-radius: var(--radius-lg);
+    padding: 20px;
+  }
+  .pattern-card.anti {
+    background: rgba(248,113,113,0.06);
+    border: 1px solid rgba(248,113,113,0.2);
+  }
+  .pattern-card.best {
+    background: rgba(69,227,184,0.06);
+    border: 1px solid rgba(69,227,184,0.2);
+  }
+  .pattern-card-header {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pattern-card.anti .pattern-card-header { color: var(--danger); }
+  .pattern-card.best .pattern-card-header { color: var(--accent); }
+
+  /* ── Steps ── */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    margin: 20px 0;
+  }
+  .steps li {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--accent2);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .steps li p { margin: 0; color: var(--text2); font-size: 14px; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 60px 0;
+  }
+
+  /* ── Progress bar ── */
+  .progress-section {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    margin: 28px 0;
+  }
+  .progress-row {
+    margin-bottom: 14px;
+  }
+  .progress-row:last-child { margin-bottom: 0; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .progress-label span:first-child { color: var(--text2); }
+  .progress-label span:last-child { color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+  .progress-track {
+    height: 6px;
+    background: var(--surface);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+  }
+
+  /* ── Table ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 20px 0;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--surface);
+    color: var(--text2);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .data-table code {
+    background: rgba(99,179,237,0.1);
+    border: 1px solid rgba(99,179,237,0.15);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #7dd3fc;
+    font-size: 12px;
+  }
+  td.good { color: var(--success); font-weight: 600; }
+  td.bad { color: var(--danger); font-weight: 600; }
+  td.mid { color: var(--warning); font-weight: 600; }
+
+  /* ── Mini project ── */
+  .project-card {
+    background: linear-gradient(135deg, rgba(59,158,255,0.06) 0%, rgba(69,227,184,0.06) 100%);
+    border: 1px solid rgba(69,227,184,0.2);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin: 28px 0;
+  }
+  .project-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .project-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(69,227,184,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .project-title { font-size: 18px; font-weight: 700; color: var(--text); }
+  .project-subtitle { font-size: 13px; color: var(--text3); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1100px) {
+    .sidebar { width: 240px; }
+    .main { padding: 40px 36px; }
+    h2 { font-size: 26px; }
+    .locator-grid { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .pattern-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 820px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: relative; }
+    .main { padding: 28px 20px; }
+    .hero { padding: 36px 20px 32px; }
+    .hero h1 { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="hero">
+  <div class="hero-badge">🎓 Professional Training Course</div>
+  <h1>Playwright <span>Locators</span><br>Masterclass</h1>
+  <p>A complete, structured learning module to master Playwright locators — from beginner fundamentals to advanced real-world techniques. Written for working QA engineers.</p>
+  <div class="hero-meta">
+    <div class="hero-stat">
+      <div class="hero-stat-icon g">📚</div>
+      <div>
+        <div class="hero-stat-label">Phases</div>
+        <div class="hero-stat-val">6 Learning Phases</div>
+      </div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-icon b">💻</div>
+      <div>
+        <div class="hero-stat-label">Code Examples</div>
+        <div class="hero-stat-val">60+ Examples</div>
+      </div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-icon p">🎯</div>
+      <div>
+        <div class="hero-stat-label">Exercises</div>
+        <div class="hero-stat-val">15 Hands-on Tasks</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ BODY ═══════════ -->
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-label">Table of Contents</div>
+
+  <div class="toc-phase">
+    <div class="toc-phase-header">
+      <div class="toc-phase-num" style="background:rgba(69,227,184,0.15);color:var(--accent)">1</div>
+      Fundamentals
+    </div>
+    <a href="#why-playwright" class="toc-item">Why Playwright Locators?</a>
+    <a href="#dom-basics" class="toc-item">DOM Basics for QA</a>
+    <a href="#xpath-problem" class="toc-item">The XPath Problem</a>
+    <a href="#locator-overview" class="toc-item">Locator API Overview</a>
+  </div>
+
+  <div class="toc-phase">
+    <div class="toc-phase-header">
+      <div class="toc-phase-num" style="background:rgba(59,158,255,0.15);color:var(--accent2)">2</div>
+      Core Locators
+    </div>
+    <a href="#getbyrole" class="toc-item">getByRole()</a>
+    <a href="#getbytext" class="toc-item">getByText()</a>
+    <a href="#getbylabel" class="toc-item">getByLabel()</a>
+    <a href="#getbyplaceholder" class="toc-item">getByPlaceholder()</a>
+    <a href="#getbytestid" class="toc-item">getByTestId()</a>
+    <a href="#locator" class="toc-item">locator() CSS</a>
+  </div>
+
+  <div class="toc-phase">
+    <div class="toc-phase-header">
+      <div class="toc-phase-num" style="background:rgba(248,124,82,0.15);color:var(--accent3)">3</div>
+      Advanced Techniques
+    </div>
+    <a href="#chaining" class="toc-item">Chaining & Scoping</a>
+    <a href="#filters" class="toc-item">Filters & nth()</a>
+    <a href="#dynamic" class="toc-item">Dynamic Elements</a>
+    <a href="#strict-mode" class="toc-item">Strict Mode</a>
+  </div>
+
+  <div class="toc-phase">
+    <div class="toc-phase-header">
+      <div class="toc-phase-num" style="background:rgba(167,139,250,0.15);color:var(--accent4)">4</div>
+      Real-world Scenarios
+    </div>
+    <a href="#forms" class="toc-item">Form Handling</a>
+    <a href="#tables" class="toc-item">Tables & Lists</a>
+    <a href="#modals" class="toc-item">Modals & Dropdowns</a>
+    <a href="#cards" class="toc-item">Card Components</a>
+  </div>
+
+  <div class="toc-phase">
+    <div class="toc-phase-header">
+      <div class="toc-phase-num" style="background:rgba(251,191,36,0.15);color:var(--warning)">5</div>
+      Mini Projects
+    </div>
+    <a href="#project-login" class="toc-item">Login Flow</a>
+    <a href="#project-cart" class="toc-item">E-Commerce Cart</a>
+    <a href="#project-form" class="toc-item">Multi-step Form</a>
+  </div>
+
+  <div class="toc-phase">
+    <div class="toc-phase-header">
+      <div class="toc-phase-num" style="background:rgba(52,211,153,0.15);color:var(--success)">6</div>
+      Mastery
+    </div>
+    <a href="#best-practices" class="toc-item">Best Practices</a>
+    <a href="#antipatterns" class="toc-item">Anti-patterns</a>
+    <a href="#checklist" class="toc-item">Self-Assessment</a>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+<!-- ═══════════ PHASE 1: FUNDAMENTALS ═══════════ -->
+
+<div class="section" id="why-playwright">
+  <div class="phase-tag p1">Phase 1 · Fundamentals</div>
+  <h2>Why Playwright Locators?</h2>
+  <p class="section-intro">
+    Playwright ships with a powerful, semantic locator API that makes tests significantly more readable, stable, and aligned with how real users interact with your application. Understanding <em>why</em> this matters is as important as knowing <em>how</em> to use it.
+  </p>
+
+  <h3>The Goal of Automation: Simulate the User</h3>
+  <p>When a real user fills in a form, they look for the label that says "Email". When they click a button, they read its text — "Submit". They don't look at CSS class names like <code>.btn-primary-v2</code> or XPath expressions. Playwright's semantic locators reflect this reality.</p>
+
+  <div class="card accent-g">
+    <h4 style="margin-top:0">The Three Pillars of Good Locators</h4>
+    <ul style="color:var(--text2);padding-left:20px;font-size:14px">
+      <li style="margin-bottom:8px"><strong>Stability</strong> — The locator should not break when CSS classes, layout, or non-semantic attributes change.</li>
+      <li style="margin-bottom:8px"><strong>Readability</strong> — Any QA engineer reading the test should immediately understand what element is being targeted.</li>
+      <li><strong>Accessibility-aligned</strong> — Locators that work with ARIA roles naturally also verify your app is accessible.</li>
+    </ul>
+  </div>
+
+  <h3>How Playwright Executes Locators</h3>
+  <p>Unlike Selenium's <code>findElement</code>, Playwright locators are <strong>lazy</strong>. They don't query the DOM immediately. They represent a way to find an element, and only when you perform an action (<code>.click()</code>, <code>.fill()</code>, <code>.textContent()</code>) does the actual DOM lookup happen. This enables built-in auto-waiting.</p>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div>
+      <div class="code-label">Lazy evaluation — no DOM query yet</div>
+    </div>
+    <pre><span class="c">// This line does NOT touch the DOM yet</span>
+<span class="k">const</span> <span class="v">btn</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit'</span> });
+
+<span class="c">// The DOM is queried HERE, with auto-waiting built in</span>
+<span class="k">await</span> <span class="v">btn</span>.<span class="fn">click</span>();
+
+<span class="c">// Playwright waits for:</span>
+<span class="c">// ✓ Element to appear in DOM</span>
+<span class="c">// ✓ Element to be visible</span>
+<span class="c">// ✓ Element to be stable (not animating)</span>
+<span class="c">// ✓ Element to receive pointer events</span>
+<span class="c">// ✓ Element to be enabled</span></pre>
+  </div>
+</div>
+
+<!-- DOM BASICS -->
+<div class="section" id="dom-basics">
+  <h2>DOM Basics for QA Engineers</h2>
+  <p class="section-intro">Before writing locators, you need to confidently read HTML and understand the attributes Playwright uses to find elements.</p>
+
+  <h3>Key HTML Attributes to Know</h3>
+  <table class="data-table" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius)">
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th>Used By</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>role</code></td><td><code>getByRole()</code></td><td><code>&lt;button role="button"&gt;</code></td></tr>
+      <tr><td><code>aria-label</code></td><td><code>getByRole({ name })</code></td><td><code>&lt;button aria-label="Close"&gt;</code></td></tr>
+      <tr><td><code>for</code> / <code>htmlFor</code></td><td><code>getByLabel()</code></td><td><code>&lt;label for="email"&gt;</code></td></tr>
+      <tr><td><code>placeholder</code></td><td><code>getByPlaceholder()</code></td><td><code>&lt;input placeholder="Enter email"&gt;</code></td></tr>
+      <tr><td><code>data-testid</code></td><td><code>getByTestId()</code></td><td><code>&lt;div data-testid="cart"&gt;</code></td></tr>
+      <tr><td><code>id</code></td><td><code>locator('#id')</code></td><td><code>&lt;input id="email"&gt;</code></td></tr>
+      <tr><td><code>class</code></td><td><code>locator('.class')</code></td><td><code>&lt;div class="modal"&gt;</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-lang"><div class="code-lang-dot" style="background:#f97316"></div>HTML</div>
+      <div class="code-label">Annotated login form</div>
+    </div>
+    <pre><span class="t">&lt;form</span> <span class="v">data-testid</span>=<span class="s">"login-form"</span><span class="t">&gt;</span>
+  <span class="c">&lt;!-- Label links to input via 'for'='id' --&gt;</span>
+  <span class="t">&lt;label</span> <span class="v">for</span>=<span class="s">"email"</span><span class="t">&gt;</span>Email Address<span class="t">&lt;/label&gt;</span>
+  <span class="t">&lt;input</span>
+    <span class="v">id</span>=<span class="s">"email"</span>
+    <span class="v">type</span>=<span class="s">"email"</span>
+    <span class="v">placeholder</span>=<span class="s">"you@example.com"</span>
+    <span class="v">aria-required</span>=<span class="s">"true"</span>
+  <span class="t">/&gt;</span>
+
+  <span class="t">&lt;label</span> <span class="v">for</span>=<span class="s">"password"</span><span class="t">&gt;</span>Password<span class="t">&lt;/label&gt;</span>
+  <span class="t">&lt;input</span>
+    <span class="v">id</span>=<span class="s">"password"</span>
+    <span class="v">type</span>=<span class="s">"password"</span>
+    <span class="v">placeholder</span>=<span class="s">"Min 8 characters"</span>
+  <span class="t">/&gt;</span>
+
+  <span class="c">&lt;!-- Implicit ARIA role = 'button' for &lt;button&gt; elements --&gt;</span>
+  <span class="t">&lt;button</span> <span class="v">type</span>=<span class="s">"submit"</span><span class="t">&gt;</span>Sign In<span class="t">&lt;/button&gt;</span>
+<span class="t">&lt;/form&gt;</span></pre>
+  </div>
+</div>
+
+<!-- XPATH PROBLEM -->
+<div class="section" id="xpath-problem">
+  <h2>The XPath Problem</h2>
+  <p class="section-intro">XPath was designed for XML querying in the early 2000s. Using it as a UI locator strategy in 2024+ is problematic for many reasons — and Playwright strongly discourages it.</p>
+
+  <h3>Why XPath Breaks Your Tests</h3>
+
+  <div class="compare-grid">
+    <div class="compare-col">
+      <div class="compare-col-header bad">❌ XPath — Fragile</div>
+      <pre><span class="c">// Breaks if ANY parent changes</span>
+<span class="k">const</span> <span class="v">btn</span> = <span class="v">page</span>.<span class="fn">locator</span>(
+  <span class="s">'/html/body/div[2]/main/section[1]/form/div[3]/button'</span>
+);
+
+<span class="c">// Breaks if class changes</span>
+<span class="k">const</span> <span class="v">el</span> = <span class="v">page</span>.<span class="fn">locator</span>(
+  <span class="s">'//div[@class="btn-primary-v2"]'</span>
+);
+
+<span class="c">// Impossible to read — what is this?</span>
+<span class="k">const</span> <span class="v">el2</span> = <span class="v">page</span>.<span class="fn">locator</span>(
+  <span class="s">'(//table//tr)[3]/td[2]'</span>
+);</pre>
+    </div>
+    <div class="compare-col">
+      <div class="compare-col-header good">✅ Playwright Native — Stable</div>
+      <pre><span class="c">// Works regardless of page structure</span>
+<span class="k">const</span> <span class="v">btn</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(
+  <span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Sign In'</span> }
+);
+
+<span class="c">// Works if class changes; reads like English</span>
+<span class="k">const</span> <span class="v">el</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(
+  <span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit Order'</span> }
+);
+
+<span class="c">// Crystal clear — row 3, "Price" column</span>
+<span class="k">const</span> <span class="v">el2</span> = <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'row'</span>, { <span class="v">name</span>: <span class="s">'Product A'</span> })
+  .<span class="fn">getByRole</span>(<span class="s">'cell'</span>, { <span class="v">name</span>: <span class="s">'Price'</span> });</pre>
+    </div>
+  </div>
+
+  <h3>XPath vs. Playwright Native — Comparison</h3>
+  <table class="data-table" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius)">
+    <thead>
+      <tr><th>Dimension</th><th>XPath</th><th>Playwright Native</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Readability</td><td class="bad">Poor</td><td class="good">Excellent</td></tr>
+      <tr><td>Stability on refactor</td><td class="bad">Breaks easily</td><td class="good">Highly stable</td></tr>
+      <tr><td>Accessibility alignment</td><td class="bad">None</td><td class="good">Built-in</td></tr>
+      <tr><td>Auto-wait support</td><td class="mid">Partial</td><td class="good">Full</td></tr>
+      <tr><td>Learning curve</td><td class="bad">Steep</td><td class="good">Intuitive</td></tr>
+      <tr><td>Maintenance cost</td><td class="bad">High</td><td class="good">Low</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">XPath Use Cases That Still Apply</div>
+      <p>XPath is acceptable for: traversing upward in the DOM (e.g., finding a parent element), querying text using <code>contains()</code> in legacy tools, or targeting elements that have no other stable identifier AND you've exhausted all other options. In Playwright, even these cases usually have a better solution through chaining and filtering.</p>
+    </div>
+  </div>
+</div>
+
+<!-- LOCATOR OVERVIEW -->
+<div class="section" id="locator-overview">
+  <h2>Playwright Locator API Overview</h2>
+  <p class="section-intro">Playwright provides a rich set of built-in locator methods. Here's a quick map of the full API before we dive deep into each one.</p>
+
+  <div class="locator-grid">
+    <div class="locator-card">
+      <div class="locator-name">getByRole()</div>
+      <div class="locator-desc">Finds elements by their ARIA role and accessible name. The most powerful and recommended locator.</div>
+      <span class="locator-tag tag-recommended">★ Most Recommended</span>
+    </div>
+    <div class="locator-card">
+      <div class="locator-name">getByLabel()</div>
+      <div class="locator-desc">Finds form inputs by their associated label text. Ideal for forms.</div>
+      <span class="locator-tag tag-recommended">Recommended</span>
+    </div>
+    <div class="locator-card">
+      <div class="locator-name">getByText()</div>
+      <div class="locator-desc">Finds elements by their text content. Best for non-interactive elements like paragraphs, headings, list items.</div>
+      <span class="locator-tag tag-recommended">Recommended</span>
+    </div>
+    <div class="locator-card">
+      <div class="locator-name">getByPlaceholder()</div>
+      <div class="locator-desc">Finds inputs by their placeholder attribute. Fallback when no label is available.</div>
+      <span class="locator-tag tag-useful">Useful</span>
+    </div>
+    <div class="locator-card">
+      <div class="locator-name">getByTestId()</div>
+      <div class="locator-desc">Finds by data-testid (or custom test attribute). Reliable when properly implemented by devs.</div>
+      <span class="locator-tag tag-useful">Useful (team agreement needed)</span>
+    </div>
+    <div class="locator-card">
+      <div class="locator-name">getByAltText()</div>
+      <div class="locator-desc">Finds elements (usually images) by their alt attribute.</div>
+      <span class="locator-tag tag-useful">For images</span>
+    </div>
+    <div class="locator-card">
+      <div class="locator-name">getByTitle()</div>
+      <div class="locator-desc">Finds elements by their title attribute.</div>
+      <span class="locator-tag tag-useful">Situational</span>
+    </div>
+    <div class="locator-card">
+      <div class="locator-name">locator(css/xpath)</div>
+      <div class="locator-desc">Low-level CSS selector or XPath. Use for scoping or when semantic locators are not sufficient.</div>
+      <span class="locator-tag tag-avoid">Last resort for XPath</span>
+    </div>
+  </div>
+
+  <h3>Priority Order — Which to Reach For First</h3>
+  <ol class="steps">
+    <li><p><strong>getByRole()</strong> — If the element has a semantic HTML role (button, link, checkbox, textbox…), this is always first choice.</p></li>
+    <li><p><strong>getByLabel()</strong> — For form inputs that have an associated label. Covers 90%+ of form fields.</p></li>
+    <li><p><strong>getByPlaceholder()</strong> — When a label doesn't exist but the input has a placeholder.</p></li>
+    <li><p><strong>getByText()</strong> — For non-interactive content, headings, list items, paragraphs.</p></li>
+    <li><p><strong>getByTestId()</strong> — When devs have added <code>data-testid</code> attributes. Best agreed upon as a team practice.</p></li>
+    <li><p><strong>locator()</strong> with CSS — Last resort for elements without any other stable identifier. Prefer over XPath.</p></li>
+  </ol>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ PHASE 2: CORE LOCATORS ═══════════ -->
+
+<!-- GETBYROLE -->
+<div class="section" id="getbyrole">
+  <div class="phase-tag p2">Phase 2 · Core Locators</div>
+  <h2>getByRole() — The Gold Standard</h2>
+  <p class="section-intro">
+    <code>getByRole()</code> is Playwright's most powerful locator. It uses the W3C Accessible Rich Internet Applications (ARIA) spec — the same system screen readers use — to find elements. This means your tests simultaneously verify accessibility.
+  </p>
+
+  <h3>Syntax</h3>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div>
+    </div>
+    <pre><span class="v">page</span>.<span class="fn">getByRole</span>(<span class="v">role</span>, <span class="v">options</span>)
+
+<span class="c">// Options:</span>
+{
+  <span class="v">name</span>: <span class="s">'string or regex'</span>,     <span class="c">// accessible name (text / aria-label)</span>
+  <span class="v">exact</span>: <span class="k">true</span> | <span class="k">false</span>,         <span class="c">// exact match on name (default: false)</span>
+  <span class="v">checked</span>: <span class="k">true</span> | <span class="k">false</span>,       <span class="c">// for checkboxes/radios</span>
+  <span class="v">disabled</span>: <span class="k">true</span> | <span class="k">false</span>,      <span class="c">// filter by disabled state</span>
+  <span class="v">expanded</span>: <span class="k">true</span> | <span class="k">false</span>,      <span class="c">// for expandable elements</span>
+  <span class="v">pressed</span>: <span class="k">true</span> | <span class="k">false</span>,       <span class="c">// for toggle buttons</span>
+  <span class="v">selected</span>: <span class="k">true</span> | <span class="k">false</span>,      <span class="c">// for options in listbox</span>
+  <span class="v">level</span>: <span class="n">1</span>-<span class="n">6</span>,                   <span class="c">// for headings</span>
+  <span class="v">includeHidden</span>: <span class="k">false</span>,        <span class="c">// include hidden elements</span>
+}</pre>
+  </div>
+
+  <h3>Common ARIA Roles You Must Know</h3>
+  <table class="data-table" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius)">
+    <thead>
+      <tr><th>HTML Element</th><th>Implicit ARIA Role</th><th>getByRole Usage</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>&lt;button&gt;</code></td><td><code>button</code></td><td><code>getByRole('button', { name: 'Submit' })</code></td></tr>
+      <tr><td><code>&lt;a href&gt;</code></td><td><code>link</code></td><td><code>getByRole('link', { name: 'About Us' })</code></td></tr>
+      <tr><td><code>&lt;input type="text"&gt;</code></td><td><code>textbox</code></td><td><code>getByRole('textbox', { name: 'Username' })</code></td></tr>
+      <tr><td><code>&lt;input type="checkbox"&gt;</code></td><td><code>checkbox</code></td><td><code>getByRole('checkbox', { name: 'Remember me' })</code></td></tr>
+      <tr><td><code>&lt;input type="radio"&gt;</code></td><td><code>radio</code></td><td><code>getByRole('radio', { name: 'Monthly' })</code></td></tr>
+      <tr><td><code>&lt;select&gt;</code></td><td><code>combobox</code></td><td><code>getByRole('combobox', { name: 'Country' })</code></td></tr>
+      <tr><td><code>&lt;h1&gt; to &lt;h6&gt;</code></td><td><code>heading</code></td><td><code>getByRole('heading', { name: 'Welcome', level: 1 })</code></td></tr>
+      <tr><td><code>&lt;img&gt;</code></td><td><code>img</code></td><td><code>getByRole('img', { name: 'Product photo' })</code></td></tr>
+      <tr><td><code>&lt;nav&gt;</code></td><td><code>navigation</code></td><td><code>getByRole('navigation')</code></td></tr>
+      <tr><td><code>&lt;dialog&gt;</code></td><td><code>dialog</code></td><td><code>getByRole('dialog', { name: 'Confirm' })</code></td></tr>
+      <tr><td><code>&lt;table&gt;</code></td><td><code>table</code></td><td><code>getByRole('table')</code></td></tr>
+      <tr><td><code>&lt;tr&gt;</code></td><td><code>row</code></td><td><code>getByRole('row', { name: 'Item name' })</code></td></tr>
+      <tr><td><code>&lt;td&gt;</code></td><td><code>cell</code></td><td><code>getByRole('cell', { name: '$29.99' })</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Practical Examples</h3>
+
+  <h4>Example 1: Buttons</h4>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div>
+      <div class="code-label">Button locators</div>
+    </div>
+    <pre><span class="c">// HTML: &lt;button type="submit"&gt;Submit Order&lt;/button&gt;</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit Order'</span> }).<span class="fn">click</span>();
+
+<span class="c">// HTML: &lt;button aria-label="Close dialog"&gt;✕&lt;/button&gt;</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Close dialog'</span> }).<span class="fn">click</span>();
+
+<span class="c">// Case-insensitive partial match</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">/submit/i</span> }).<span class="fn">click</span>();
+
+<span class="c">// Exact match to avoid matching "Submit Order" and "Submit Draft"</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit'</span>, <span class="v">exact</span>: <span class="k">true</span> }).<span class="fn">click</span>();
+
+<span class="c">// Disabled button assertion</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit'</span>, <span class="v">disabled</span>: <span class="k">true</span> })
+).<span class="fn">toBeVisible</span>();</pre>
+  </div>
+
+  <h4>Example 2: Navigation Links</h4>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div>
+    </div>
+    <pre><span class="c">// HTML: &lt;nav&gt;&lt;a href="/about"&gt;About Us&lt;/a&gt;&lt;/nav&gt;</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'link'</span>, { <span class="v">name</span>: <span class="s">'About Us'</span> }).<span class="fn">click</span>();
+
+<span class="c">// Scope to navigation to avoid matching page body links</span>
+<span class="k">await</span> <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'navigation'</span>)
+  .<span class="fn">getByRole</span>(<span class="s">'link'</span>, { <span class="v">name</span>: <span class="s">'Products'</span> })
+  .<span class="fn">click</span>();</pre>
+  </div>
+
+  <h4>Example 3: Checkboxes & Radios</h4>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div>
+    </div>
+    <pre><span class="c">// HTML: &lt;label&gt;&lt;input type="checkbox"&gt; Remember me&lt;/label&gt;</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'checkbox'</span>, { <span class="v">name</span>: <span class="s">'Remember me'</span> }).<span class="fn">check</span>();
+
+<span class="c">// Assert it's checked</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'checkbox'</span>, { <span class="v">name</span>: <span class="s">'Remember me'</span> })
+).<span class="fn">toBeChecked</span>();
+
+<span class="c">// Radio buttons</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'radio'</span>, { <span class="v">name</span>: <span class="s">'Annual billing'</span> }).<span class="fn">check</span>();
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'radio'</span>, { <span class="v">name</span>: <span class="s">'Monthly billing'</span> }).<span class="fn">check</span>();</pre>
+  </div>
+
+  <h4>Example 4: Headings</h4>
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div>
+    </div>
+    <pre><span class="c">// Assert page title is correct</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'heading'</span>, { <span class="v">name</span>: <span class="s">'Your Dashboard'</span>, <span class="v">level</span>: <span class="n">1</span> })
+).<span class="fn">toBeVisible</span>();
+
+<span class="c">// Section heading (h2)</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'heading'</span>, { <span class="v">name</span>: <span class="s">'Recent Orders'</span>, <span class="v">level</span>: <span class="n">2</span> })
+).<span class="fn">toBeVisible</span>();</pre>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exercise 1</span>
+      <span class="exercise-title">getByRole() Practice</span>
+    </div>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:16px">Given the following HTML, write Playwright locators using <code>getByRole()</code> for each task:</p>
+    <div class="code-block" style="margin-bottom:16px">
+      <div class="code-header"><div class="code-lang"><div class="code-lang-dot" style="background:#f97316"></div>HTML</div><div class="code-label">Target HTML</div></div>
+      <pre><span class="t">&lt;nav</span> <span class="v">aria-label</span>=<span class="s">"Main"</span><span class="t">&gt;</span>
+  <span class="t">&lt;a</span> <span class="v">href</span>=<span class="s">"/"</span><span class="t">&gt;</span>Home<span class="t">&lt;/a&gt;</span>
+  <span class="t">&lt;a</span> <span class="v">href</span>=<span class="s">"/shop"</span><span class="t">&gt;</span>Shop<span class="t">&lt;/a&gt;</span>
+<span class="t">&lt;/nav&gt;</span>
+<span class="t">&lt;main&gt;</span>
+  <span class="t">&lt;h1&gt;</span>Product Catalog<span class="t">&lt;/h1&gt;</span>
+  <span class="t">&lt;input</span> <span class="v">type</span>=<span class="s">"search"</span> <span class="v">aria-label</span>=<span class="s">"Search products"</span> <span class="t">/&gt;</span>
+  <span class="t">&lt;input</span> <span class="v">type</span>=<span class="s">"checkbox"</span> <span class="v">id</span>=<span class="s">"sale"</span><span class="t">&gt;</span>
+  <span class="t">&lt;label</span> <span class="v">for</span>=<span class="s">"sale"</span><span class="t">&gt;</span>On Sale Only<span class="t">&lt;/label&gt;</span>
+  <span class="t">&lt;button</span> <span class="v">disabled</span><span class="t">&gt;</span>Add to Cart<span class="t">&lt;/button&gt;</span>
+<span class="t">&lt;/main&gt;</span></pre>
+    </div>
+    <ol>
+      <li>Click the "Shop" link <em>specifically within the navigation</em></li>
+      <li>Assert the main heading reads "Product Catalog" at level 1</li>
+      <li>Fill the search input with "laptop"</li>
+      <li>Check the "On Sale Only" checkbox</li>
+      <li>Assert the "Add to Cart" button is disabled</li>
+    </ol>
+    <div class="callout tip" style="margin-top:16px">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <div class="callout-title">Hint</div>
+        <p>For the search input, use <code>role: 'searchbox'</code>. Scope the link to the navigation with chaining.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GETBYTEXT -->
+<div class="section" id="getbytext">
+  <h2>getByText() — Visible Text Locator</h2>
+  <p class="section-intro">Finds elements by their visible text content. Best for non-interactive elements like paragraphs, labels, menu items, and status messages — not for buttons or inputs (use <code>getByRole</code> for those).</p>
+
+  <h3>Syntax & Options</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div></div>
+    <pre><span class="v">page</span>.<span class="fn">getByText</span>(<span class="v">text</span>, <span class="v">options</span>)
+<span class="c">// text: string or RegExp</span>
+<span class="c">// options: { exact: boolean } — default: false (substring match)</span></pre>
+  </div>
+
+  <h4>Example 1: Status messages & alerts</h4>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div></div>
+    <pre><span class="c">// HTML: &lt;p class="alert-success"&gt;Your order has been placed.&lt;/p&gt;</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">'Your order has been placed.'</span>)
+).<span class="fn">toBeVisible</span>();
+
+<span class="c">// Partial match (default) — finds "Your order has been placed. Thank you!"</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">'Your order has been placed'</span>)
+).<span class="fn">toBeVisible</span>();
+
+<span class="c">// Regex — flexible matching</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">/order.*placed/i</span>)
+).<span class="fn">toBeVisible</span>();
+
+<span class="c">// Exact match — avoids matching similar text</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">'Saved'</span>, { <span class="v">exact</span>: <span class="k">true</span> })
+).<span class="fn">toBeVisible</span>();</pre>
+  </div>
+
+  <h4>Example 2: Menu items and list items</h4>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div></div>
+    <pre><span class="c">// HTML: &lt;ul&gt;&lt;li&gt;Electronics&lt;/li&gt;&lt;li&gt;Clothing&lt;/li&gt;&lt;/ul&gt;</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">'Electronics'</span>).<span class="fn">click</span>();
+
+<span class="c">// Scoped to a specific list to avoid ambiguity</span>
+<span class="k">await</span> <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'list'</span>)
+  .<span class="fn">getByText</span>(<span class="s">'Electronics'</span>)
+  .<span class="fn">click</span>();</pre>
+  </div>
+
+  <div class="callout warn">
+    <div class="callout-icon">⚠️</div>
+    <div class="callout-body">
+      <div class="callout-title">Important: getByText() Matches Parent Containers</div>
+      <p><code>getByText('Hello')</code> may match a <code>&lt;div&gt;</code> that contains a <code>&lt;p&gt;Hello&lt;/p&gt;</code>. Always use <code>exact: true</code> or scope with a parent locator when targeting specific elements.</p>
+    </div>
+  </div>
+</div>
+
+<!-- GETBYLABEL -->
+<div class="section" id="getbylabel">
+  <h2>getByLabel() — Form Fields by Label</h2>
+  <p class="section-intro">Finds form elements (inputs, textareas, selects) by the text of their associated <code>&lt;label&gt;</code>. This is the preferred way to target form fields because it reflects exactly how users identify them.</p>
+
+  <h3>How Label Association Works</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot" style="background:#f97316"></div>HTML</div><div class="code-label">Three ways to associate a label</div></div>
+    <pre><span class="c">&lt;!-- Method 1: for/id pairing (most common) --&gt;</span>
+<span class="t">&lt;label</span> <span class="v">for</span>=<span class="s">"username"</span><span class="t">&gt;</span>Username<span class="t">&lt;/label&gt;</span>
+<span class="t">&lt;input</span> <span class="v">id</span>=<span class="s">"username"</span> <span class="v">type</span>=<span class="s">"text"</span><span class="t">&gt;</span>
+
+<span class="c">&lt;!-- Method 2: wrapping (implicit association) --&gt;</span>
+<span class="t">&lt;label&gt;</span>
+  Password
+  <span class="t">&lt;input</span> <span class="v">type</span>=<span class="s">"password"</span><span class="t">&gt;</span>
+<span class="t">&lt;/label&gt;</span>
+
+<span class="c">&lt;!-- Method 3: aria-labelledby --&gt;</span>
+<span class="t">&lt;span</span> <span class="v">id</span>=<span class="s">"search-label"</span><span class="t">&gt;</span>Search<span class="t">&lt;/span&gt;</span>
+<span class="t">&lt;input</span> <span class="v">aria-labelledby</span>=<span class="s">"search-label"</span> <span class="v">type</span>=<span class="s">"search"</span><span class="t">&gt;</span></pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">getByLabel() examples</div></div>
+    <pre><span class="c">// Works for all three label association methods above</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Username'</span>).<span class="fn">fill</span>(<span class="s">'john_doe'</span>);
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Password'</span>).<span class="fn">fill</span>(<span class="s">'S3cur3P@ss'</span>);
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Search'</span>).<span class="fn">fill</span>(<span class="s">'laptop'</span>);
+
+<span class="c">// Select dropdowns</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Country'</span>).<span class="fn">selectOption</span>(<span class="s">'India'</span>);
+
+<span class="c">// Textarea</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Comments'</span>).<span class="fn">fill</span>(<span class="s">'Great product!'</span>);
+
+<span class="c">// Partial label match (default)</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email'</span>).<span class="fn">fill</span>(<span class="s">'user@example.com'</span>);
+<span class="c">// Matches: "Email Address", "Email *", "Email (required)"</span>
+
+<span class="c">// Exact match</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email'</span>, { <span class="v">exact</span>: <span class="k">true</span> }).<span class="fn">fill</span>(<span class="s">'user@example.com'</span>);
+<span class="c">// Only matches: "Email" (not "Email Address")</span></pre>
+  </div>
+</div>
+
+<!-- GETBYPLACEHOLDER -->
+<div class="section" id="getbyplaceholder">
+  <h2>getByPlaceholder() — Input Placeholder Text</h2>
+  <p class="section-intro">A fallback locator for inputs that lack a <code>&lt;label&gt;</code>. Prefer <code>getByLabel()</code> when possible, since placeholder text is often not accessible to screen readers.</p>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div></div>
+    <pre><span class="c">// HTML: &lt;input type="email" placeholder="Enter your email address"&gt;</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByPlaceholder</span>(<span class="s">'Enter your email address'</span>).<span class="fn">fill</span>(<span class="s">'test@test.com'</span>);
+
+<span class="c">// Partial match</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByPlaceholder</span>(<span class="s">'email'</span>).<span class="fn">fill</span>(<span class="s">'test@test.com'</span>);
+
+<span class="c">// Regex</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByPlaceholder</span>(<span class="s">/search/i</span>).<span class="fn">fill</span>(<span class="s">'playwright'</span>);</pre>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <div class="callout-title">When to Use getByPlaceholder()</div>
+      <p>Use this when the input has no label AND adding a label is not immediately possible. It's also useful for search bars that often rely on placeholder text as their visible indicator.</p>
+    </div>
+  </div>
+</div>
+
+<!-- GETBYTESTID -->
+<div class="section" id="getbytestid">
+  <h2>getByTestId() — Test-Specific Attributes</h2>
+  <p class="section-intro">Uses a dedicated test attribute (default: <code>data-testid</code>) to locate elements. Highly stable since these attributes exist purely for testing and won't change with UI redesigns. Requires a team agreement to add them consistently.</p>
+
+  <h3>Setup: Configuring Custom Test ID Attribute</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">playwright.config.js</div></div>
+    <pre><span class="k">import</span> { <span class="v">defineConfig</span> } <span class="k">from</span> <span class="s">'@playwright/test'</span>;
+
+<span class="k">export default</span> <span class="fn">defineConfig</span>({
+  <span class="v">use</span>: {
+    <span class="c">// Default is 'data-testid', change as needed</span>
+    <span class="v">testIdAttribute</span>: <span class="s">'data-testid'</span>,
+    <span class="c">// Or use custom: 'data-qa', 'data-cy', 'data-test'</span>
+    <span class="v">testIdAttribute</span>: <span class="s">'data-qa'</span>,
+  }
+});</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Usage</div></div>
+    <pre><span class="c">// HTML: &lt;div data-testid="shopping-cart"&gt;3 items&lt;/div&gt;</span>
+<span class="k">const</span> <span class="v">cart</span> = <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'shopping-cart'</span>);
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">cart</span>).<span class="fn">toContainText</span>(<span class="s">'3 items'</span>);
+
+<span class="c">// HTML: &lt;button data-testid="add-to-cart-btn"&gt;Add to Cart&lt;/button&gt;</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'add-to-cart-btn'</span>).<span class="fn">click</span>();
+
+<span class="c">// Combine: find within a scoped area</span>
+<span class="k">const</span> <span class="v">productCard</span> = <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'product-card-42'</span>);
+<span class="k">await</span> <span class="v">productCard</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Add to Cart'</span> }).<span class="fn">click</span>();</pre>
+  </div>
+</div>
+
+<!-- LOCATOR CSS -->
+<div class="section" id="locator">
+  <h2>locator() — CSS Selectors</h2>
+  <p class="section-intro">The generic <code>locator()</code> method accepts CSS selectors (and XPath as a last resort). Use CSS selectors when you need to scope by attributes, pseudo-classes, or structural selectors not covered by semantic methods.</p>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">CSS selector examples</div></div>
+    <pre><span class="c">// By ID (stable but IDs can be auto-generated — verify first)</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'#submit-btn'</span>);
+
+<span class="c">// By attribute value</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'[data-product-id="42"]'</span>);
+
+<span class="c">// By input type</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'input[type="file"]'</span>);
+
+<span class="c">// nth-of-type (use .nth() method instead when possible)</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'li:nth-of-type(2)'</span>);
+
+<span class="c">// Combining attributes</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'input[type="text"][name="city"]'</span>);
+
+<span class="c">// Has pseudo-class (Playwright extension)</span>
+<span class="c">// Finds .card that CONTAINS a .badge with text "Sale"</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'.card'</span>).<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Sale'</span> });
+
+<span class="c">// ✋ XPath — use only when absolutely necessary</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'xpath=//div[@aria-label="Filter panel"]'</span>);</pre>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exercise 2</span>
+      <span class="exercise-title">XPath → Playwright Conversion</span>
+    </div>
+    <p style="color:var(--text2);font-size:14px;margin-bottom:16px">Convert these fragile XPath locators to Playwright-native equivalents. Consider which semantic locator is most appropriate for each:</p>
+    <ol>
+      <li><code>//button[contains(@class, 'btn-submit')]</code> → <em>a button labeled "Submit"</em></li>
+      <li><code>//input[@name='email']</code> → <em>has a label "Email Address"</em></li>
+      <li><code>//h2[text()='Recent Orders']</code></li>
+      <li><code>(//div[@class='product-card'])[3]</code> → <em>3rd product card, has data-testid="product-card"</em></li>
+      <li><code>//table//tr[contains(.,'John Doe')]//td[3]</code> → <em>3rd cell of row containing "John Doe"</em></li>
+    </ol>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ PHASE 3: ADVANCED ═══════════ -->
+
+<div class="section" id="chaining">
+  <div class="phase-tag p3">Phase 3 · Advanced Techniques</div>
+  <h2>Chaining & Scoping Locators</h2>
+  <p class="section-intro">Chaining is one of Playwright's most powerful features. You start with a container locator and then use locator methods on it. This scopes all subsequent queries to elements <em>within</em> that container.</p>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Scoping pattern</div></div>
+    <pre><span class="c">// PATTERN: parent.child()</span>
+<span class="k">const</span> <span class="v">dialog</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'dialog'</span>, { <span class="v">name</span>: <span class="s">'Confirm Delete'</span> });
+<span class="k">await</span> <span class="v">dialog</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Yes, Delete'</span> }).<span class="fn">click</span>();
+<span class="c">// Much safer than: page.getByRole('button', { name: 'Yes, Delete' })</span>
+<span class="c">// which might match other buttons on the page.</span>
+
+<span class="c">// ─────────────────────────────────────────────</span>
+<span class="c">// Real-world: Shopping cart item</span>
+<span class="k">const</span> <span class="v">cartSection</span> = <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'cart-panel'</span>);
+<span class="k">const</span> <span class="v">laptopItem</span> = <span class="v">cartSection</span>
+  .<span class="fn">getByRole</span>(<span class="s">'listitem'</span>)
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Gaming Laptop'</span> });
+
+<span class="k">await</span> <span class="v">laptopItem</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Remove'</span> }).<span class="fn">click</span>();
+
+<span class="c">// ─────────────────────────────────────────────</span>
+<span class="c">// Navigation menu scoping</span>
+<span class="k">const</span> <span class="v">nav</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'navigation'</span>, { <span class="v">name</span>: <span class="s">'Main navigation'</span> });
+<span class="k">await</span> <span class="v">nav</span>.<span class="fn">getByRole</span>(<span class="s">'link'</span>, { <span class="v">name</span>: <span class="s">'Settings'</span> }).<span class="fn">click</span>();</pre>
+  </div>
+
+  <h3>The has Option — Filter by Child Element</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div></div>
+    <pre><span class="c">// Find a row that contains a specific cell value</span>
+<span class="k">const</span> <span class="v">row</span> = <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'row'</span>)
+  .<span class="fn">filter</span>({
+    <span class="v">has</span>: <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'cell'</span>, { <span class="v">name</span>: <span class="s">'John Doe'</span> })
+  });
+
+<span class="c">// Click the Edit button in that specific row</span>
+<span class="k">await</span> <span class="v">row</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Edit'</span> }).<span class="fn">click</span>();
+
+<span class="c">// Find card that has BOTH a heading AND a price badge</span>
+<span class="k">const</span> <span class="v">premiumCard</span> = <span class="v">page</span>
+  .<span class="fn">locator</span>(<span class="s">'.product-card'</span>)
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Premium'</span> })
+  .<span class="fn">filter</span>({
+    <span class="v">has</span>: <span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'.badge-sale'</span>)
+  });</pre>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="section" id="filters">
+  <h2>Filters, nth(), first(), last()</h2>
+  <p class="section-intro">When multiple elements match a locator, you need tools to narrow the selection. Playwright provides <code>.filter()</code>, <code>.nth()</code>, <code>.first()</code>, and <code>.last()</code> for this purpose.</p>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Narrowing multiple matches</div></div>
+    <pre><span class="c">// ── .first() and .last() ──</span>
+<span class="k">const</span> <span class="v">firstProduct</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'listitem'</span>).<span class="fn">first</span>();
+<span class="k">const</span> <span class="v">lastProduct</span>  = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'listitem'</span>).<span class="fn">last</span>();
+
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">firstProduct</span>).<span class="fn">toContainText</span>(<span class="s">'Gaming Laptop'</span>);
+
+<span class="c">// ── .nth(index) — zero-based ──</span>
+<span class="k">const</span> <span class="v">secondRow</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'row'</span>).<span class="fn">nth</span>(<span class="n">1</span>); <span class="c">// index 0 = first</span>
+
+<span class="c">// ── .filter({ hasText }) ──</span>
+<span class="k">const</span> <span class="v">saleItems</span> = <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'listitem'</span>)
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'SALE'</span> });
+
+<span class="k">const</span> <span class="v">count</span> = <span class="k">await</span> <span class="v">saleItems</span>.<span class="fn">count</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="s">`Found <span class="n">${count}</span> items on sale`</span>);
+
+<span class="c">// ── .filter({ hasNot }) — negative filter ──</span>
+<span class="k">const</span> <span class="v">inStockItems</span> = <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'listitem'</span>)
+  .<span class="fn">filter</span>({ <span class="v">hasNotText</span>: <span class="s">'Out of Stock'</span> });
+
+<span class="c">// ── Combining filters ──</span>
+<span class="k">const</span> <span class="v">target</span> = <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'row'</span>)
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Active'</span> })      <span class="c">// has status "Active"</span>
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Admin'</span> })        <span class="c">// AND has role "Admin"</span>
+  .<span class="fn">first</span>();                              <span class="c">// take the first match</span></pre>
+  </div>
+
+  <h3>Counting & Iterating</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div></div>
+    <pre><span class="c">// Count elements</span>
+<span class="k">const</span> <span class="v">items</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'listitem'</span>);
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">items</span>).<span class="fn">toHaveCount</span>(<span class="n">5</span>);
+
+<span class="c">// Iterate over all matching elements</span>
+<span class="k">const</span> <span class="v">allItems</span> = <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'listitem'</span>).<span class="fn">all</span>();
+<span class="k">for</span> (<span class="k">const</span> <span class="v">item</span> <span class="k">of</span> <span class="v">allItems</span>) {
+  <span class="k">const</span> <span class="v">text</span> = <span class="k">await</span> <span class="v">item</span>.<span class="fn">textContent</span>();
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="v">text</span>);
+}
+
+<span class="c">// Assert all items contain a common word</span>
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'listitem'</span>))
+  .<span class="fn">toContainText</span>([<span class="s">'Item 1'</span>, <span class="s">'Item 2'</span>, <span class="s">'Item 3'</span>]);</pre>
+  </div>
+</div>
+
+<!-- DYNAMIC ELEMENTS -->
+<div class="section" id="dynamic">
+  <h2>Dynamic Elements</h2>
+  <p class="section-intro">Dynamic elements appear and disappear based on user actions, API responses, or timers. Playwright's auto-waiting handles most cases, but here are advanced patterns for tricky scenarios.</p>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Waiting patterns</div></div>
+    <pre><span class="c">// ── Wait for element to appear ──</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'alert'</span>)
+).<span class="fn">toBeVisible</span>({ <span class="v">timeout</span>: <span class="n">10000</span> });
+
+<span class="c">// ── Wait for element to disappear ──</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'loading-spinner'</span>)
+).<span class="fn">toBeHidden</span>();
+
+<span class="c">// ── Wait for text to change ──</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'status-badge'</span>)
+).<span class="fn">toHaveText</span>(<span class="s">'Processing'</span>);
+
+<span class="c">// ── Elements in a dynamically-loaded list ──</span>
+<span class="c">// After clicking "Load more", wait for new items</span>
+<span class="k">const</span> <span class="v">initialCount</span> = <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'listitem'</span>).<span class="fn">count</span>();
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Load more'</span> }).<span class="fn">click</span>();
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'listitem'</span>))
+  .<span class="fn">toHaveCount</span>(<span class="v">initialCount</span> + <span class="n">10</span>);
+
+<span class="c">// ── Locating items in a select populated via API ──</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Country'</span>).<span class="fn">click</span>();
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'option'</span>, { <span class="v">name</span>: <span class="s">'India'</span> })
+).<span class="fn">toBeVisible</span>();
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'option'</span>, { <span class="v">name</span>: <span class="s">'India'</span> }).<span class="fn">click</span>();</pre>
+  </div>
+</div>
+
+<!-- STRICT MODE -->
+<div class="section" id="strict-mode">
+  <h2>Strict Mode — Handling Multiple Matches</h2>
+  <p class="section-intro">Playwright is in "strict mode" for actions like <code>.click()</code> and <code>.fill()</code>. If your locator matches more than one element, it throws a "strict mode violation" error. This is a safety net — not a bug.</p>
+
+  <div class="callout danger">
+    <div class="callout-icon">🚫</div>
+    <div class="callout-body">
+      <div class="callout-title">Strict Mode Violation Error</div>
+      <p><code>Error: locator.click: Error: strict mode violation: getByRole('button', { name: 'Edit' }) resolved to 5 elements</code></p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Resolving strict mode violations</div></div>
+    <pre><span class="c">// ❌ PROBLEM: Multiple "Edit" buttons</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Edit'</span> }).<span class="fn">click</span>(); <span class="c">// Throws!</span>
+
+<span class="c">// ✅ SOLUTION 1: Scope to a specific row</span>
+<span class="k">const</span> <span class="v">johnRow</span> = <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'row'</span>)
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'John Doe'</span> });
+<span class="k">await</span> <span class="v">johnRow</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Edit'</span> }).<span class="fn">click</span>();
+
+<span class="c">// ✅ SOLUTION 2: Use .nth()</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Edit'</span> }).<span class="fn">nth</span>(<span class="n">0</span>).<span class="fn">click</span>();
+<span class="c">// Use only if order is guaranteed and meaningful</span>
+
+<span class="c">// ✅ SOLUTION 3: Add aria-label to distinguish</span>
+<span class="c">// Ask devs to add: aria-label="Edit John Doe"</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Edit John Doe'</span> }).<span class="fn">click</span>();
+
+<span class="c">// ── Checking count before acting ──</span>
+<span class="k">const</span> <span class="v">editBtns</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Edit'</span> });
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">editBtns</span>).<span class="fn">toHaveCount</span>(<span class="n">3</span>); <span class="c">// Assert expected count</span>
+<span class="k">await</span> <span class="v">editBtns</span>.<span class="fn">nth</span>(<span class="n">0</span>).<span class="fn">click</span>();         <span class="c">// Safe now</span></pre>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exercise 3</span>
+      <span class="exercise-title">Fixing Strict Mode Violations</span>
+    </div>
+    <ol>
+      <li>A page has 4 "Delete" buttons in a user management table. Write a locator to click the "Delete" button only for the user named "Alice Johnson".</li>
+      <li>A product listing has multiple "Add to Cart" buttons. Write a locator that adds the <em>cheapest</em> item (the one with text "$9.99") to the cart.</li>
+      <li>Debug this locator that causes a strict mode error: <code>page.getByRole('textbox').fill('test')</code> — the page has 3 textboxes (Name, Email, Address). Fix it using <code>getByLabel()</code>.</li>
+    </ol>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ PHASE 4: REAL-WORLD SCENARIOS ═══════════ -->
+
+<div class="section" id="forms">
+  <div class="phase-tag p4">Phase 4 · Real-world Scenarios</div>
+  <h2>Form Handling</h2>
+  <p class="section-intro">Forms are the most common UI element in web apps. Here's a complete, production-grade approach to handling all form element types.</p>
+
+  <h3>Complete Registration Form</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Full form interaction</div></div>
+    <pre><span class="k">async function</span> <span class="fn">fillRegistrationForm</span>(<span class="v">page</span>, <span class="v">data</span>) {
+  <span class="c">// ── Text inputs ──</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'First Name'</span>).<span class="fn">fill</span>(<span class="v">data</span>.<span class="v">firstName</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Last Name'</span>).<span class="fn">fill</span>(<span class="v">data</span>.<span class="v">lastName</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email Address'</span>).<span class="fn">fill</span>(<span class="v">data</span>.<span class="v">email</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Password'</span>).<span class="fn">fill</span>(<span class="v">data</span>.<span class="v">password</span>);
+
+  <span class="c">// ── Native select dropdown ──</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Country'</span>).<span class="fn">selectOption</span>(<span class="v">data</span>.<span class="v">country</span>);
+  <span class="c">// Or by value: .selectOption({ value: 'IN' })</span>
+  <span class="c">// Or by index: .selectOption({ index: 2 })</span>
+
+  <span class="c">// ── Radio buttons ──</span>
+  <span class="k">await</span> <span class="v">page</span>
+    .<span class="fn">getByRole</span>(<span class="s">'radio'</span>, { <span class="v">name</span>: <span class="v">data</span>.<span class="v">accountType</span> })
+    .<span class="fn">check</span>();
+
+  <span class="c">// ── Checkboxes ──</span>
+  <span class="k">if</span> (<span class="v">data</span>.<span class="v">agreeToTerms</span>) {
+    <span class="k">await</span> <span class="v">page</span>
+      .<span class="fn">getByRole</span>(<span class="s">'checkbox'</span>, { <span class="v">name</span>: <span class="s">'I agree to the Terms'</span> })
+      .<span class="fn">check</span>();
+  }
+
+  <span class="c">// ── File upload ──</span>
+  <span class="k">if</span> (<span class="v">data</span>.<span class="v">avatar</span>) {
+    <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Profile Picture'</span>)
+      .<span class="fn">setInputFiles</span>(<span class="v">data</span>.<span class="v">avatar</span>);
+  }
+
+  <span class="c">// ── Textarea ──</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Bio'</span>).<span class="fn">fill</span>(<span class="v">data</span>.<span class="v">bio</span>);
+
+  <span class="c">// ── Custom combobox / autocomplete ──</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'combobox'</span>, { <span class="v">name</span>: <span class="s">'Skills'</span> }).<span class="fn">click</span>();
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'option'</span>, { <span class="v">name</span>: <span class="s">'JavaScript'</span> }).<span class="fn">click</span>();
+
+  <span class="c">// ── Submit ──</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Create Account'</span> }).<span class="fn">click</span>();
+}
+
+<span class="c">// ── Form Validation Assertions ──</span>
+<span class="k">async function</span> <span class="fn">assertFormErrors</span>(<span class="v">page</span>) {
+  <span class="c">// Error next to a field</span>
+  <span class="k">const</span> <span class="v">emailGroup</span> = <span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'.form-group'</span>)
+    .<span class="fn">filter</span>({ <span class="v">has</span>: <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email'</span>) });
+  <span class="k">await</span> <span class="fn">expect</span>(
+    <span class="v">emailGroup</span>.<span class="fn">getByRole</span>(<span class="s">'alert'</span>)
+  ).<span class="fn">toContainText</span>(<span class="s">'Invalid email'</span>);
+
+  <span class="c">// Field marked as invalid (aria-invalid)</span>
+  <span class="k">await</span> <span class="fn">expect</span>(
+    <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email'</span>)
+  ).<span class="fn">toHaveAttribute</span>(<span class="s">'aria-invalid'</span>, <span class="s">'true'</span>);
+}</pre>
+  </div>
+</div>
+
+<!-- TABLES -->
+<div class="section" id="tables">
+  <h2>Tables & Lists</h2>
+  <p class="section-intro">Tables and lists are the most challenging elements to write stable locators for. Here are proven patterns.</p>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Table locator patterns</div></div>
+    <pre><span class="c">// ── Assert cell value in a specific row ──</span>
+<span class="k">const</span> <span class="v">table</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'table'</span>);
+
+<span class="k">const</span> <span class="v">johnRow</span> = <span class="v">table</span>
+  .<span class="fn">getByRole</span>(<span class="s">'row'</span>)
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'John Doe'</span> });
+
+<span class="c">// Get a specific cell by column header context</span>
+<span class="c">// Pattern: find row → find cell by its approximate position</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">johnRow</span>.<span class="fn">getByRole</span>(<span class="s">'cell'</span>).nth(<span class="n">2</span>)  <span class="c">// 3rd cell = "Status"</span>
+).<span class="fn">toContainText</span>(<span class="s">'Active'</span>);
+
+<span class="c">// ── More robust: get column index first ──</span>
+<span class="k">const</span> <span class="v">headers</span> = <span class="v">table</span>.<span class="fn">getByRole</span>(<span class="s">'columnheader'</span>);
+<span class="k">const</span> <span class="v">headerTexts</span> = <span class="k">await</span> <span class="v">headers</span>.<span class="fn">allTextContents</span>();
+<span class="k">const</span> <span class="v">statusCol</span> = <span class="v">headerTexts</span>.<span class="fn">indexOf</span>(<span class="s">'Status'</span>);
+
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">johnRow</span>.<span class="fn">getByRole</span>(<span class="s">'cell'</span>).<span class="fn">nth</span>(<span class="v">statusCol</span>)
+).<span class="fn">toContainText</span>(<span class="s">'Active'</span>);
+
+<span class="c">// ── Click action button in a table row ──</span>
+<span class="k">await</span> <span class="v">table</span>
+  .<span class="fn">getByRole</span>(<span class="s">'row'</span>)
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Jane Smith'</span> })
+  .<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Delete'</span> })
+  .<span class="fn">click</span>();
+
+<span class="c">// ── Verify full table row contents ──</span>
+<span class="k">const</span> <span class="v">firstDataRow</span> = <span class="v">table</span>
+  .<span class="fn">getByRole</span>(<span class="s">'row'</span>)
+  .<span class="fn">nth</span>(<span class="n">1</span>); <span class="c">// Skip header row (index 0)</span>
+
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">firstDataRow</span>).<span class="fn">toContainText</span>([
+  <span class="s">'John Doe'</span>,
+  <span class="s">'john@example.com'</span>,
+  <span class="s">'Admin'</span>,
+  <span class="s">'Active'</span>
+]);</pre>
+  </div>
+</div>
+
+<!-- MODALS & DROPDOWNS -->
+<div class="section" id="modals">
+  <h2>Modals & Dropdowns</h2>
+  <p class="section-intro">Modals and dropdowns require scoped locators to avoid interacting with hidden or background elements.</p>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Modal interaction</div></div>
+    <pre><span class="c">// ── Trigger modal ──</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Delete Account'</span> }).<span class="fn">click</span>();
+
+<span class="c">// ── Wait for modal to appear ──</span>
+<span class="k">const</span> <span class="v">modal</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'dialog'</span>, { <span class="v">name</span>: <span class="s">'Confirm Deletion'</span> });
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">modal</span>).<span class="fn">toBeVisible</span>();
+
+<span class="c">// ── Assert modal content ──</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">modal</span>.<span class="fn">getByText</span>(<span class="s">'This action cannot be undone'</span>)
+).<span class="fn">toBeVisible</span>();
+
+<span class="c">// ── Interact within the modal ──</span>
+<span class="k">await</span> <span class="v">modal</span>.<span class="fn">getByLabel</span>(<span class="s">'Type DELETE to confirm'</span>).<span class="fn">fill</span>(<span class="s">'DELETE'</span>);
+<span class="k">await</span> <span class="v">modal</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Confirm'</span> }).<span class="fn">click</span>();
+
+<span class="c">// ── Assert modal dismissed ──</span>
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">modal</span>).<span class="fn">toBeHidden</span>();</pre>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Custom dropdown (not native select)</div></div>
+    <pre><span class="c">// Custom dropdowns (React/Vue components — not &lt;select&gt;)</span>
+
+<span class="c">// Step 1: Open the dropdown trigger</span>
+<span class="k">await</span> <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'combobox'</span>, { <span class="v">name</span>: <span class="s">'Sort by'</span> })
+  .<span class="fn">click</span>();
+
+<span class="c">// Step 2: Assert the dropdown options are visible</span>
+<span class="k">const</span> <span class="v">listbox</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'listbox'</span>);
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">listbox</span>).<span class="fn">toBeVisible</span>();
+
+<span class="c">// Step 3: Select an option</span>
+<span class="k">await</span> <span class="v">listbox</span>
+  .<span class="fn">getByRole</span>(<span class="s">'option'</span>, { <span class="v">name</span>: <span class="s">'Price: Low to High'</span> })
+  .<span class="fn">click</span>();
+
+<span class="c">// Step 4: Assert selection registered</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'combobox'</span>, { <span class="v">name</span>: <span class="s">'Sort by'</span> })
+).<span class="fn">toHaveText</span>(<span class="s">'Price: Low to High'</span>);</pre>
+  </div>
+</div>
+
+<!-- CARDS -->
+<div class="section" id="cards">
+  <h2>Card Components</h2>
+  <p class="section-intro">Product cards, user cards, and content cards often repeat the same structure. Scoped locators are essential here.</p>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">Card component patterns</div></div>
+    <pre><span class="c">// ── Targeting a specific product card ──</span>
+<span class="k">const</span> <span class="v">laptopCard</span> = <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'article'</span>)  <span class="c">// cards often use &lt;article&gt;</span>
+  .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Gaming Laptop Pro'</span> });
+
+<span class="c">// Assert card details</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">laptopCard</span>.<span class="fn">getByText</span>(<span class="s">'$1,299.00'</span>)
+).<span class="fn">toBeVisible</span>();
+
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">laptopCard</span>.<span class="fn">getByRole</span>(<span class="s">'img'</span>)
+).<span class="fn">toHaveAttribute</span>(<span class="s">'alt'</span>, <span class="s">'Gaming Laptop Pro'</span>);
+
+<span class="c">// Interact with card actions</span>
+<span class="k">await</span> <span class="v">laptopCard</span>
+  .<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Add to Cart'</span> })
+  .<span class="fn">click</span>();
+
+<span class="c">// ── When cards use data-testid ──</span>
+<span class="k">const</span> <span class="v">cards</span> = <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'product-card'</span>);
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">cards</span>).<span class="fn">toHaveCount</span>(<span class="n">12</span>);
+
+<span class="c">// ── Card with expandable content ──</span>
+<span class="k">const</span> <span class="v">faqCard</span> = <span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'What is your return policy?'</span> });
+
+<span class="c">// Assert collapsed</span>
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">faqCard</span>).<span class="fn">toHaveAttribute</span>(<span class="s">'aria-expanded'</span>, <span class="s">'false'</span>);
+
+<span class="c">// Expand</span>
+<span class="k">await</span> <span class="v">faqCard</span>.<span class="fn">click</span>();
+
+<span class="c">// Assert expanded content visible</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'region'</span>, { <span class="v">name</span>: <span class="s">'What is your return policy?'</span> })
+).<span class="fn">toBeVisible</span>();</pre>
+  </div>
+
+  <div class="exercise">
+    <div class="exercise-header">
+      <span class="exercise-badge">Exercise 4</span>
+      <span class="exercise-title">Card & Modal Scenarios</span>
+    </div>
+    <ol>
+      <li>A product listing has cards with names, prices, and "Wishlist" + "Add to Cart" buttons. Write locators to: (a) find the card for "Wireless Headphones", (b) click its "Add to Cart" button, and (c) assert the price shows "$89.99".</li>
+      <li>A delete confirmation modal has the title "Delete User", a warning message, and two buttons: "Cancel" and "Delete". Write the full interaction sequence including: open modal, assert content, click Delete, assert modal closes.</li>
+      <li>A user profile card shows the name "Priya Sharma", role "Senior Engineer", and has an "Edit Profile" link. Write a locator that clicks the link inside only that card (assume multiple profile cards exist on the page).</li>
+    </ol>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ PHASE 5: MINI PROJECTS ═══════════ -->
+
+<div class="section" id="project-login">
+  <div class="phase-tag p5">Phase 5 · Mini Projects</div>
+  <h2>Mini Project 1: Login Flow</h2>
+
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-icon">🔐</div>
+      <div>
+        <div class="project-title">Full Login Test Suite</div>
+        <div class="project-subtitle">Tests: Successful login, Invalid credentials, Empty fields, Forgot password</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">login.spec.js — Complete test file</div></div>
+    <pre><span class="k">import</span> { <span class="v">test</span>, <span class="v">expect</span> } <span class="k">from</span> <span class="s">'@playwright/test'</span>;
+
+<span class="c">// Page Object helper functions (inline for brevity)</span>
+<span class="k">const</span> <span class="fn">loginPage</span> = (<span class="v">page</span>) => ({
+  <span class="v">emailInput</span>:    <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email Address'</span>),
+  <span class="v">passwordInput</span>: <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Password'</span>),
+  <span class="v">submitBtn</span>:     <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Sign In'</span> }),
+  <span class="v">errorAlert</span>:    <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'alert'</span>),
+  <span class="v">forgotLink</span>:    <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'link'</span>, { <span class="v">name</span>: <span class="s">'Forgot Password?'</span> }),
+});
+
+<span class="v">test</span>.<span class="fn">describe</span>(<span class="s">'Login Flow'</span>, () => {
+  <span class="v">test</span>.<span class="fn">beforeEach</span>(<span class="k">async</span> ({ <span class="v">page</span> }) => {
+    <span class="k">await</span> <span class="v">page</span>.<span class="fn">goto</span>(<span class="s">'/login'</span>);
+    <span class="c">// Assert we're on the right page</span>
+    <span class="k">await</span> <span class="fn">expect</span>(
+      <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'heading'</span>, { <span class="v">name</span>: <span class="s">'Sign In'</span>, <span class="v">level</span>: <span class="n">1</span> })
+    ).<span class="fn">toBeVisible</span>();
+  });
+
+  <span class="v">test</span>(<span class="s">'successful login redirects to dashboard'</span>, <span class="k">async</span> ({ <span class="v">page</span> }) => {
+    <span class="k">const</span> { <span class="v">emailInput</span>, <span class="v">passwordInput</span>, <span class="v">submitBtn</span> } = <span class="fn">loginPage</span>(<span class="v">page</span>);
+
+    <span class="k">await</span> <span class="v">emailInput</span>.<span class="fn">fill</span>(<span class="s">'user@example.com'</span>);
+    <span class="k">await</span> <span class="v">passwordInput</span>.<span class="fn">fill</span>(<span class="s">'ValidPass123!'</span>);
+    <span class="k">await</span> <span class="v">submitBtn</span>.<span class="fn">click</span>();
+
+    <span class="c">// Assert dashboard loaded</span>
+    <span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>).<span class="fn">toHaveURL</span>(<span class="s">/\/dashboard/</span>);
+    <span class="k">await</span> <span class="fn">expect</span>(
+      <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'heading'</span>, { <span class="v">name</span>: <span class="s">'Your Dashboard'</span> })
+    ).<span class="fn">toBeVisible</span>();
+    <span class="k">await</span> <span class="fn">expect</span>(
+      <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">'Welcome back, user@example.com'</span>)
+    ).<span class="fn">toBeVisible</span>();
+  });
+
+  <span class="v">test</span>(<span class="s">'invalid credentials shows error alert'</span>, <span class="k">async</span> ({ <span class="v">page</span> }) => {
+    <span class="k">const</span> { <span class="v">emailInput</span>, <span class="v">passwordInput</span>, <span class="v">submitBtn</span>, <span class="v">errorAlert</span> } = <span class="fn">loginPage</span>(<span class="v">page</span>);
+
+    <span class="k">await</span> <span class="v">emailInput</span>.<span class="fn">fill</span>(<span class="s">'wrong@example.com'</span>);
+    <span class="k">await</span> <span class="v">passwordInput</span>.<span class="fn">fill</span>(<span class="s">'wrongpassword'</span>);
+    <span class="k">await</span> <span class="v">submitBtn</span>.<span class="fn">click</span>();
+
+    <span class="k">await</span> <span class="fn">expect</span>(<span class="v">errorAlert</span>).<span class="fn">toBeVisible</span>();
+    <span class="k">await</span> <span class="fn">expect</span>(<span class="v">errorAlert</span>).<span class="fn">toContainText</span>(<span class="s">'Invalid email or password'</span>);
+    <span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>).<span class="fn">toHaveURL</span>(<span class="s">/\/login/</span>); <span class="c">// Still on login</span>
+  });
+
+  <span class="v">test</span>(<span class="s">'empty form shows validation errors'</span>, <span class="k">async</span> ({ <span class="v">page</span> }) => {
+    <span class="k">const</span> { <span class="v">submitBtn</span> } = <span class="fn">loginPage</span>(<span class="v">page</span>);
+    <span class="k">await</span> <span class="v">submitBtn</span>.<span class="fn">click</span>();
+
+    <span class="c">// HTML5 validation — check aria-invalid</span>
+    <span class="k">await</span> <span class="fn">expect</span>(
+      <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email Address'</span>)
+    ).<span class="fn">toHaveAttribute</span>(<span class="s">'aria-invalid'</span>, <span class="s">'true'</span>);
+  });
+
+  <span class="v">test</span>(<span class="s">'forgot password link navigates correctly'</span>, <span class="k">async</span> ({ <span class="v">page</span> }) => {
+    <span class="k">const</span> { <span class="v">forgotLink</span> } = <span class="fn">loginPage</span>(<span class="v">page</span>);
+    <span class="k">await</span> <span class="v">forgotLink</span>.<span class="fn">click</span>();
+    <span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>).<span class="fn">toHaveURL</span>(<span class="s">/\/forgot-password/</span>);
+  });
+});</pre>
+  </div>
+</div>
+
+<!-- PROJECT CART -->
+<div class="section" id="project-cart">
+  <h2>Mini Project 2: E-Commerce Cart</h2>
+
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-icon">🛒</div>
+      <div>
+        <div class="project-title">Shopping Cart End-to-End</div>
+        <div class="project-subtitle">Search → Filter → Add item → Update qty → Apply coupon → Checkout</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">cart.spec.js</div></div>
+    <pre><span class="k">import</span> { <span class="v">test</span>, <span class="v">expect</span> } <span class="k">from</span> <span class="s">'@playwright/test'</span>;
+
+<span class="v">test</span>(<span class="s">'add item to cart and checkout flow'</span>, <span class="k">async</span> ({ <span class="v">page</span> }) => {
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">goto</span>(<span class="s">'/shop'</span>);
+
+  <span class="c">// ── Step 1: Search for product ──</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'searchbox'</span>, { <span class="v">name</span>: <span class="s">'Search products'</span> })
+    .<span class="fn">fill</span>(<span class="s">'wireless headphones'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">keyboard</span>.<span class="fn">press</span>(<span class="s">'Enter'</span>);
+
+  <span class="c">// ── Step 2: Apply filter ──</span>
+  <span class="k">await</span> <span class="v">page</span>
+    .<span class="fn">getByRole</span>(<span class="s">'checkbox'</span>, { <span class="v">name</span>: <span class="s">'In Stock Only'</span> })
+    .<span class="fn">check</span>();
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Sort by'</span>).<span class="fn">selectOption</span>(<span class="s">'price-low'</span>);
+
+  <span class="c">// ── Step 3: Find and interact with product card ──</span>
+  <span class="k">const</span> <span class="v">card</span> = <span class="v">page</span>
+    .<span class="fn">getByRole</span>(<span class="s">'article'</span>)
+    .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Sony WH-1000XM5'</span> });
+
+  <span class="k">await</span> <span class="fn">expect</span>(<span class="v">card</span>).<span class="fn">toBeVisible</span>();
+  <span class="k">await</span> <span class="fn">expect</span>(<span class="v">card</span>.<span class="fn">getByText</span>(<span class="s">'$349.00'</span>)).<span class="fn">toBeVisible</span>();
+
+  <span class="k">await</span> <span class="v">card</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Add to Cart'</span> }).<span class="fn">click</span>();
+
+  <span class="c">// ── Step 4: Assert cart badge updated ──</span>
+  <span class="k">await</span> <span class="fn">expect</span>(
+    <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'cart-item-count'</span>)
+  ).<span class="fn">toHaveText</span>(<span class="s">'1'</span>);
+
+  <span class="c">// ── Step 5: Open cart panel ──</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Shopping Cart'</span> }).<span class="fn">click</span>();
+
+  <span class="k">const</span> <span class="v">cartPanel</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'dialog'</span>, { <span class="v">name</span>: <span class="s">'Your Cart'</span> });
+  <span class="k">await</span> <span class="fn">expect</span>(<span class="v">cartPanel</span>).<span class="fn">toBeVisible</span>();
+
+  <span class="c">// ── Step 6: Update quantity ──</span>
+  <span class="k">const</span> <span class="v">cartItem</span> = <span class="v">cartPanel</span>
+    .<span class="fn">getByRole</span>(<span class="s">'listitem'</span>)
+    .<span class="fn">filter</span>({ <span class="v">hasText</span>: <span class="s">'Sony WH-1000XM5'</span> });
+
+  <span class="k">await</span> <span class="v">cartItem</span>
+    .<span class="fn">getByLabel</span>(<span class="s">'Quantity'</span>)
+    .<span class="fn">fill</span>(<span class="s">'2'</span>);
+  <span class="k">await</span> <span class="v">cartItem</span>
+    .<span class="fn">getByLabel</span>(<span class="s">'Quantity'</span>)
+    .<span class="fn">press</span>(<span class="s">'Enter'</span>);
+
+  <span class="c">// ── Step 7: Apply coupon ──</span>
+  <span class="k">await</span> <span class="v">cartPanel</span>.<span class="fn">getByLabel</span>(<span class="s">'Coupon Code'</span>).<span class="fn">fill</span>(<span class="s">'SAVE20'</span>);
+  <span class="k">await</span> <span class="v">cartPanel</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Apply'</span> }).<span class="fn">click</span>();
+  <span class="k">await</span> <span class="fn">expect</span>(
+    <span class="v">cartPanel</span>.<span class="fn">getByText</span>(<span class="s">'Discount applied'</span>)
+  ).<span class="fn">toBeVisible</span>();
+
+  <span class="c">// ── Step 8: Proceed to checkout ──</span>
+  <span class="k">await</span> <span class="v">cartPanel</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Proceed to Checkout'</span> }).<span class="fn">click</span>();
+  <span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>).<span class="fn">toHaveURL</span>(<span class="s">/\/checkout/</span>);
+});</pre>
+  </div>
+</div>
+
+<!-- PROJECT FORM -->
+<div class="section" id="project-form">
+  <h2>Mini Project 3: Multi-step Form</h2>
+
+  <div class="project-card">
+    <div class="project-header">
+      <div class="project-icon">📋</div>
+      <div>
+        <div class="project-title">Multi-step Checkout Form</div>
+        <div class="project-subtitle">Personal Info → Shipping → Payment → Review → Confirm</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">checkout-form.spec.js</div></div>
+    <pre><span class="k">import</span> { <span class="v">test</span>, <span class="v">expect</span> } <span class="k">from</span> <span class="s">'@playwright/test'</span>;
+
+<span class="c">// Helper: assert current step is active</span>
+<span class="k">async function</span> <span class="fn">assertStep</span>(<span class="v">page</span>, <span class="v">stepName</span>) {
+  <span class="k">await</span> <span class="fn">expect</span>(
+    <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'tab'</span>, { <span class="v">name</span>: <span class="v">stepName</span>, <span class="v">selected</span>: <span class="k">true</span> })
+  ).<span class="fn">toBeVisible</span>();
+}
+
+<span class="v">test</span>(<span class="s">'complete multi-step checkout form'</span>, <span class="k">async</span> ({ <span class="v">page</span> }) => {
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">goto</span>(<span class="s">'/checkout'</span>);
+
+  <span class="c">// ── Step 1: Personal Information ──</span>
+  <span class="k">await</span> <span class="fn">assertStep</span>(<span class="v">page</span>, <span class="s">'Personal Info'</span>);
+
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'First Name'</span>).<span class="fn">fill</span>(<span class="s">'Rahul'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Last Name'</span>).<span class="fn">fill</span>(<span class="s">'Sharma'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email'</span>).<span class="fn">fill</span>(<span class="s">'rahul@test.com'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Phone Number'</span>).<span class="fn">fill</span>(<span class="s">'+91 9876543210'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Continue'</span> }).<span class="fn">click</span>();
+
+  <span class="c">// ── Step 2: Shipping Address ──</span>
+  <span class="k">await</span> <span class="fn">assertStep</span>(<span class="v">page</span>, <span class="s">'Shipping'</span>);
+
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Address Line 1'</span>).<span class="fn">fill</span>(<span class="s">'123 MG Road'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'City'</span>).<span class="fn">fill</span>(<span class="s">'Mumbai'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'State'</span>).<span class="fn">selectOption</span>(<span class="s">'Maharashtra'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Pincode'</span>).<span class="fn">fill</span>(<span class="s">'400001'</span>);
+
+  <span class="k">await</span> <span class="v">page</span>
+    .<span class="fn">getByRole</span>(<span class="s">'radio'</span>, { <span class="v">name</span>: <span class="s">'Express Delivery (2-3 days)'</span> })
+    .<span class="fn">check</span>();
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Continue'</span> }).<span class="fn">click</span>();
+
+  <span class="c">// ── Step 3: Payment ──</span>
+  <span class="k">await</span> <span class="fn">assertStep</span>(<span class="v">page</span>, <span class="s">'Payment'</span>);
+
+  <span class="k">await</span> <span class="v">page</span>
+    .<span class="fn">getByRole</span>(<span class="s">'radio'</span>, { <span class="v">name</span>: <span class="s">'Credit Card'</span> })
+    .<span class="fn">check</span>();
+
+  <span class="c">// Credit card form (often in iframe — handle separately)</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Card Number'</span>).<span class="fn">fill</span>(<span class="s">'4111 1111 1111 1111'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Expiry Date'</span>).<span class="fn">fill</span>(<span class="s">'12/26'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'CVV'</span>).<span class="fn">fill</span>(<span class="s">'123'</span>);
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Review Order'</span> }).<span class="fn">click</span>();
+
+  <span class="c">// ── Step 4: Review ──</span>
+  <span class="k">await</span> <span class="fn">assertStep</span>(<span class="v">page</span>, <span class="s">'Review'</span>);
+
+  <span class="k">const</span> <span class="v">summary</span> = <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'order-summary'</span>);
+  <span class="k">await</span> <span class="fn">expect</span>(<span class="v">summary</span>.<span class="fn">getByText</span>(<span class="s">'Sony WH-1000XM5'</span>)).<span class="fn">toBeVisible</span>();
+  <span class="k">await</span> <span class="fn">expect</span>(<span class="v">summary</span>.<span class="fn">getByText</span>(<span class="s">'Express Delivery'</span>)).<span class="fn">toBeVisible</span>();
+  <span class="k">await</span> <span class="fn">expect</span>(
+    <span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'total-amount'</span>)
+  ).<span class="fn">toContainText</span>(<span class="s">'$'</span>); <span class="c">// Just verify it has a price</span>
+
+  <span class="c">// ── Step 5: Place Order ──</span>
+  <span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Place Order'</span> }).<span class="fn">click</span>();
+
+  <span class="c">// ── Confirmation ──</span>
+  <span class="k">await</span> <span class="fn">expect</span>(
+    <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'heading'</span>, { <span class="v">name</span>: <span class="s">'Order Confirmed!'</span> })
+  ).<span class="fn">toBeVisible</span>();
+  <span class="k">await</span> <span class="fn">expect</span>(
+    <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">/Order #[A-Z0-9]+/</span>)
+  ).<span class="fn">toBeVisible</span>(); <span class="c">// Order number pattern</span>
+});</pre>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══════════ PHASE 6: MASTERY ═══════════ -->
+
+<div class="section" id="best-practices">
+  <div class="phase-tag p6">Phase 6 · Mastery</div>
+  <h2>Best Practices</h2>
+  <p class="section-intro">These are the habits and patterns that separate good automation from great automation. Build these into your muscle memory.</p>
+
+  <h3>1. Always Prefer Semantic Locators</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <div class="compare-col-header bad">❌ Avoid</div>
+      <pre><span class="c">// Fragile — breaks on any refactor</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'.btn.btn-primary.submit-btn'</span>);
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'#formContainer > div:nth-child(3) > input'</span>);
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'//button[@class="btn btn-primary"]'</span>);</pre>
+    </div>
+    <div class="compare-col">
+      <div class="compare-col-header good">✅ Prefer</div>
+      <pre><span class="c">// Stable — aligned with user intent</span>
+<span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit'</span> });
+<span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email Address'</span>);
+<span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit'</span> });</pre>
+    </div>
+  </div>
+
+  <h3>2. Use Page Object Model (POM)</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div><div class="code-label">pages/LoginPage.js</div></div>
+    <pre><span class="k">export class</span> <span class="t">LoginPage</span> {
+  <span class="fn">constructor</span>(<span class="v">page</span>) {
+    <span class="k">this</span>.<span class="v">page</span> = <span class="v">page</span>;
+
+    <span class="c">// Define locators ONCE — reuse everywhere</span>
+    <span class="k">this</span>.<span class="v">emailInput</span>    = <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Email'</span>);
+    <span class="k">this</span>.<span class="v">passwordInput</span> = <span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'Password'</span>);
+    <span class="k">this</span>.<span class="v">submitButton</span>  = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Sign In'</span> });
+    <span class="k">this</span>.<span class="v">errorMessage</span>  = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'alert'</span>);
+  }
+
+  <span class="k">async</span> <span class="fn">goto</span>() {
+    <span class="k">await</span> <span class="k">this</span>.<span class="v">page</span>.<span class="fn">goto</span>(<span class="s">'/login'</span>);
+  }
+
+  <span class="k">async</span> <span class="fn">login</span>(<span class="v">email</span>, <span class="v">password</span>) {
+    <span class="k">await</span> <span class="k">this</span>.<span class="v">emailInput</span>.<span class="fn">fill</span>(<span class="v">email</span>);
+    <span class="k">await</span> <span class="k">this</span>.<span class="v">passwordInput</span>.<span class="fn">fill</span>(<span class="v">password</span>);
+    <span class="k">await</span> <span class="k">this</span>.<span class="v">submitButton</span>.<span class="fn">click</span>();
+  }
+
+  <span class="k">async</span> <span class="fn">assertError</span>(<span class="v">message</span>) {
+    <span class="k">await</span> <span class="fn">expect</span>(<span class="k">this</span>.<span class="v">errorMessage</span>).<span class="fn">toContainText</span>(<span class="v">message</span>);
+  }
+}</pre>
+  </div>
+
+  <h3>3. Work With Developers on test-id Strategy</h3>
+  <div class="callout tip">
+    <div class="callout-icon">💡</div>
+    <div class="callout-body">
+      <div class="callout-title">Team Best Practice</div>
+      <p>Agree on a <code>data-testid</code> naming convention with your dev team. Suggested format: <strong>[component]-[element]-[context]</strong>. Examples: <code>product-card-title</code>, <code>checkout-submit-btn</code>, <code>user-table-row</code>. These should be added during development, not retrofitted.</p>
+    </div>
+  </div>
+
+  <h3>4. Never Hard-code Timeouts</h3>
+  <div class="compare-grid">
+    <div class="compare-col">
+      <div class="compare-col-header bad">❌ Anti-pattern</div>
+      <pre><span class="c">// Hard-coded waits are flaky</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">waitForTimeout</span>(<span class="n">3000</span>);
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">'Success'</span>).<span class="fn">click</span>();</pre>
+    </div>
+    <div class="compare-col">
+      <div class="compare-col-header good">✅ Best Practice</div>
+      <pre><span class="c">// Use expect with auto-waiting</span>
+<span class="k">await</span> <span class="fn">expect</span>(
+  <span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">'Success'</span>)
+).<span class="fn">toBeVisible</span>();</pre>
+    </div>
+  </div>
+
+  <h3>5. Scope Locators to Avoid Ambiguity</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div></div>
+    <pre><span class="c">// ❌ Page-global — which "Submit" button?</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit'</span> }).<span class="fn">click</span>();
+
+<span class="c">// ✅ Scoped — unambiguous</span>
+<span class="k">const</span> <span class="v">form</span> = <span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'form'</span>, { <span class="v">name</span>: <span class="s">'Registration'</span> });
+<span class="k">await</span> <span class="v">form</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit'</span> }).<span class="fn">click</span>();</pre>
+  </div>
+
+  <h3>6. Use Regex for Dynamic Text</h3>
+  <div class="code-block">
+    <div class="code-header"><div class="code-lang"><div class="code-lang-dot"></div>JavaScript</div></div>
+    <pre><span class="c">// ❌ Exact match breaks for dynamic order numbers</span>
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">'Order #ORD-2024-00042'</span>)).<span class="fn">toBeVisible</span>();
+
+<span class="c">// ✅ Regex handles dynamic values</span>
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">/Order #ORD-\d+/</span>)).<span class="fn">toBeVisible</span>();
+
+<span class="c">// ✅ Also for welcome messages with dynamic usernames</span>
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">page</span>.<span class="fn">getByText</span>(<span class="s">/Welcome,\s+\w+/</span>)).<span class="fn">toBeVisible</span>();</pre>
+  </div>
+</div>
+
+<!-- ANTI-PATTERNS -->
+<div class="section" id="antipatterns">
+  <h2>Anti-patterns to Avoid</h2>
+  <p class="section-intro">These are the most common mistakes QA engineers make when writing Playwright tests. Learn to recognize and avoid them.</p>
+
+  <div class="pattern-grid">
+    <div class="pattern-card anti">
+      <div class="pattern-card-header">❌ Anti-pattern #1</div>
+      <p style="font-size:13px;color:var(--text2);font-weight:600">CSS Classes as Locators</p>
+      <div class="code-block" style="margin-top:10px">
+        <pre style="padding:12px;font-size:12px"><span class="c">// Breaks on refactor / rebrand</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'.btn-primary-v2'</span>)
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'.MuiButton-root'</span>)</pre>
+      </div>
+    </div>
+    <div class="pattern-card best">
+      <div class="pattern-card-header">✅ Fix</div>
+      <p style="font-size:13px;color:var(--text2);font-weight:600">Use semantic role + accessible name</p>
+      <div class="code-block" style="margin-top:10px">
+        <pre style="padding:12px;font-size:12px"><span class="c">// Stable across redesigns</span>
+<span class="v">page</span>.<span class="fn">getByRole</span>(<span class="s">'button'</span>, {
+  <span class="v">name</span>: <span class="s">'Place Order'</span>
+})</pre>
+      </div>
+    </div>
+
+    <div class="pattern-card anti">
+      <div class="pattern-card-header">❌ Anti-pattern #2</div>
+      <p style="font-size:13px;color:var(--text2);font-weight:600">Auto-generated IDs</p>
+      <div class="code-block" style="margin-top:10px">
+        <pre style="padding:12px;font-size:12px"><span class="c">// Random IDs change every build</span>
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'#ember-123'</span>)
+<span class="v">page</span>.<span class="fn">locator</span>(<span class="s">'#react-select-3-input'</span>)</pre>
+      </div>
+    </div>
+    <div class="pattern-card best">
+      <div class="pattern-card-header">✅ Fix</div>
+      <p style="font-size:13px;color:var(--text2);font-weight:600">Ask devs to add stable data-testid</p>
+      <div class="code-block" style="margin-top:10px">
+        <pre style="padding:12px;font-size:12px"><span class="c">// Or use label/role instead</span>
+<span class="v">page</span>.<span class="fn">getByTestId</span>(<span class="s">'city-select'</span>)
+<span class="v">page</span>.<span class="fn">getByLabel</span>(<span class="s">'City'</span>)</pre>
+      </div>
+    </div>
+
+    <div class="pattern-card anti">
+      <div class="pattern-card-header">❌ Anti-pattern #3</div>
+      <p style="font-size:13px;color:var(--text2);font-weight:600">Deep XPath Chains</p>
+      <div class="code-block" style="margin-top:10px">
+        <pre style="padding:12px;font-size:12px"><span class="c">// Breaks on any DOM change</span>
+<span class="s">'//body/div[1]/main/section/form/div[3]/button'</span></pre>
+      </div>
+    </div>
+    <div class="pattern-card best">
+      <div class="pattern-card-header">✅ Fix</div>
+      <p style="font-size:13px;color:var(--text2);font-weight:600">Scope from nearest stable parent</p>
+      <div class="code-block" style="margin-top:10px">
+        <pre style="padding:12px;font-size:12px"><span class="c">// Structural changes don't matter</span>
+<span class="v">page</span>
+  .<span class="fn">getByRole</span>(<span class="s">'form'</span>)
+  .<span class="fn">getByRole</span>(<span class="s">'button'</span>, { <span class="v">name</span>: <span class="s">'Submit'</span> })</pre>
+      </div>
+    </div>
+
+    <div class="pattern-card anti">
+      <div class="pattern-card-header">❌ Anti-pattern #4</div>
+      <p style="font-size:13px;color:var(--text2);font-weight:600">waitForTimeout for loading</p>
+      <div class="code-block" style="margin-top:10px">
+        <pre style="padding:12px;font-size:12px"><span class="c">// Slow AND unreliable</span>
+<span class="k">await</span> <span class="v">page</span>.<span class="fn">waitForTimeout</span>(<span class="n">5000</span>);
+<span class="k">await</span> <span class="v">btn</span>.<span class="fn">click</span>();</pre>
+      </div>
+    </div>
+    <div class="pattern-card best">
+      <div class="pattern-card-header">✅ Fix</div>
+      <p style="font-size:13px;color:var(--text2);font-weight:600">Wait for a specific condition</p>
+      <div class="code-block" style="margin-top:10px">
+        <pre style="padding:12px;font-size:12px"><span class="c">// Fast AND deterministic</span>
+<span class="k">await</span> <span class="fn">expect</span>(<span class="v">spinner</span>).<span class="fn">toBeHidden</span>();
+<span class="k">await</span> <span class="v">btn</span>.<span class="fn">click</span>();</pre>
+      </div>
+    </div>
+  </div>
+
+  <h3>Quick Reference: What to Use vs Avoid</h3>
+  <table class="data-table" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius)">
+    <thead>
+      <tr><th>Scenario</th><th>❌ Avoid</th><th>✅ Use Instead</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Click a button</td><td class="bad">CSS class, XPath</td><td class="good">getByRole('button', {name})</td></tr>
+      <tr><td>Fill a form field</td><td class="bad">ID, name attribute</td><td class="good">getByLabel()</td></tr>
+      <tr><td>Assert visible text</td><td class="bad">getByText() on interactive elements</td><td class="good">getByText() / toContainText()</td></tr>
+      <tr><td>Navigate links</td><td class="bad">Page-global locator</td><td class="good">Scope to nav → getByRole('link')</td></tr>
+      <tr><td>Multiple same elements</td><td class="bad">.first() blindly</td><td class="good">.filter() then .nth()</td></tr>
+      <tr><td>Wait for state change</td><td class="bad">waitForTimeout()</td><td class="good">expect().toBeVisible() / toBeHidden()</td></tr>
+      <tr><td>Dynamic content</td><td class="bad">Exact string match</td><td class="good">Regex: /pattern/</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <h2>Self-Assessment Checklist</h2>
+  <p class="section-intro">Use this checklist to gauge your mastery level. Honest self-assessment helps identify gaps before they become problems in real test suites.</p>
+
+  <h3>🟢 Beginner Level (Phase 1–2)</h3>
+  <div class="progress-section">
+    <div class="progress-row">
+      <div class="progress-label"><span>Understanding DOM structure and ARIA roles</span><span>Foundation</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>Using getByRole() for buttons, links, inputs</span><span>Core</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:90%"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>Using getByLabel() for all form fields</span><span>Core</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:85%"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>Knowing when to use getByText() vs getByRole()</span><span>Core</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:80%"></div></div>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><div class="check-box"></div>I can identify HTML elements' implicit ARIA roles (button, link, textbox, checkbox…)</li>
+    <li><div class="check-box"></div>I use getByRole() for all interactive elements (buttons, links, inputs, checkboxes)</li>
+    <li><div class="check-box"></div>I use getByLabel() for form fields — not id selectors or XPath</li>
+    <li><div class="check-box"></div>I understand the difference between exact and partial text matching</li>
+    <li><div class="check-box"></div>I can use Playwright Inspector (npx playwright codegen) to explore locators</li>
+  </ul>
+
+  <h3>🟡 Intermediate Level (Phase 3–4)</h3>
+  <ul class="checklist">
+    <li><div class="check-box"></div>I chain locators to scope searches to specific containers (e.g., modal, table row, nav)</li>
+    <li><div class="check-box"></div>I use .filter() with hasText / hasNot to narrow collections</li>
+    <li><div class="check-box"></div>I understand and resolve "strict mode violation" errors</li>
+    <li><div class="check-box"></div>I write locators for tables by row content, not row index</li>
+    <li><div class="check-box"></div>I handle dynamic content with expect assertions instead of waitForTimeout</li>
+    <li><div class="check-box"></div>I use regex for text matching when content is dynamic</li>
+    <li><div class="check-box"></div>I can convert any XPath locator to a Playwright-native equivalent</li>
+  </ul>
+
+  <h3>🔴 Advanced Level (Phase 5–6)</h3>
+  <ul class="checklist">
+    <li><div class="check-box"></div>I organize locators in Page Object Model classes</li>
+    <li><div class="check-box"></div>I have a team test-id naming convention and enforce it</li>
+    <li><div class="check-box"></div>My locators survive UI redesigns without changing</li>
+    <li><div class="check-box"></div>I write full E2E tests (login, cart, form) using only Playwright-native locators</li>
+    <li><div class="check-box"></div>I can debug failing locators using Playwright Trace Viewer and Inspector</li>
+    <li><div class="check-box"></div>I review and fix fragile locators in code reviews</li>
+    <li><div class="check-box"></div>I can teach this material to a junior QA engineer</li>
+  </ul>
+
+  <div class="card accent-g" style="margin-top:32px">
+    <h4 style="margin-top:0;color:var(--accent)">🎯 Final Capstone Challenge</h4>
+    <p>Take any web application you have access to (or use https://demo.playwright.dev/todomvc) and write a complete test suite that:</p>
+    <ol style="color:var(--text2);padding-left:20px;font-size:14px">
+      <li style="margin-bottom:8px">Uses ZERO XPath and ZERO CSS class selectors</li>
+      <li style="margin-bottom:8px">Covers at least 3 user flows end-to-end</li>
+      <li style="margin-bottom:8px">Handles dynamic content, multiple matching elements, and form validation</li>
+      <li style="margin-bottom:8px">Is organized using Page Object Model</li>
+      <li>Has all locators reviewed against the anti-pattern list above</li>
+    </ol>
+    <p style="color:var(--accent);font-weight:600;font-size:14px;margin-top:16px;margin-bottom:0">When you can do this comfortably, you have achieved proficiency. 🚀</p>
+  </div>
+
+  <div class="callout info" style="margin-top:28px">
+    <div class="callout-icon">📖</div>
+    <div class="callout-body">
+      <div class="callout-title">Recommended Next Steps</div>
+      <p>After this module: explore Playwright's API Testing capabilities, learn about Fixtures, master Playwright's Trace Viewer for debugging, and study parallel test execution strategies. The official Playwright docs at <strong>playwright.dev</strong> are excellent and actively maintained.</p>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+</body>
+</html>
