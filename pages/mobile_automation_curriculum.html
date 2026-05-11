@@ -1,0 +1,2451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hybrid Mobile Automation Mastery — Complete Training Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070810;
+    --bg2: #0d0f1e;
+    --bg3: #12152a;
+    --border: rgba(120,130,255,0.12);
+    --border2: rgba(120,130,255,0.22);
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --accent3: #a5b4fc;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --coral: #f87171;
+    --pink: #f472b6;
+    --cyan: #22d3ee;
+    --text: #e8eaf6;
+    --text2: #9fa3c7;
+    --text3: #5b5f8a;
+    --card: rgba(255,255,255,0.03);
+    --card2: rgba(255,255,255,0.05);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── ANIMATED BACKGROUND ─── */
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    animation: gridShift 20s linear infinite;
+  }
+  @keyframes gridShift {
+    0% { background-position: 0 0; }
+    100% { background-position: 48px 48px; }
+  }
+  .bg-orb {
+    position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+    filter: blur(80px); opacity: 0.18;
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .bg-orb-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; animation-delay: 0s; }
+  .bg-orb-2 { width: 500px; height: 500px; background: var(--cyan); top: 40%; right: -150px; animation-delay: -4s; }
+  .bg-orb-3 { width: 400px; height: 400px; background: var(--pink); bottom: -150px; left: 30%; animation-delay: -8s; }
+  @keyframes orbFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-40px) scale(1.05); }
+  }
+
+  /* ─── LAYOUT ─── */
+  .wrap { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 6rem 2rem 4rem;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3);
+    border-radius: 100px; padding: 6px 18px;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent3); font-family: 'DM Mono', monospace;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s ease infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 6.5rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 0%, var(--accent3) 50%, var(--cyan) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--text2); max-width: 680px;
+    margin: 1.5rem auto 2.5rem;
+    line-height: 1.7; font-weight: 300;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+  .hero-stack {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+  .stack-pill {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 5px 14px;
+    font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text2);
+    transition: all 0.2s;
+  }
+  .stack-pill:hover { border-color: var(--accent); color: var(--accent3); transform: translateY(-1px); }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 1px;
+    border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+    background: var(--border);
+    animation: fadeUp 0.7s 0.4s ease both;
+    width: 100%; max-width: 720px;
+  }
+  .stat-item {
+    background: var(--bg2); padding: 1.5rem 1rem; text-align: center;
+    transition: background 0.2s;
+  }
+  .stat-item:hover { background: var(--bg3); }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 700; color: var(--accent3); }
+  .stat-label { font-size: 11px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTION ─── */
+  section { padding: 6rem 0; }
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-eyebrow::before { content: ''; flex: 0 0 24px; height: 1px; background: var(--accent); }
+  .section-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.2; letter-spacing: -0.02em;
+  }
+  .section-desc {
+    color: var(--text2); max-width: 700px; margin-top: 1rem;
+    font-size: 1.05rem; line-height: 1.7;
+  }
+
+  /* ─── ROADMAP ─── */
+  .roadmap-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: 20px; overflow: hidden;
+    margin-top: 3rem;
+  }
+  .phase-card {
+    background: var(--bg2); padding: 2rem;
+    position: relative; overflow: hidden;
+    transition: background 0.3s;
+    cursor: default;
+  }
+  .phase-card::before {
+    content: ''; position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.3s;
+    background: radial-gradient(400px at var(--mx,50%) var(--my,50%), rgba(99,102,241,0.06), transparent 60%);
+  }
+  .phase-card:hover { background: var(--bg3); }
+  .phase-card:hover::before { opacity: 1; }
+  .phase-num {
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    color: var(--text3); margin-bottom: 1rem; letter-spacing: 0.1em;
+  }
+  .phase-icon {
+    font-size: 2rem; margin-bottom: 1rem;
+    display: block; line-height: 1;
+  }
+  .phase-title {
+    font-family: 'Syne', sans-serif; font-size: 1.15rem;
+    font-weight: 700; margin-bottom: 0.5rem;
+  }
+  .phase-desc { font-size: 0.9rem; color: var(--text2); line-height: 1.6; margin-bottom: 1.25rem; }
+  .phase-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .phase-tag {
+    font-size: 11px; padding: 3px 10px; border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    background: rgba(99,102,241,0.1); color: var(--accent3);
+    border: 1px solid rgba(99,102,241,0.2);
+  }
+  .phase-tag.green { background: rgba(52,211,153,0.1); color: var(--green); border-color: rgba(52,211,153,0.2); }
+  .phase-tag.amber { background: rgba(251,191,36,0.1); color: var(--amber); border-color: rgba(251,191,36,0.2); }
+  .phase-tag.coral { background: rgba(248,113,113,0.1); color: var(--coral); border-color: rgba(248,113,113,0.2); }
+  .phase-tag.pink { background: rgba(244,114,182,0.1); color: var(--pink); border-color: rgba(244,114,182,0.2); }
+  .phase-tag.cyan { background: rgba(34,211,238,0.1); color: var(--cyan); border-color: rgba(34,211,238,0.2); }
+
+  /* ─── DETAILED PHASE CONTENT ─── */
+  .phases-detail { margin-top: 4rem; }
+  .phase-detail {
+    margin-bottom: 4rem;
+    opacity: 0; transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .phase-detail.visible { opacity: 1; transform: translateY(0); }
+
+  .phase-header {
+    display: flex; align-items: flex-start; gap: 1.5rem;
+    margin-bottom: 2rem; padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-header-num {
+    flex-shrink: 0;
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem;
+    color: white;
+  }
+  .phase-header-content {}
+  .phase-header-label { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; letter-spacing: 0.1em; margin-bottom: 6px; text-transform: uppercase; }
+  .phase-header-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 6px; }
+  .phase-header-desc { color: var(--text2); font-size: 0.95rem; line-height: 1.6; }
+
+  /* Sub-phases */
+  .subphase-list { display: flex; flex-direction: column; gap: 1.5rem; }
+  .subphase {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+  }
+  .subphase-header {
+    padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    cursor: pointer; user-select: none;
+    transition: background 0.2s;
+    border-bottom: 1px solid transparent;
+  }
+  .subphase-header:hover { background: rgba(255,255,255,0.03); }
+  .subphase-header.open { border-bottom-color: var(--border); }
+  .subphase-num-badge {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 500;
+  }
+  .subphase-num-badge.blue { background: rgba(99,102,241,0.15); color: var(--accent3); }
+  .subphase-num-badge.green { background: rgba(52,211,153,0.15); color: var(--green); }
+  .subphase-num-badge.amber { background: rgba(251,191,36,0.15); color: var(--amber); }
+  .subphase-num-badge.coral { background: rgba(248,113,113,0.15); color: var(--coral); }
+  .subphase-num-badge.cyan { background: rgba(34,211,238,0.15); color: var(--cyan); }
+  .subphase-num-badge.pink { background: rgba(244,114,182,0.15); color: var(--pink); }
+  .subphase-title-wrap { flex: 1; }
+  .subphase-title { font-size: 1rem; font-weight: 500; font-family: 'Syne', sans-serif; }
+  .subphase-subtitle { font-size: 12px; color: var(--text3); margin-top: 2px; }
+  .subphase-arrow { color: var(--text3); font-size: 18px; transition: transform 0.25s; }
+  .subphase-header.open .subphase-arrow { transform: rotate(90deg); }
+  .subphase-body { display: none; padding: 1.5rem; }
+  .subphase-body.open { display: block; }
+
+  /* Content inside subphase */
+  .content-block { margin-bottom: 2rem; }
+  .content-block:last-child { margin-bottom: 0; }
+  .content-h3 {
+    font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 600;
+    color: var(--text); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .content-h3::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+  .topic-item {
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; color: var(--text2);
+    display: flex; align-items: flex-start; gap: 10px;
+    line-height: 1.5;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .topic-item:hover { border-color: var(--border2); color: var(--text); }
+  .topic-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; margin-top: 5px; }
+  .topic-dot.blue { background: var(--accent); }
+  .topic-dot.green { background: var(--green); }
+  .topic-dot.amber { background: var(--amber); }
+  .topic-dot.coral { background: var(--coral); }
+  .topic-dot.cyan { background: var(--cyan); }
+  .topic-dot.pink { background: var(--pink); }
+
+  .info-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 8px; }
+  .info-card {
+    background: rgba(255,255,255,0.025); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1rem 1.25rem;
+  }
+  .info-card-label { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .info-card-content { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .info-card-content strong { color: var(--text); font-weight: 500; }
+
+  .callout {
+    border-radius: 10px; padding: 1rem 1.25rem;
+    margin-top: 12px; font-size: 13px; line-height: 1.7;
+    display: flex; gap: 10px;
+  }
+  .callout.tip { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.2); color: rgba(52,211,153,0.9); }
+  .callout.warn { background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.2); color: rgba(251,191,36,0.9); }
+  .callout.danger { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.2); color: rgba(248,113,113,0.9); }
+  .callout.info { background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.2); color: rgba(165,180,252,0.9); }
+  .callout-icon { flex-shrink: 0; font-size: 1rem; }
+
+  code {
+    font-family: 'DM Mono', monospace; font-size: 12px;
+    background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
+    border-radius: 4px; padding: 2px 7px; color: var(--accent3);
+  }
+  .code-block {
+    background: #0a0c18; border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem; margin-top: 10px; overflow-x: auto;
+  }
+  .code-block pre {
+    font-family: 'DM Mono', monospace; font-size: 12.5px;
+    color: var(--text2); line-height: 1.7;
+    white-space: pre;
+  }
+  .code-block .kw { color: var(--accent3); }
+  .code-block .str { color: var(--green); }
+  .code-block .cm { color: var(--text3); }
+  .code-block .fn { color: var(--cyan); }
+  .code-block .num { color: var(--amber); }
+
+  /* ─── FOLDER TREE ─── */
+  .folder-tree {
+    background: #090b17; border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.5rem;
+    font-family: 'DM Mono', monospace; font-size: 12.5px;
+    line-height: 2; color: var(--text2);
+  }
+  .tree-dir { color: var(--accent3); }
+  .tree-file { color: var(--text2); }
+  .tree-comment { color: var(--text3); }
+  .tree-indent { padding-left: 1.2rem; }
+
+  /* ─── MILESTONES ─── */
+  .milestones { display: flex; flex-direction: column; gap: 0; }
+  .milestone {
+    display: flex; gap: 1.5rem; padding: 0 0 2.5rem;
+    position: relative;
+  }
+  .milestone::after {
+    content: ''; position: absolute; left: 20px; top: 44px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .milestone:last-child::after { display: none; }
+  .milestone:last-child { padding-bottom: 0; }
+  .ms-dot {
+    flex-shrink: 0; width: 42px; height: 42px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; position: relative; z-index: 1;
+    border: 2px solid var(--border2);
+    background: var(--bg2);
+  }
+  .ms-content {}
+  .ms-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+  .ms-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  /* ─── INTERVIEW QUESTIONS ─── */
+  .iq-list { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+  .iq-item {
+    background: rgba(99,102,241,0.05); border: 1px solid rgba(99,102,241,0.15);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 13px; color: var(--text2); line-height: 1.5;
+    display: flex; gap: 10px;
+  }
+  .iq-q { color: var(--accent3); font-family: 'DM Mono', monospace; font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border); padding: 3rem 0;
+    text-align: center; color: var(--text3); font-size: 13px;
+  }
+  footer strong { color: var(--text2); }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ─── PROGRESS BAR ─── */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; z-index: 1000;
+    height: 2px; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--cyan));
+    transition: width 0.1s linear;
+  }
+
+  /* ─── NAV ─── */
+  .topnav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(7,8,16,0.8); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1rem; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-link { font-size: 13px; color: var(--text2); text-decoration: none; transition: color 0.2s; }
+  .nav-link:hover { color: var(--text); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero-stats { grid-template-columns: repeat(2,1fr); }
+    .phase-header { flex-direction: column; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div class="bg-grid"></div>
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+
+<nav class="topnav">
+  <div class="nav-logo"><div class="nav-logo-dot"></div>HybridAutoMastery</div>
+  <div class="nav-links">
+    <a href="#roadmap" class="nav-link">Roadmap</a>
+    <a href="#phases" class="nav-link">Phases</a>
+    <a href="#structure" class="nav-link">Structure</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════ HERO -->
+<div class="hero wrap">
+  <div class="hero-badge">Complete Training Program · 9 Phases</div>
+  <h1>Hybrid Mobile Automation Mastery</h1>
+  <p class="hero-sub">A complete, structured learning journey from absolute beginner to senior automation engineer — covering Android, iOS, Web, and cloud-based Playwright + Appetize automation in JavaScript.</p>
+  <div class="hero-stack">
+    <span class="stack-pill">JavaScript</span>
+    <span class="stack-pill">Node.js</span>
+    <span class="stack-pill">Playwright</span>
+    <span class="stack-pill">Appetize Cloud</span>
+    <span class="stack-pill">Android SDK</span>
+    <span class="stack-pill">ADB</span>
+    <span class="stack-pill">GitHub Actions</span>
+    <span class="stack-pill">Allure Reports</span>
+    <span class="stack-pill">Page Object Model</span>
+    <span class="stack-pill">CI/CD</span>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">9</div><div class="stat-label">Phases</div></div>
+    <div class="stat-item"><div class="stat-num">60+</div><div class="stat-label">Sub-phases</div></div>
+    <div class="stat-item"><div class="stat-num">400+</div><div class="stat-label">Topics</div></div>
+    <div class="stat-item"><div class="stat-num">100+</div><div class="stat-label">Code Snippets</div></div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════ ROADMAP OVERVIEW -->
+<section id="roadmap">
+  <div class="wrap">
+    <div class="section-eyebrow reveal">Learning Roadmap</div>
+    <h2 class="section-title reveal">Nine Phases. Zero to Industry-Ready.</h2>
+    <p class="section-desc reveal">Each phase builds on the last, moving from raw setup through framework design, mobile automation, CI/CD, and scalable production architecture.</p>
+
+    <div class="roadmap-grid reveal">
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 01</div>
+        <span class="phase-icon">🛠️</span>
+        <div class="phase-title">Complete Environment Setup</div>
+        <div class="phase-desc">Install and configure every tool, SDK, emulator, and cloud connection needed. From Node.js to Appetize cloud devices — your entire dev environment, built from zero.</div>
+        <div class="phase-tags">
+          <span class="phase-tag">Node.js</span>
+          <span class="phase-tag">Android Studio</span>
+          <span class="phase-tag green">Appetize</span>
+          <span class="phase-tag">ADB</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 02</div>
+        <span class="phase-icon">⚡</span>
+        <div class="phase-title">JavaScript + Playwright Fundamentals</div>
+        <div class="phase-desc">Master async/await, Promises, classes, JSON, error handling, and all Playwright core concepts — locators, assertions, waits, frames, network interception, and codegen.</div>
+        <div class="phase-tags">
+          <span class="phase-tag amber">JS Async</span>
+          <span class="phase-tag">Playwright API</span>
+          <span class="phase-tag cyan">Trace Viewer</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 03</div>
+        <span class="phase-icon">📱</span>
+        <div class="phase-title">Mobile Automation with Appetize</div>
+        <div class="phase-desc">Automate Android & iOS in the cloud. Cover touch gestures, swipes, long press, device rotation, deep linking, accessibility IDs, session lifecycle, and remote debugging.</div>
+        <div class="phase-tags">
+          <span class="phase-tag coral">Gestures</span>
+          <span class="phase-tag">Cloud Sessions</span>
+          <span class="phase-tag green">iOS + Android</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 04</div>
+        <span class="phase-icon">🌐</span>
+        <div class="phase-title">Website Automation</div>
+        <div class="phase-desc">Build a complete web automation layer for sttc.onrender.com — login, navigation, forms, tables, API validations, session persistence, dynamic waits, and cross-browser execution.</div>
+        <div class="phase-tags">
+          <span class="phase-tag">POM</span>
+          <span class="phase-tag amber">Cross-browser</span>
+          <span class="phase-tag">API Validation</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 05</div>
+        <span class="phase-icon">🔗</span>
+        <div class="phase-title">Hybrid Mobile + Web Automation</div>
+        <div class="phase-desc">Connect mobile and web in single end-to-end flows. OTP automation, shared auth, API-assisted hybrid scenarios, data sync testing, and real multi-platform user journeys.</div>
+        <div class="phase-tags">
+          <span class="phase-tag pink">OTP Flows</span>
+          <span class="phase-tag cyan">Auth Sync</span>
+          <span class="phase-tag">E2E Hybrid</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 06</div>
+        <span class="phase-icon">🏗️</span>
+        <div class="phase-title">Framework Design</div>
+        <div class="phase-desc">Build a complete industry-standard framework: POM, COM, service layer, fixtures, hooks, env configs, test data management, retry handling, logging architecture, and parallel execution.</div>
+        <div class="phase-tags">
+          <span class="phase-tag">Architecture</span>
+          <span class="phase-tag green">POM + COM</span>
+          <span class="phase-tag amber">Parallel</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 07</div>
+        <span class="phase-icon">📊</span>
+        <div class="phase-title">Reporting + Debugging</div>
+        <div class="phase-desc">HTML reports, Allure, trace viewer, video recording, custom logger, failure analysis, network debugging, mobile debugging, and CI failure triage workflows.</div>
+        <div class="phase-tags">
+          <span class="phase-tag coral">Allure</span>
+          <span class="phase-tag">Trace Viewer</span>
+          <span class="phase-tag cyan">Custom Logger</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 08</div>
+        <span class="phase-icon">🚀</span>
+        <div class="phase-title">Advanced Architecture</div>
+        <div class="phase-desc">Data-driven framework, tag-based execution, API+UI combined testing, performance optimization, Docker basics, secret management, self-healing locators, and cloud execution optimization.</div>
+        <div class="phase-tags">
+          <span class="phase-tag pink">Data-Driven</span>
+          <span class="phase-tag">Docker</span>
+          <span class="phase-tag green">Self-Healing</span>
+        </div>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">PHASE 09</div>
+        <span class="phase-icon">⚙️</span>
+        <div class="phase-title">CI/CD + Scaling</div>
+        <div class="phase-desc">GitHub Actions, Jenkins pipelines, scheduled runs, artifact storage, distributed execution, PR validations, Slack/email reporting, and full team collaboration workflows.</div>
+        <div class="phase-tags">
+          <span class="phase-tag">GitHub Actions</span>
+          <span class="phase-tag amber">Jenkins</span>
+          <span class="phase-tag cyan">Slack Reports</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════ DETAILED PHASES -->
+<section id="phases">
+  <div class="wrap">
+    <div class="section-eyebrow reveal">Detailed Curriculum</div>
+    <h2 class="section-title reveal">Every Phase. Every Sub-Phase. Every Topic.</h2>
+    <p class="section-desc reveal">Expand each sub-phase to explore its complete objectives, topics, code examples, best practices, and interview questions.</p>
+
+    <div class="phases-detail" id="phases-container">
+
+<!-- ════════════════════ PHASE 1 ════════════════════ -->
+<div class="phase-detail reveal" id="phase1">
+  <div class="phase-header">
+    <div class="phase-header-num">P1</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 01 · Foundation</div>
+      <div class="phase-header-title">Complete Environment Setup</div>
+      <div class="phase-header-desc">Build your entire development environment from scratch — from installing Node.js to uploading your first APK to Appetize cloud and verifying end-to-end device connectivity.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">1.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">System Requirements & Windows Setup</div>
+          <div class="subphase-subtitle">OS configuration, hardware specs, and baseline tools</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Objective</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7">Prepare your Windows machine to host a complete mobile+web automation environment. Understand why each system setting matters and how misconfiguration causes hard-to-debug issues later.</p>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Recommended System Specs</div>
+          <div class="info-row">
+            <div class="info-card"><div class="info-card-label">RAM</div><div class="info-card-content"><strong>16 GB minimum</strong> — Android emulators alone consume 2–4 GB. Running Chrome + Node + emulator simultaneously needs headroom.</div></div>
+            <div class="info-card"><div class="info-card-label">Storage</div><div class="info-card-content"><strong>50 GB free minimum</strong> — Android Studio SDK + emulator images + node_modules can reach 30 GB.</div></div>
+            <div class="info-card"><div class="info-card-label">CPU</div><div class="info-card-content"><strong>Intel i5/i7 or AMD Ryzen 5/7</strong> with hardware virtualization (VT-x/AMD-V) enabled in BIOS — required for emulator acceleration.</div></div>
+            <div class="info-card"><div class="info-card-label">OS</div><div class="info-card-content"><strong>Windows 10 v1903+ or Windows 11</strong> — WSL2 recommended for Docker tasks later. 64-bit required.</div></div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Key Windows Configurations</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot blue"></div>Enable Developer Mode in Settings → Update & Security → For Developers</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Enable Hyper-V or Virtualization in BIOS (required for Android emulator HAXM)</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Disable Windows Defender real-time scanning on <code>node_modules</code> folders (speeds up npm installs)</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Set Windows PATH length to allow Long Paths via Group Policy or registry</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Install Windows Terminal (modern tabbed terminal for running multiple shells)</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Install PowerShell 7+ and configure execution policy with <code>Set-ExecutionPolicy RemoteSigned</code></div>
+          </div>
+        </div>
+        <div class="callout warn"><div class="callout-icon">⚠</div><strong>Common Mistake:</strong> Skipping BIOS virtualization enables Intel HAXM fails silently and Android emulator runs at 5 FPS. Always verify virtualization is ON before installing Android Studio.</div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">1.2</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Node.js, NPM & Package Management</div>
+          <div class="subphase-subtitle">Installing Node, understanding npm, nvm, and package.json</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Why Node.js?</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7">Playwright is a Node.js library. Node provides the JavaScript runtime, the module system, the event loop, and the package manager (npm) that allows your automation project to have dependencies, scripts, and structure. Without understanding Node properly, debugging test infrastructure issues becomes impossible.</p>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Installation Steps</div>
+          <div class="code-block"><pre>
+<span class="cm"># Step 1: Install nvm-windows (Node Version Manager)</span>
+<span class="cm"># Download from: https://github.com/coreybutler/nvm-windows/releases</span>
+<span class="cm"># nvm lets you switch Node versions — critical for team projects</span>
+
+<span class="cm"># Step 2: Install Node LTS via nvm</span>
+<span class="kw">nvm</span> install <span class="str">lts</span>
+<span class="kw">nvm</span> use <span class="str">lts</span>
+
+<span class="cm"># Step 3: Verify installation</span>
+<span class="kw">node</span> --version    <span class="cm"># Should show v18.x or v20.x</span>
+<span class="kw">npm</span> --version     <span class="cm"># Should show 9.x or 10.x</span>
+
+<span class="cm"># Step 4: Install global tools</span>
+<span class="kw">npm</span> install -g npx
+<span class="kw">npm</span> install -g rimraf    <span class="cm"># cross-platform rm -rf</span>
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Understanding package.json</div>
+          <div class="code-block"><pre>
+<span class="cm">// Every automation project is a Node.js project.</span>
+<span class="cm">// package.json is the project's manifest — it defines:</span>
+{
+  <span class="str">"name"</span>: <span class="str">"tabletennis-automation"</span>,
+  <span class="str">"version"</span>: <span class="str">"1.0.0"</span>,
+  <span class="str">"scripts"</span>: {
+    <span class="str">"test"</span>: <span class="str">"playwright test"</span>,
+    <span class="str">"test:mobile"</span>: <span class="str">"playwright test --project=mobile"</span>,
+    <span class="str">"report"</span>: <span class="str">"playwright show-report"</span>
+  },
+  <span class="str">"dependencies"</span>: {},         <span class="cm">// Runtime deps</span>
+  <span class="str">"devDependencies"</span>: {        <span class="cm">// Test-time only deps</span>
+    <span class="str">"@playwright/test"</span>: <span class="str">"^1.45.0"</span>
+  }
+}
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">NPM Concepts You Must Know</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot green"></div><strong>npm install</strong> — reads package.json and installs all deps into node_modules</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>npm ci</strong> — clean install from package-lock.json, used in CI pipelines for reproducibility</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>node_modules</strong> — never commit this folder. Add to .gitignore always.</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>package-lock.json</strong> — locks exact versions. Always commit this for reproducible builds.</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>devDependencies</strong> — Playwright belongs here, not dependencies, since it's test-only</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>npx</strong> — run a package binary without global install, e.g. <code>npx playwright test</code></div>
+          </div>
+        </div>
+        <div class="iq-list">
+          <div class="iq-item"><span class="iq-q">Q→</span>What is the difference between npm install and npm ci, and why does CI/CD always use npm ci?</div>
+          <div class="iq-item"><span class="iq-q">Q→</span>Why should Playwright be in devDependencies and not dependencies?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">1.3</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">VS Code Setup + Recommended Extensions</div>
+          <div class="subphase-subtitle">IDE configuration, debugger, linting, formatting</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Essential VS Code Extensions</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>Playwright Test for VS Code</strong> — run/debug individual tests from the editor, see test tree</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>ESLint</strong> — catch JS errors and enforce code style rules before running tests</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>Prettier</strong> — auto-format code on save. Consistency across team members.</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>GitLens</strong> — inline Git blame, history, and comparison tools</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>DotENV</strong> — syntax highlighting for .env files (critical for env-based config)</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>Error Lens</strong> — inline error/warning display directly in the editor</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>REST Client</strong> — test API endpoints directly from VS Code without Postman</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>indent-rainbow</strong> — color-coded indentation levels — reduces nesting errors</div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Recommended settings.json</div>
+          <div class="code-block"><pre>
+{
+  <span class="str">"editor.formatOnSave"</span>: <span class="kw">true</span>,
+  <span class="str">"editor.defaultFormatter"</span>: <span class="str">"esbenp.prettier-vscode"</span>,
+  <span class="str">"editor.tabSize"</span>: <span class="num">2</span>,
+  <span class="str">"files.eol"</span>: <span class="str">"\n"</span>,              <span class="cm">// Unix line endings</span>
+  <span class="str">"editor.rulers"</span>: [<span class="num">100</span>],          <span class="cm">// Line length guide</span>
+  <span class="str">"playwright.reuseBrowser"</span>: <span class="kw">false</span>,
+  <span class="str">"javascript.suggest.autoImports"</span>: <span class="kw">true</span>,
+  <span class="str">"files.exclude"</span>: {
+    <span class="str">"**/node_modules"</span>: <span class="kw">true</span>,
+    <span class="str">"**/.git"</span>: <span class="kw">true</span>
+  }
+}
+</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">1.4</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Git, GitHub & Version Control Workflow</div>
+          <div class="subphase-subtitle">Git internals, branching strategy, and .gitignore for automation</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Automation-Specific Git Practices</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot amber"></div>Always commit <code>package-lock.json</code> — it ensures reproducible installs across machines</div>
+            <div class="topic-item"><div class="topic-dot amber"></div>Never commit <code>node_modules/</code>, <code>.env</code>, <code>reports/</code>, <code>screenshots/</code>, or <code>videos/</code></div>
+            <div class="topic-item"><div class="topic-dot amber"></div>Use feature branches: <code>feat/login-tests</code>, <code>fix/mobile-swipe</code>, <code>chore/update-deps</code></div>
+            <div class="topic-item"><div class="topic-dot amber"></div>Write conventional commits: <code>test: add TableTennis login automation</code></div>
+            <div class="topic-item"><div class="topic-dot amber"></div>Tag releases with version numbers: <code>git tag v1.0.0 -m "First stable framework"</code></div>
+            <div class="topic-item"><div class="topic-dot amber"></div>Protect main branch — require PR review before merging test changes</div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Automation .gitignore</div>
+          <div class="code-block"><pre>
+<span class="cm"># Dependencies</span>
+node_modules/
+
+<span class="cm"># Environment secrets</span>
+.env
+.env.local
+.env.*.local
+
+<span class="cm"># Generated test artifacts</span>
+reports/
+allure-results/
+allure-report/
+screenshots/
+videos/
+traces/
+logs/
+test-results/
+
+<span class="cm"># OS files</span>
+.DS_Store
+Thumbs.db
+
+<span class="cm"># VS Code</span>
+.vscode/settings.json   <span class="cm"># But commit extensions.json</span>
+</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">1.5</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Android Studio, SDK & Emulator Setup</div>
+          <div class="subphase-subtitle">Full Android development environment configuration</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">What You Need and Why</div>
+          <div class="info-row">
+            <div class="info-card"><div class="info-card-label">Android Studio</div><div class="info-card-content">The IDE that bundles the entire Android toolchain — SDK Manager, AVD Manager, and the emulator. Even if you won't write Android code, you need its tools for APK inspection and ADB.</div></div>
+            <div class="info-card"><div class="info-card-label">Android SDK</div><div class="info-card-content">The collection of Android platform tools, build tools, and system images. The SDK is what ADB and emulators use to communicate with devices. You need SDK 29+ (Android 10+).</div></div>
+            <div class="info-card"><div class="info-card-label">AVD Manager</div><div class="info-card-content">Android Virtual Device manager — creates and manages emulator instances. For automation you'll primarily use Appetize cloud, but local emulators are needed for locator discovery.</div></div>
+            <div class="info-card"><div class="info-card-label">HAXM / Hypervisor</div><div class="info-card-content">Hardware Accelerated Execution Manager — uses CPU virtualization to run emulators at near-native speed. Without it, emulators crawl. Install via SDK Manager.</div></div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">SDK Components to Install</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot blue"></div>Android SDK Platform 33, 34 (latest two stable versions)</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Android SDK Build-Tools 34.0.0</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Android SDK Command-line Tools (latest)</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Android Emulator</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Android SDK Platform-Tools (ADB lives here)</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Intel x86 Emulator Accelerator (HAXM) or Android Emulator Hypervisor Driver</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Google Play Intel x86_64 Atom System Image (for Play Store apps)</div>
+            <div class="topic-item"><div class="topic-dot blue"></div>Google USB Driver (for physical device connections)</div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Environment Variables</div>
+          <div class="code-block"><pre>
+<span class="cm"># Add these to System Environment Variables → Path</span>
+<span class="cm"># Replace USERNAME with your actual Windows username</span>
+
+ANDROID_HOME = C:\Users\USERNAME\AppData\Local\Android\Sdk
+ANDROID_SDK_ROOT = C:\Users\USERNAME\AppData\Local\Android\Sdk
+
+<span class="cm"># Add to PATH:</span>
+%ANDROID_HOME%\tools
+%ANDROID_HOME%\tools\bin
+%ANDROID_HOME%\platform-tools    <span class="cm">← This is where adb.exe lives</span>
+%ANDROID_HOME%\emulator
+
+<span class="cm"># Verify after restarting terminal:</span>
+<span class="kw">adb</span> version
+<span class="kw">emulator</span> -list-avds
+</pre></div>
+        </div>
+        <div class="callout danger"><div class="callout-icon">⛔</div><strong>Critical:</strong> ANDROID_HOME and ANDROID_SDK_ROOT must point to the same path. Having them differ causes ADB and build tools to disagree on which SDK to use, causing cryptic "device not found" errors.</div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">1.6</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">ADB — Android Debug Bridge Deep Dive</div>
+          <div class="subphase-subtitle">Device communication, commands, debugging, APK management</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">What ADB Actually Is</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7">ADB is a command-line tool that acts as a bridge between your development machine and an Android device (real or emulated). It uses a client-server architecture: the adb client on your machine communicates with the adb daemon running on the device. Understanding ADB deeply means you can debug any Android issue, install APKs, capture logs, take screenshots, and simulate events — all programmatically.</p>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Essential ADB Commands for Automation Engineers</div>
+          <div class="code-block"><pre>
+<span class="cm"># Device management</span>
+<span class="kw">adb</span> devices                           <span class="cm"># List all connected devices</span>
+<span class="kw">adb</span> -s emulator-5554 shell           <span class="cm"># Shell into specific device</span>
+<span class="kw">adb</span> kill-server && adb start-server  <span class="cm"># Reset ADB server (fixes 99% of device issues)</span>
+
+<span class="cm"># APK operations</span>
+<span class="kw">adb</span> install TableTennis.apk           <span class="cm"># Install app</span>
+<span class="kw">adb</span> install -r TableTennis.apk        <span class="cm"># Reinstall keeping data</span>
+<span class="kw">adb</span> uninstall com.tabletennis.app     <span class="cm"># Uninstall by package name</span>
+<span class="kw">adb</span> shell pm list packages            <span class="cm"># List all installed packages</span>
+
+<span class="cm"># UI automation helpers</span>
+<span class="kw">adb</span> shell uiautomator dump /sdcard/ui.xml  <span class="cm"># Dump UI hierarchy to XML</span>
+<span class="kw">adb</span> pull /sdcard/ui.xml ./ui.xml           <span class="cm"># Pull dump to local machine</span>
+<span class="kw">adb</span> shell screencap /sdcard/screen.png     <span class="cm"># Take screenshot</span>
+<span class="kw">adb</span> pull /sdcard/screen.png ./screen.png   <span class="cm"># Pull screenshot</span>
+
+<span class="cm"># Logs</span>
+<span class="kw">adb</span> logcat -v time | grep TableTennis <span class="cm"># Filter app logs in real-time</span>
+<span class="kw">adb</span> logcat -c                          <span class="cm"># Clear logcat buffer</span>
+
+<span class="cm"># Input simulation</span>
+<span class="kw">adb</span> shell input tap 500 800           <span class="cm"># Tap at coordinates</span>
+<span class="kw">adb</span> shell input swipe 200 800 200 400 <span class="cm"># Swipe up</span>
+<span class="kw">adb</span> shell input text "Hello"          <span class="cm"># Type text</span>
+<span class="kw">adb</span> shell input keyevent 3            <span class="cm"># Press HOME button</span>
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">APK vs IPA — Understanding Mobile Packages</div>
+          <div class="info-row">
+            <div class="info-card"><div class="info-card-label">APK (Android)</div><div class="info-card-content"><strong>Android Package Kit</strong> — a ZIP archive containing compiled Java/Kotlin bytecode (classes.dex), resources, manifest, and native libraries. Created by the Android build toolchain. Can be installed via ADB or Appetize upload.</div></div>
+            <div class="info-card"><div class="info-card-label">IPA (iOS)</div><div class="info-card-content"><strong>iOS App Store Package</strong> — a ZIP archive containing compiled ARM binary, resources, and entitlements. Requires a macOS machine to build and sign. Uploaded to Appetize for cloud iOS testing.</div></div>
+          </div>
+        </div>
+        <div class="iq-list">
+          <div class="iq-item"><span class="iq-q">Q→</span>Explain the ADB client-daemon-server architecture and what happens when you run `adb devices`.</div>
+          <div class="iq-item"><span class="iq-q">Q→</span>How would you use ADB to programmatically clear app data before each test run?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">1.7</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Appetize Cloud Device Setup</div>
+          <div class="subphase-subtitle">Account creation, APK/IPA upload, session management, API keys</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">What Appetize Is and How It Works</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7">Appetize.io runs real Android and iOS simulators in the cloud, accessible via a browser or programmatic API. For automation, you interact with Appetize through its JavaScript SDK, which streams a virtualized device into a browser page. Playwright then controls the browser page containing the device stream, and Appetize translates Playwright's pointer events into real mobile touch events on the virtualized device. This means no Appium, no device farm setup — just a cloud URL and a session token.</p>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Appetize Setup Steps</div>
+          <div class="milestones">
+            <div class="milestone"><div class="ms-dot">1</div><div class="ms-content"><div class="ms-title">Create Appetize Account</div><div class="ms-desc">Go to appetize.io, sign up. Free tier includes 100 minutes/month. Upgrade for CI usage. Note your API token from Dashboard → API.</div></div></div>
+            <div class="milestone"><div class="ms-dot">2</div><div class="ms-content"><div class="ms-title">Upload TableTennis APK</div><div class="ms-desc">Upload via the web dashboard or via API: <code>POST https://api.appetize.io/v1/apps</code> with your APK file and API key. You'll receive a public key for the app.</div></div></div>
+            <div class="milestone"><div class="ms-dot">3</div><div class="ms-content"><div class="ms-title">Note the App Public Key</div><div class="ms-desc">Every uploaded app gets a unique public key (e.g., <code>p7nww3n8e362m3bn</code>). This key is used in your automation config to launch the correct app.</div></div></div>
+            <div class="milestone"><div class="ms-dot">4</div><div class="ms-content"><div class="ms-title">Test Device in Browser</div><div class="ms-desc">Open <code>https://appetize.io/app/{YOUR_KEY}</code> and verify the TableTennis app launches on the cloud device. Interact manually first before automating.</div></div></div>
+            <div class="milestone"><div class="ms-dot">5</div><div class="ms-content"><div class="ms-title">Store Credentials in .env</div><div class="ms-desc">Never hardcode API keys in test code. Store in <code>.env</code> file and access via <code>process.env.APPETIZE_API_KEY</code>.</div></div></div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Uploading APK via API (Node.js)</div>
+          <div class="code-block"><pre>
+<span class="cm">// scripts/upload-apk.js</span>
+<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
+<span class="kw">const</span> FormData = <span class="fn">require</span>(<span class="str">'form-data'</span>);
+<span class="kw">const</span> axios = <span class="fn">require</span>(<span class="str">'axios'</span>);
+
+<span class="kw">async function</span> <span class="fn">uploadAPK</span>() {
+  <span class="kw">const</span> form = <span class="kw">new</span> <span class="fn">FormData</span>();
+  form.<span class="fn">append</span>(<span class="str">'file'</span>, fs.<span class="fn">createReadStream</span>(<span class="str">'./apps/TableTennis.apk'</span>));
+  form.<span class="fn">append</span>(<span class="str">'platform'</span>, <span class="str">'android'</span>);
+
+  <span class="kw">const</span> response = <span class="kw">await</span> axios.<span class="fn">post</span>(
+    <span class="str">'https://api.appetize.io/v1/apps'</span>,
+    form,
+    {
+      headers: {
+        ...form.<span class="fn">getHeaders</span>(),
+        <span class="str">'Authorization'</span>: <span class="str">`Bearer ${process.env.APPETIZE_API_KEY}`</span>
+      }
+    }
+  );
+
+  console.<span class="fn">log</span>(<span class="str">'App Key:'</span>, response.data.publicKey);
+  <span class="cm">// Save this key to your .env as APPETIZE_APP_KEY</span>
+}
+
+<span class="fn">uploadAPK</span>();
+</pre></div>
+        </div>
+        <div class="callout tip"><div class="callout-icon">💡</div>Use Appetize's <strong>embed URL</strong> feature during development to visually verify your app on different device types (Pixel 6, iPhone 14, etc.) before writing automation. This saves hours of debugging incorrect locators.</div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">1.8</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Playwright Installation & First Automation Run</div>
+          <div class="subphase-subtitle">Install, configure, run first test, understand execution architecture</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Installation</div>
+          <div class="code-block"><pre>
+<span class="cm"># Create project and install Playwright</span>
+<span class="kw">mkdir</span> tabletennis-automation && <span class="kw">cd</span> tabletennis-automation
+<span class="kw">npm</span> init -y
+<span class="kw">npm</span> install -D @playwright/test@latest
+
+<span class="cm"># Install browsers (Chromium, Firefox, WebKit)</span>
+<span class="kw">npx</span> playwright install
+
+<span class="cm"># Initialize Playwright config</span>
+<span class="kw">npx</span> playwright init
+<span class="cm"># Select: TypeScript? No | E2E tests? Yes | GitHub Actions? Yes</span>
+
+<span class="cm"># Run example test to verify installation</span>
+<span class="kw">npx</span> playwright test --headed
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">First Real Test — sttc.onrender.com</div>
+          <div class="code-block"><pre>
+<span class="cm">// tests/web/first-test.spec.js</span>
+<span class="kw">const</span> { test, expect } = <span class="fn">require</span>(<span class="str">'@playwright/test'</span>);
+
+test.<span class="fn">describe</span>(<span class="str">'TableTennis Website — First Test'</span>, () => {
+  test(<span class="str">'should load homepage and verify title'</span>, <span class="kw">async</span> ({ page }) => {
+    <span class="cm">// Navigate to the website</span>
+    <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'https://sttc.onrender.com'</span>);
+
+    <span class="cm">// Wait for page to be fully loaded</span>
+    <span class="kw">await</span> page.<span class="fn">waitForLoadState</span>(<span class="str">'networkidle'</span>);
+
+    <span class="cm">// Assert the title contains expected text</span>
+    <span class="kw">await</span> expect(page).<span class="fn">toHaveTitle</span>(/TableTennis/i);
+
+    <span class="cm">// Assert a key element is visible</span>
+    <span class="kw">await</span> expect(page.<span class="fn">locator</span>(<span class="str">'nav'</span>)).<span class="fn">toBeVisible</span>();
+
+    <span class="cm">// Take a screenshot for visual reference</span>
+    <span class="kw">await</span> page.<span class="fn">screenshot</span>({ path: <span class="str">'screenshots/homepage.png'</span> });
+  });
+});
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Understanding the Execution Architecture</div>
+          <div class="info-row">
+            <div class="info-card"><div class="info-card-label">Test Runner</div><div class="info-card-content">Playwright Test reads your spec files, creates worker processes, and coordinates parallel execution. Each worker gets its own browser instance.</div></div>
+            <div class="info-card"><div class="info-card-label">Browser Context</div><div class="info-card-content">An isolated browser session — like an incognito window. Each test gets its own context by default, ensuring complete isolation of cookies, storage, and sessions.</div></div>
+            <div class="info-card"><div class="info-card-label">Page Object</div><div class="info-card-content">A single browser tab/window. All automation actions (click, fill, navigate) happen on a page object. You interact with the DOM through a page.</div></div>
+            <div class="info-card"><div class="info-card-label">CDP Protocol</div><div class="info-card-content">Chrome DevTools Protocol — the underlying wire protocol Playwright uses to communicate with Chromium. For WebKit and Firefox, Playwright uses their equivalent protocols.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end subphase-list -->
+</div><!-- end phase1 -->
+
+
+<!-- ════════════════════ PHASE 2 ════════════════════ -->
+<div class="phase-detail reveal" id="phase2">
+  <div class="phase-header">
+    <div class="phase-header-num">P2</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 02 · Core Skills</div>
+      <div class="phase-header-title">JavaScript + Playwright Fundamentals</div>
+      <div class="phase-header-desc">Master the JavaScript patterns and Playwright APIs that form the backbone of every automation test — from async/await to network interception, trace viewer, and codegen.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge green">2.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">JavaScript Automation Essentials</div>
+          <div class="subphase-subtitle">Async/await, Promises, classes, modules, error handling</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Why Async/Await Matters in Automation</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7">Every Playwright interaction — clicking, navigating, waiting — is asynchronous because it involves I/O with a browser process. If you don't <code>await</code> these calls, your code proceeds to the next line before the browser action completes, causing race conditions and flaky tests. Understanding the JS event loop is not academic — it directly determines whether your tests pass reliably.</p>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Async/Await Patterns for Automation</div>
+          <div class="code-block"><pre>
+<span class="cm">// Pattern 1: Basic async test function</span>
+test(<span class="str">'login test'</span>, <span class="kw">async</span> ({ page }) => {
+  <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'https://sttc.onrender.com/login'</span>);
+  <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="str">'#username'</span>, <span class="str">'testuser'</span>);
+  <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="str">'#password'</span>, <span class="str">'testpass'</span>);
+  <span class="kw">await</span> page.<span class="fn">click</span>(<span class="str">'button[type="submit"]'</span>);
+});
+
+<span class="cm">// Pattern 2: Parallel execution with Promise.all</span>
+<span class="cm">// When two independent async actions can run simultaneously</span>
+<span class="kw">await</span> Promise.<span class="fn">all</span>([
+  page.<span class="fn">waitForNavigation</span>(),  <span class="cm">// Wait for nav...</span>
+  page.<span class="fn">click</span>(<span class="str">'#submit'</span>)      <span class="cm">// ...while clicking</span>
+]);
+
+<span class="cm">// Pattern 3: Error handling in async tests</span>
+test(<span class="str">'flaky api check'</span>, <span class="kw">async</span> ({ page }) => {
+  <span class="kw">try</span> {
+    <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'https://sttc.onrender.com'</span>, { timeout: <span class="num">30000</span> });
+  } <span class="kw">catch</span> (err) {
+    console.<span class="fn">error</span>(<span class="str">'Navigation failed:'</span>, err.message);
+    <span class="kw">throw</span> err; <span class="cm">// Re-throw so test fails properly</span>
+  }
+});
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">JavaScript Fundamentals for Automation</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Destructuring</strong> — <code>const { page, context } = args</code> — used constantly in Playwright fixtures</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Template literals</strong> — <code>`Hello ${name}`</code> — used in dynamic selectors and log messages</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Arrow functions</strong> — <code>() => {}</code> — used in test callbacks, locator filters, and array methods</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Spread/Rest</strong> — <code>...options</code> — used in config merging and fixture composition</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Optional chaining</strong> — <code>user?.profile?.name</code> — safely accessing nested API response fields</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Classes</strong> — <code>class LoginPage</code> — the foundation of Page Object Model</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Modules</strong> — <code>import/export</code> or <code>require/module.exports</code> — how page objects and utilities are shared</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Array methods</strong> — <code>.filter()</code>, <code>.map()</code>, <code>.find()</code> — processing test data sets</div>
+          </div>
+        </div>
+        <div class="iq-list">
+          <div class="iq-item"><span class="iq-q">Q→</span>What happens if you forget `await` before a Playwright action? Why does it sometimes still pass?</div>
+          <div class="iq-item"><span class="iq-q">Q→</span>When would you use Promise.all() vs Promise.allSettled() in a test?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge green">2.2</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Playwright Locator Strategies</div>
+          <div class="subphase-subtitle">Selector hierarchy, resilient locators, anti-patterns</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Locator Priority Hierarchy (Best to Worst)</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot green"></div><strong>1. Role locators</strong> — <code>getByRole('button', {name: 'Login'})</code> — most resilient, tied to accessibility semantics</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>2. Label locators</strong> — <code>getByLabel('Email address')</code> — targets form inputs by their label text</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>3. Placeholder</strong> — <code>getByPlaceholder('Enter email')</code> — good for inputs without labels</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>4. Text locators</strong> — <code>getByText('Submit')</code> — targets by visible text, fragile if text changes</div>
+            <div class="topic-item"><div class="topic-dot amber"></div><strong>5. Test IDs</strong> — <code>getByTestId('login-btn')</code> — requires devs to add <code>data-testid</code> attributes</div>
+            <div class="topic-item"><div class="topic-dot amber"></div><strong>6. CSS selectors</strong> — <code>locator('#login-btn')</code> — reliable if IDs are stable, fragile otherwise</div>
+            <div class="topic-item"><div class="topic-dot coral"></div><strong>7. XPath</strong> — <code>locator('//button[@id="login"]')</code> — use only as last resort, brittle</div>
+            <div class="topic-item"><div class="topic-dot coral"></div><strong>AVOID</strong> — index-based selectors like <code>nth(2)</code>, absolute XPaths, or class-only selectors</div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Playwright Locator API</div>
+          <div class="code-block"><pre>
+<span class="cm">// Playwright's locator() is lazy — it doesn't find the element until an action is called</span>
+<span class="kw">const</span> loginBtn = page.<span class="fn">getByRole</span>(<span class="str">'button'</span>, { name: <span class="str">'Login'</span> });
+
+<span class="cm">// Chaining locators — narrows scope</span>
+<span class="kw">const</span> form = page.<span class="fn">locator</span>(<span class="str">'form#login-form'</span>);
+<span class="kw">const</span> emailField = form.<span class="fn">getByLabel</span>(<span class="str">'Email'</span>);
+
+<span class="cm">// Filter locators — select from multiple matching elements</span>
+<span class="kw">const</span> activePlayer = page
+  .<span class="fn">locator</span>(<span class="str">'.player-card'</span>)
+  .<span class="fn">filter</span>({ hasText: <span class="str">'Ma Long'</span> });
+
+<span class="cm">// Counting elements</span>
+<span class="kw">const</span> count = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'.player-row'</span>).<span class="fn">count</span>();
+console.<span class="fn">log</span>(<span class="str">`Found ${count} players`</span>);
+
+<span class="cm">// Getting all matching elements</span>
+<span class="kw">const</span> players = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="str">'.player-name'</span>).<span class="fn">allTextContents</span>();
+</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge green">2.3</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Assertions, Waits & Network Interception</div>
+          <div class="subphase-subtitle">Auto-waiting, expect API, request interception, response mocking</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Playwright Auto-Waiting (Why It's Special)</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7">Unlike older tools that require explicit sleep() calls, Playwright automatically waits for elements to be actionable before interacting. "Actionable" means: visible, stable (not animating), not obscured, enabled, and attached to the DOM. This eliminates 80% of flaky tests caused by race conditions. However, you must still understand timeouts and when auto-waiting is NOT enough.</p>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Core Assertions</div>
+          <div class="code-block"><pre>
+<span class="cm">// All expect() assertions are async and auto-retry until timeout</span>
+<span class="kw">await</span> expect(page.<span class="fn">locator</span>(<span class="str">'#welcome-msg'</span>)).<span class="fn">toBeVisible</span>();
+<span class="kw">await</span> expect(page.<span class="fn">locator</span>(<span class="str">'#score'</span>)).<span class="fn">toHaveText</span>(<span class="str">'11-9'</span>);
+<span class="kw">await</span> expect(page.<span class="fn">locator</span>(<span class="str">'#submit-btn'</span>)).<span class="fn">toBeEnabled</span>();
+<span class="kw">await</span> expect(page.<span class="fn">locator</span>(<span class="str">'input#email'</span>)).<span class="fn">toHaveValue</span>(<span class="str">'test@test.com'</span>);
+<span class="kw">await</span> expect(page).<span class="fn">toHaveURL</span>(/dashboard/);
+<span class="kw">await</span> expect(page).<span class="fn">toHaveTitle</span>(<span class="str">'TableTennis Club'</span>);
+
+<span class="cm">// Soft assertions — don't stop test on failure</span>
+<span class="kw">await</span> expect.<span class="fn">soft</span>(page.<span class="fn">locator</span>(<span class="str">'#logo'</span>)).<span class="fn">toBeVisible</span>();
+<span class="kw">await</span> expect.<span class="fn">soft</span>(page.<span class="fn">locator</span>(<span class="str">'#nav'</span>)).<span class="fn">toBeVisible</span>();
+<span class="cm">// All soft assertion failures are collected and reported together</span>
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Network Interception</div>
+          <div class="code-block"><pre>
+<span class="cm">// Intercept and mock API responses for stable testing</span>
+<span class="kw">await</span> page.<span class="fn">route</span>(<span class="str">'**/api/players'</span>, <span class="kw">async</span> route => {
+  <span class="kw">await</span> route.<span class="fn">fulfill</span>({
+    status: <span class="num">200</span>,
+    contentType: <span class="str">'application/json'</span>,
+    body: JSON.<span class="fn">stringify</span>([
+      { id: <span class="num">1</span>, name: <span class="str">'Ma Long'</span>, ranking: <span class="num">1</span> },
+      { id: <span class="num">2</span>, name: <span class="str">'Fan Zhendong'</span>, ranking: <span class="num">2</span> }
+    ])
+  });
+});
+
+<span class="cm">// Monitor API calls without mocking</span>
+<span class="kw">const</span> [response] = <span class="kw">await</span> Promise.<span class="fn">all</span>([
+  page.<span class="fn">waitForResponse</span>(<span class="str">'**/api/login'</span>),
+  page.<span class="fn">click</span>(<span class="str">'#login-btn'</span>)
+]);
+expect(response.<span class="fn">status</span>()).<span class="fn">toBe</span>(<span class="num">200</span>);
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Trace Viewer & Codegen</div>
+          <div class="code-block"><pre>
+<span class="cm"># Enable tracing — records every action, screenshot, and network call</span>
+<span class="cm"># In playwright.config.js:</span>
+<span class="str">use</span>: {
+  trace: <span class="str">'on-first-retry'</span>  <span class="cm">// Captures trace when test fails on retry</span>
+}
+
+<span class="cm"># View trace after failure:</span>
+<span class="kw">npx</span> playwright show-trace test-results/trace.zip
+
+<span class="cm"># Generate test code by recording browser actions:</span>
+<span class="kw">npx</span> playwright codegen https://sttc.onrender.com
+<span class="cm"># Codegen opens a browser + inspector. Your interactions are turned into code.</span>
+</pre></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════ PHASE 3 ════════════════════ -->
+<div class="phase-detail reveal" id="phase3">
+  <div class="phase-header">
+    <div class="phase-header-num">P3</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 03 · Mobile</div>
+      <div class="phase-header-title">Mobile Automation with Appetize</div>
+      <div class="phase-header-desc">Automate the TableTennis Android & iOS application on real cloud devices. Understand the complete session lifecycle, gesture automation, accessibility locators, and cloud device debugging.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge amber">3.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Appetize Session Architecture</div>
+          <div class="subphase-subtitle">How Playwright communicates with a cloud mobile device</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">End-to-End Communication Flow</div>
+          <div class="info-row">
+            <div class="info-card"><div class="info-card-label">Step 1: Session Init</div><div class="info-card-content">Your automation opens a Playwright page to the Appetize embed URL with your app public key and device config. Appetize allocates a cloud device and starts the app.</div></div>
+            <div class="info-card"><div class="info-card-label">Step 2: WebSocket</div><div class="info-card-content">Appetize establishes a WebSocket connection streaming the device screen as video frames into the browser viewport. The device is running in a datacenter.</div></div>
+            <div class="info-card"><div class="info-card-label">Step 3: Input Mapping</div><div class="info-card-content">Playwright's pointer events (click, move, touchstart) land on the Appetize canvas element. Appetize translates canvas coordinates to device screen coordinates and sends touch events to the virtual device.</div></div>
+            <div class="info-card"><div class="info-card-label">Step 4: SDK Control</div><div class="info-card-content">Appetize's JavaScript SDK (appetize.io/sdk) provides a higher-level API: session.tap(), session.swipe(), session.typeText() — these are wrappers around the coordinate translation layer.</div></div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Setting Up Appetize Session in Playwright</div>
+          <div class="code-block"><pre>
+<span class="cm">// mobile/helpers/appetize-session.js</span>
+<span class="kw">const</span> { chromium } = <span class="fn">require</span>(<span class="str">'@playwright/test'</span>);
+
+<span class="kw">async function</span> <span class="fn">createMobileSession</span>(appKey, device = <span class="str">'pixel6'</span>, os = <span class="str">'android'</span>) {
+  <span class="kw">const</span> browser = <span class="kw">await</span> chromium.<span class="fn">launch</span>({ headless: <span class="kw">false</span> });
+  <span class="kw">const</span> context = <span class="kw">await</span> browser.<span class="fn">newContext</span>();
+  <span class="kw">const</span> page = <span class="kw">await</span> context.<span class="fn">newPage</span>();
+
+  <span class="kw">const</span> url = <span class="str">`https://appetize.io/embed/${appKey}?device=${device}&os=${os}&autoplay=true`</span>;
+  <span class="kw">await</span> page.<span class="fn">goto</span>(url);
+
+  <span class="cm">// Wait for device to finish booting and app to launch</span>
+  <span class="kw">await</span> page.<span class="fn">waitForSelector</span>(<span class="str">'.appetize-device-screen'</span>, { timeout: <span class="num">60000</span> });
+  <span class="kw">await</span> page.<span class="fn">waitForTimeout</span>(<span class="num">5000</span>); <span class="cm">// App launch buffer</span>
+
+  <span class="kw">return</span> { browser, context, page };
+}
+
+module.exports = { createMobileSession };
+</pre></div>
+        </div>
+        <div class="callout info"><div class="callout-icon">ℹ</div>Appetize sessions have a <strong>timeout</strong> (default 120 seconds of inactivity). In long test suites, send periodic keepalive interactions or configure session.keepAlive = true in the SDK to prevent premature termination.</div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge amber">3.2</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Touch Gestures & Mobile Interactions</div>
+          <div class="subphase-subtitle">Tap, swipe, long press, scroll, drag, rotation, keyboard</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Gesture Implementation Patterns</div>
+          <div class="code-block"><pre>
+<span class="cm">// mobile/utils/gestures.js — Reusable gesture utilities</span>
+
+<span class="kw">class</span> MobileGestures {
+  <span class="kw">constructor</span>(page) {
+    <span class="kw">this</span>.page = page;
+    <span class="kw">this</span>.deviceCanvas = page.<span class="fn">locator</span>(<span class="str">'.appetize-device'</span>);
+  }
+
+  <span class="kw">async</span> <span class="fn">tap</span>(x, y) {
+    <span class="kw">const</span> box = <span class="kw">await</span> <span class="kw">this</span>.deviceCanvas.<span class="fn">boundingBox</span>();
+    <span class="kw">await</span> <span class="kw">this</span>.page.mouse.<span class="fn">click</span>(box.x + x, box.y + y);
+  }
+
+  <span class="kw">async</span> <span class="fn">swipeUp</span>(startY = <span class="num">700</span>, endY = <span class="num">300</span>, x = <span class="num">200</span>) {
+    <span class="kw">const</span> box = <span class="kw">await</span> <span class="kw">this</span>.deviceCanvas.<span class="fn">boundingBox</span>();
+    <span class="kw">await</span> <span class="kw">this</span>.page.mouse.<span class="fn">move</span>(box.x + x, box.y + startY);
+    <span class="kw">await</span> <span class="kw">this</span>.page.mouse.<span class="fn">down</span>();
+    <span class="kw">await</span> <span class="kw">this</span>.page.mouse.<span class="fn">move</span>(box.x + x, box.y + endY, { steps: <span class="num">20</span> });
+    <span class="kw">await</span> <span class="kw">this</span>.page.mouse.<span class="fn">up</span>();
+  }
+
+  <span class="kw">async</span> <span class="fn">longPress</span>(x, y, durationMs = <span class="num">1500</span>) {
+    <span class="kw">const</span> box = <span class="kw">await</span> <span class="kw">this</span>.deviceCanvas.<span class="fn">boundingBox</span>();
+    <span class="kw">await</span> <span class="kw">this</span>.page.mouse.<span class="fn">move</span>(box.x + x, box.y + y);
+    <span class="kw">await</span> <span class="kw">this</span>.page.mouse.<span class="fn">down</span>();
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">waitForTimeout</span>(durationMs);
+    <span class="kw">await</span> <span class="kw">this</span>.page.mouse.<span class="fn">up</span>();
+  }
+
+  <span class="kw">async</span> <span class="fn">typeText</span>(text) {
+    <span class="kw">await</span> <span class="kw">this</span>.page.keyboard.<span class="fn">type</span>(text, { delay: <span class="num">80</span> });
+  }
+
+  <span class="kw">async</span> <span class="fn">rotateToLandscape</span>() {
+    <span class="cm">// Via Appetize SDK API call injected into page</span>
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">evaluate</span>(() => {
+      window.appetize?.session.<span class="fn">setOrientation</span>(<span class="str">'landscape'</span>);
+    });
+  }
+}
+
+module.exports = { MobileGestures };
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Mobile Locator Strategies</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot amber"></div><strong>Accessibility ID</strong> — <code>accessibility id=login-button</code> — most stable mobile locator, works across Android & iOS</div>
+            <div class="topic-item"><div class="topic-dot amber"></div><strong>Resource ID</strong> — <code>resource-id=com.tabletennis:id/btn_login</code> — Android-specific, generated from XML layout resource names</div>
+            <div class="topic-item"><div class="topic-dot amber"></div><strong>Content Description</strong> — <code>content-desc=Submit score</code> — Android accessibility attribute set by developers</div>
+            <div class="topic-item"><div class="topic-dot amber"></div><strong>UIAutomator</strong> — <code>new UiSelector().text("Login")</code> — Android-only, powerful for complex element selection</div>
+            <div class="topic-item"><div class="topic-dot amber"></div><strong>XPath</strong> — last resort, use only when accessibility attributes are absent</div>
+            <div class="topic-item"><div class="topic-dot amber"></div><strong>Image matching</strong> — Appetize supports visual element detection for cases where text attributes are unreliable</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge amber">3.3</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Mobile App Automation — TableTennis App Scenarios</div>
+          <div class="subphase-subtitle">Login, navigation, score entry, push notifications, deep links</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Complete Mobile Login Test</div>
+          <div class="code-block"><pre>
+<span class="cm">// tests/mobile/login.spec.js</span>
+<span class="kw">const</span> { test, expect } = <span class="fn">require</span>(<span class="str">'@playwright/test'</span>);
+<span class="kw">const</span> { MobileGestures } = <span class="fn">require</span>(<span class="str">'../../mobile/utils/gestures'</span>);
+<span class="kw">const</span> { createMobileSession } = <span class="fn">require</span>(<span class="str">'../../mobile/helpers/appetize-session'</span>);
+
+test.<span class="fn">describe</span>(<span class="str">'TableTennis App — Login'</span>, () => {
+  <span class="kw">let</span> browser, context, page, gestures;
+
+  test.<span class="fn">beforeEach</span>(<span class="kw">async</span> () => {
+    ({ browser, context, page } = <span class="kw">await</span> <span class="fn">createMobileSession</span>(
+      process.env.APPETIZE_APP_KEY
+    ));
+    gestures = <span class="kw">new</span> <span class="fn">MobileGestures</span>(page);
+  });
+
+  test(<span class="str">'should login with valid credentials'</span>, <span class="kw">async</span> () => {
+    <span class="cm">// Tap email field</span>
+    <span class="kw">await</span> gestures.<span class="fn">tap</span>(<span class="num">200</span>, <span class="num">380</span>);
+    <span class="kw">await</span> gestures.<span class="fn">typeText</span>(<span class="str">'testuser@tabletennis.com'</span>);
+
+    <span class="cm">// Tap password field</span>
+    <span class="kw">await</span> gestures.<span class="fn">tap</span>(<span class="num">200</span>, <span class="num">450</span>);
+    <span class="kw">await</span> gestures.<span class="fn">typeText</span>(<span class="str">'SecurePass123!'</span>);
+
+    <span class="cm">// Tap login button</span>
+    <span class="kw">await</span> gestures.<span class="fn">tap</span>(<span class="num">200</span>, <span class="num">540</span>);
+
+    <span class="cm">// Wait for home screen to appear</span>
+    <span class="kw">await</span> page.<span class="fn">waitForTimeout</span>(<span class="num">3000</span>);
+
+    <span class="cm">// Assert dashboard is visible (screenshot-based or DOM-based)</span>
+    <span class="kw">await</span> page.<span class="fn">screenshot</span>({ path: <span class="str">'screenshots/mobile-home.png'</span> });
+  });
+
+  test.<span class="fn">afterEach</span>(<span class="kw">async</span> () => {
+    <span class="kw">await</span> browser.<span class="fn">close</span>();
+  });
+});
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Handling Mobile-Specific Scenarios</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot coral"></div><strong>Permission dialogs</strong> — auto-dismiss or pre-grant camera/location/notification permissions via Appetize config before session starts</div>
+            <div class="topic-item"><div class="topic-dot coral"></div><strong>Push notifications</strong> — use Appetize's notification API to simulate push events and verify in-app notification display</div>
+            <div class="topic-item"><div class="topic-dot coral"></div><strong>Deep linking</strong> — send device intent via ADB or Appetize URL scheme to open specific app screens directly</div>
+            <div class="topic-item"><div class="topic-dot coral"></div><strong>Keyboard dismissal</strong> — on Android, use Back keyevent; on iOS, tap outside the input or use Done key</div>
+            <div class="topic-item"><div class="topic-dot coral"></div><strong>Network conditions</strong> — Appetize allows throttling network speed to simulate 3G/4G conditions for performance testing</div>
+            <div class="topic-item"><div class="topic-dot coral"></div><strong>App state reset</strong> — between tests, use Appetize's clearStorage option or reinstall to ensure clean state</div>
+          </div>
+        </div>
+        <div class="iq-list">
+          <div class="iq-item"><span class="iq-q">Q→</span>How do you handle Appetize session timeouts in a long test suite with 50+ scenarios?</div>
+          <div class="iq-item"><span class="iq-q">Q→</span>What is the difference between using accessibility IDs vs coordinate-based tapping, and when is each appropriate?</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════ PHASE 4 ════════════════════ -->
+<div class="phase-detail reveal" id="phase4">
+  <div class="phase-header">
+    <div class="phase-header-num">P4</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 04 · Web</div>
+      <div class="phase-header-title">Website Automation — sttc.onrender.com</div>
+      <div class="phase-header-desc">Build a complete, maintainable web automation suite for the TableTennis Club website — from login and navigation through forms, tables, API validation, and session management.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge cyan">4.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Page Object Model for Web</div>
+          <div class="subphase-subtitle">Designing maintainable page classes for every screen</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">What is POM and Why It Exists</div>
+          <p style="font-size:13px;color:var(--text2);line-height:1.7">Page Object Model is a design pattern where each screen of your application is represented as a JavaScript class. The class contains the locators for that screen and the actions a user performs on it. Tests then use these classes instead of raw selectors. When the UI changes, you update one class — not 50 test files. This is the single most impactful pattern for test maintainability at scale.</p>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">LoginPage Implementation</div>
+          <div class="code-block"><pre>
+<span class="cm">// pages/web/LoginPage.js</span>
+<span class="kw">class</span> LoginPage {
+  <span class="kw">constructor</span>(page) {
+    <span class="kw">this</span>.page = page;
+
+    <span class="cm">// Define all locators as class properties</span>
+    <span class="kw">this</span>.emailInput    = page.<span class="fn">getByLabel</span>(<span class="str">'Email'</span>);
+    <span class="kw">this</span>.passwordInput = page.<span class="fn">getByLabel</span>(<span class="str">'Password'</span>);
+    <span class="kw">this</span>.loginButton   = page.<span class="fn">getByRole</span>(<span class="str">'button'</span>, { name: <span class="str">'Login'</span> });
+    <span class="kw">this</span>.errorMessage  = page.<span class="fn">locator</span>(<span class="str">'.error-alert'</span>);
+    <span class="kw">this</span>.forgotLink    = page.<span class="fn">getByText</span>(<span class="str">'Forgot password?'</span>);
+  }
+
+  <span class="kw">async</span> <span class="fn">navigate</span>() {
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">goto</span>(<span class="str">'https://sttc.onrender.com/login'</span>);
+  }
+
+  <span class="kw">async</span> <span class="fn">login</span>(email, password) {
+    <span class="kw">await</span> <span class="kw">this</span>.emailInput.<span class="fn">fill</span>(email);
+    <span class="kw">await</span> <span class="kw">this</span>.passwordInput.<span class="fn">fill</span>(password);
+    <span class="kw">await</span> <span class="kw">this</span>.loginButton.<span class="fn">click</span>();
+  }
+
+  <span class="kw">async</span> <span class="fn">getErrorMessage</span>() {
+    <span class="kw">return</span> <span class="kw">this</span>.errorMessage.<span class="fn">textContent</span>();
+  }
+
+  <span class="kw">async</span> <span class="fn">verifySuccessfulLogin</span>() {
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">waitForURL</span>(<span class="str">'**/dashboard'</span>);
+  }
+}
+
+module.exports = { LoginPage };
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Using POM in Tests</div>
+          <div class="code-block"><pre>
+<span class="cm">// tests/web/login.spec.js</span>
+<span class="kw">const</span> { test, expect } = <span class="fn">require</span>(<span class="str">'@playwright/test'</span>);
+<span class="kw">const</span> { LoginPage } = <span class="fn">require</span>(<span class="str">'../../pages/web/LoginPage'</span>);
+
+test.<span class="fn">describe</span>(<span class="str">'STTC Website Login'</span>, () => {
+  test(<span class="str">'valid login navigates to dashboard'</span>, <span class="kw">async</span> ({ page }) => {
+    <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="fn">LoginPage</span>(page);
+    <span class="kw">await</span> loginPage.<span class="fn">navigate</span>();
+    <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="str">'admin@sttc.com'</span>, <span class="str">'Admin123!'</span>);
+    <span class="kw">await</span> loginPage.<span class="fn">verifySuccessfulLogin</span>();
+    <span class="kw">await</span> expect(page).<span class="fn">toHaveURL</span>(/dashboard/);
+  });
+
+  test(<span class="str">'invalid password shows error'</span>, <span class="kw">async</span> ({ page }) => {
+    <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="fn">LoginPage</span>(page);
+    <span class="kw">await</span> loginPage.<span class="fn">navigate</span>();
+    <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="str">'admin@sttc.com'</span>, <span class="str">'wrong'</span>);
+    <span class="kw">const</span> error = <span class="kw">await</span> loginPage.<span class="fn">getErrorMessage</span>();
+    expect(error).<span class="fn">toContain</span>(<span class="str">'Invalid credentials'</span>);
+  });
+});
+</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge cyan">4.2</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">API Validation & Session Persistence</div>
+          <div class="subphase-subtitle">API testing, cookie management, auth state reuse</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">API-Assisted Login (Bypassing UI for Speed)</div>
+          <div class="code-block"><pre>
+<span class="cm">// fixtures/auth.js — Login once, reuse auth state across 100 tests</span>
+<span class="kw">const</span> { request } = <span class="fn">require</span>(<span class="str">'@playwright/test'</span>);
+
+<span class="kw">async function</span> <span class="fn">getAuthState</span>() {
+  <span class="kw">const</span> apiContext = <span class="kw">await</span> request.<span class="fn">newContext</span>();
+
+  <span class="kw">const</span> response = <span class="kw">await</span> apiContext.<span class="fn">post</span>(<span class="str">'https://sttc.onrender.com/api/auth/login'</span>, {
+    data: {
+      email: process.env.TEST_USER_EMAIL,
+      password: process.env.TEST_USER_PASSWORD
+    }
+  });
+
+  expect(response.<span class="fn">ok</span>()).<span class="fn">toBeTruthy</span>();
+  <span class="kw">const</span> body = <span class="kw">await</span> response.<span class="fn">json</span>();
+
+  <span class="cm">// Return auth token and cookies for browser context injection</span>
+  <span class="kw">return</span> {
+    token: body.accessToken,
+    cookies: response.headers()[<span class="str">'set-cookie'</span>]
+  };
+}
+
+<span class="cm">// In playwright.config.js — save state once:</span>
+<span class="cm">// globalSetup: './fixtures/global-setup.js'</span>
+<span class="cm">// storageState: './fixtures/auth-state.json'</span>
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Web Automation Topics</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>Cross-browser execution</strong> — run same test on Chromium, Firefox, WebKit via projects config</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>Dynamic tables</strong> — iterate rows, extract data, validate against API responses</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>File uploads</strong> — use <code>setInputFiles()</code> for uploading match results or score sheets</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>Drag and drop</strong> — tournament bracket reordering via <code>dragTo()</code></div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>Iframe handling</strong> — embedded payment or calendar iframes in tournament registration</div>
+            <div class="topic-item"><div class="topic-dot cyan"></div><strong>Multi-tab flows</strong> — when login opens a new tab or OAuth popup appears</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════ PHASE 5 ════════════════════ -->
+<div class="phase-detail reveal" id="phase5">
+  <div class="phase-header">
+    <div class="phase-header-num">P5</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 05 · Integration</div>
+      <div class="phase-header-title">Hybrid Mobile + Web Automation</div>
+      <div class="phase-header-desc">Connect the TableTennis mobile app and website in real end-to-end journeys — including OTP flows, shared authentication, data synchronization, and multi-platform user scenarios.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge pink">5.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Hybrid Framework Architecture</div>
+          <div class="subphase-subtitle">Coordinating mobile and web contexts in a single test</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Running Mobile + Web in Parallel</div>
+          <div class="code-block"><pre>
+<span class="cm">// tests/hybrid/registration-flow.spec.js</span>
+<span class="cm">// Scenario: User registers on website, verifies via mobile app notification</span>
+
+test(<span class="str">'registration reflects in mobile app'</span>, <span class="kw">async</span> ({ browser }) => {
+  <span class="cm">// Create TWO parallel contexts — web and mobile</span>
+  <span class="kw">const</span> webContext    = <span class="kw">await</span> browser.<span class="fn">newContext</span>();
+  <span class="kw">const</span> mobileContext = <span class="kw">await</span> browser.<span class="fn">newContext</span>();
+
+  <span class="kw">const</span> webPage    = <span class="kw">await</span> webContext.<span class="fn">newPage</span>();
+  <span class="kw">const</span> mobilePage = <span class="kw">await</span> mobileContext.<span class="fn">newPage</span>();
+
+  <span class="cm">// Step 1: Register tournament on website</span>
+  <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="fn">LoginPage</span>(webPage);
+  <span class="kw">await</span> loginPage.<span class="fn">navigate</span>();
+  <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="str">'player@sttc.com'</span>, <span class="str">'pass'</span>);
+
+  <span class="kw">const</span> registrationPage = <span class="kw">new</span> <span class="fn">RegistrationPage</span>(webPage);
+  <span class="kw">await</span> registrationPage.<span class="fn">registerForTournament</span>(<span class="str">'Summer Cup 2025'</span>);
+
+  <span class="cm">// Step 2: Open mobile app and verify notification</span>
+  <span class="kw">const</span> { page: appPage } = <span class="kw">await</span> <span class="fn">createMobileSession</span>(process.env.APPETIZE_APP_KEY);
+  <span class="kw">const</span> mobileApp = <span class="kw">new</span> <span class="fn">MobileHomePage</span>(appPage);
+  <span class="kw">await</span> mobileApp.<span class="fn">verifyNotification</span>(<span class="str">'Registration confirmed: Summer Cup 2025'</span>);
+
+  <span class="cm">// Step 3: Verify data sync — API confirms both platforms have same data</span>
+  <span class="kw">const</span> apiCheck = <span class="kw">await</span> <span class="fn">getPlayerRegistrations</span>(<span class="str">'player@sttc.com'</span>);
+  expect(apiCheck.tournaments).<span class="fn">toContain</span>(<span class="str">'Summer Cup 2025'</span>);
+});
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Hybrid Flow Scenarios — TableTennis</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>OTP login</strong> — Trigger OTP on web, receive and enter on mobile app (or vice versa)</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Score entry sync</strong> — Enter match score on mobile, verify instantly updates on web leaderboard</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Profile changes</strong> — Update profile picture on web, verify same image loads in mobile app</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Tournament bracket</strong> — Create bracket on web admin, verify player sees updated draw on mobile</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Payment flow</strong> — Complete payment on web, verify premium features unlock on mobile app</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Multi-device session</strong> — Log in on both platforms, verify logout from one expires the other</div>
+          </div>
+        </div>
+        <div class="iq-list">
+          <div class="iq-item"><span class="iq-q">Q→</span>How do you manage shared test data (user accounts, tournament IDs) between mobile and web tests running in CI?</div>
+          <div class="iq-item"><span class="iq-q">Q→</span>Describe how you would architect an OTP automation flow without mocking — accessing OTP from a real email service.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════ PHASE 6 ════════════════════ -->
+<div class="phase-detail reveal" id="phase6">
+  <div class="phase-header">
+    <div class="phase-header-num">P6</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 06 · Architecture</div>
+      <div class="phase-header-title">Industry-Standard Framework Design</div>
+      <div class="phase-header-desc">Build the complete production-level automation framework architecture — every folder, every layer, every pattern explained with purpose and implementation.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">6.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Complete Project Folder Structure</div>
+          <div class="subphase-subtitle">Every folder explained with purpose, contents, and naming conventions</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Production Framework Structure</div>
+          <div class="folder-tree">
+<span class="tree-dir">tabletennis-automation/</span>
+│
+├── <span class="tree-dir">tests/</span>                    <span class="tree-comment">← All test specifications</span>
+│   ├── <span class="tree-dir">web/</span>                  <span class="tree-comment">← Website-only test specs</span>
+│   │   ├── login.spec.js
+│   │   ├── registration.spec.js
+│   │   └── tournament.spec.js
+│   ├── <span class="tree-dir">mobile/</span>               <span class="tree-comment">← Mobile-only test specs</span>
+│   │   ├── android/
+│   │   │   ├── login.spec.js
+│   │   │   └── score-entry.spec.js
+│   │   └── ios/
+│   │       └── login.spec.js
+│   └── <span class="tree-dir">hybrid/</span>               <span class="tree-comment">← Cross-platform E2E tests</span>
+│       ├── registration-flow.spec.js
+│       └── otp-login.spec.js
+│
+├── <span class="tree-dir">pages/</span>                    <span class="tree-comment">← Page Object Model classes</span>
+│   ├── <span class="tree-dir">web/</span>
+│   │   ├── BasePage.js       <span class="tree-comment">← Shared methods all pages extend</span>
+│   │   ├── LoginPage.js
+│   │   ├── DashboardPage.js
+│   │   └── TournamentPage.js
+│   └── <span class="tree-dir">mobile/</span>
+│       ├── MobileBasePage.js
+│       ├── MobileLoginPage.js
+│       └── MobileHomePage.js
+│
+├── <span class="tree-dir">components/</span>               <span class="tree-comment">← Component Object Model — reusable UI pieces</span>
+│   ├── NavigationBar.js
+│   ├── DataTable.js
+│   ├── Modal.js
+│   └── ToastNotification.js
+│
+├── <span class="tree-dir">api/</span>                      <span class="tree-comment">← API service layer — all API calls centralized</span>
+│   ├── AuthService.js
+│   ├── TournamentService.js
+│   └── PlayerService.js
+│
+├── <span class="tree-dir">fixtures/</span>                 <span class="tree-comment">← Playwright fixtures — extended test object</span>
+│   ├── base.fixtures.js
+│   ├── auth.fixtures.js
+│   └── mobile.fixtures.js
+│
+├── <span class="tree-dir">config/</span>                   <span class="tree-comment">← Environment and execution configuration</span>
+│   ├── environments/
+│   │   ├── dev.config.js
+│   │   ├── staging.config.js
+│   │   └── prod.config.js
+│   └── playwright.config.js
+│
+├── <span class="tree-dir">data/</span>                     <span class="tree-comment">← Test data — static and generated</span>
+│   ├── users.json
+│   ├── tournaments.json
+│   └── generators/
+│       └── user-generator.js
+│
+├── <span class="tree-dir">utils/</span>                    <span class="tree-comment">← Helper utilities</span>
+│   ├── wait-helpers.js
+│   ├── date-helpers.js
+│   ├── string-helpers.js
+│   └── file-helpers.js
+│
+├── <span class="tree-dir">hooks/</span>                    <span class="tree-comment">← Before/after hooks shared across tests</span>
+│   ├── global-setup.js
+│   ├── global-teardown.js
+│   └── test-hooks.js
+│
+├── <span class="tree-dir">constants/</span>               <span class="tree-comment">← App constants, selectors, URLs, messages</span>
+│   ├── urls.js
+│   ├── selectors.js
+│   └── messages.js
+│
+├── <span class="tree-dir">helpers/</span>                  <span class="tree-comment">← Business-logic helpers</span>
+│   ├── mobile/
+│   │   ├── gestures.js
+│   │   └── appetize-session.js
+│   └── web/
+│       └── browser-helpers.js
+│
+├── <span class="tree-dir">reports/</span>                  <span class="tree-comment">← Generated reports (gitignored)</span>
+├── <span class="tree-dir">screenshots/</span>             <span class="tree-comment">← Test screenshots (gitignored)</span>
+├── <span class="tree-dir">videos/</span>                   <span class="tree-comment">← Test recordings (gitignored)</span>
+├── <span class="tree-dir">traces/</span>                   <span class="tree-comment">← Playwright traces (gitignored)</span>
+├── <span class="tree-dir">logs/</span>                     <span class="tree-comment">← Execution logs (gitignored)</span>
+│
+├── <span class="tree-dir">ci/</span>                       <span class="tree-comment">← CI/CD pipeline configs</span>
+│   ├── github-actions/
+│   │   ├── run-web-tests.yml
+│   │   └── run-mobile-tests.yml
+│   └── jenkins/
+│       └── Jenkinsfile
+│
+├── <span class="tree-dir">scripts/</span>                  <span class="tree-comment">← Utility scripts</span>
+│   ├── upload-apk.js
+│   ├── cleanup-reports.js
+│   └── generate-test-data.js
+│
+├── .env                      <span class="tree-comment">← NEVER commit — secrets go here</span>
+├── .env.example              <span class="tree-comment">← Commit this — shows required vars</span>
+├── .gitignore
+├── package.json
+└── README.md
+          </div>
+        </div>
+        <div class="callout tip"><div class="callout-icon">💡</div><strong>Key Design Principle:</strong> Each folder has a single responsibility. <code>pages/</code> never makes API calls. <code>api/</code> never knows about page elements. <code>tests/</code> never contains raw selectors. When everything has a place, finding and fixing bugs takes minutes, not hours.</div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">6.2</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Fixtures, Hooks & Dependency Injection</div>
+          <div class="subphase-subtitle">Custom fixtures, beforeAll/beforeEach, fixture composition</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Custom Fixtures — The Correct Way to Share Setup</div>
+          <div class="code-block"><pre>
+<span class="cm">// fixtures/base.fixtures.js</span>
+<span class="kw">const</span> { test: base } = <span class="fn">require</span>(<span class="str">'@playwright/test'</span>);
+<span class="kw">const</span> { LoginPage } = <span class="fn">require</span>(<span class="str">'../pages/web/LoginPage'</span>);
+<span class="kw">const</span> { DashboardPage } = <span class="fn">require</span>(<span class="str">'../pages/web/DashboardPage'</span>);
+
+<span class="kw">const</span> test = base.<span class="fn">extend</span>({
+  <span class="cm">// loginPage fixture — automatically creates a LoginPage for each test</span>
+  loginPage: <span class="kw">async</span> ({ page }, use) => {
+    <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="fn">LoginPage</span>(page);
+    <span class="kw">await</span> use(loginPage);
+  },
+
+  <span class="cm">// authenticatedPage — logs in before test, logs out after</span>
+  authenticatedPage: <span class="kw">async</span> ({ page }, use) => {
+    <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="fn">LoginPage</span>(page);
+    <span class="kw">await</span> loginPage.<span class="fn">navigate</span>();
+    <span class="kw">await</span> loginPage.<span class="fn">login</span>(process.env.TEST_EMAIL, process.env.TEST_PASSWORD);
+    <span class="kw">await</span> loginPage.<span class="fn">verifySuccessfulLogin</span>();
+
+    <span class="kw">await</span> <span class="fn">use</span>(page);  <span class="cm">// Run the test</span>
+
+    <span class="cm">// Teardown after test completes</span>
+    <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'https://sttc.onrender.com/logout'</span>);
+  }
+});
+
+module.exports = { test };
+
+<span class="cm">// Now in your test file:</span>
+<span class="cm">// const { test } = require('../../fixtures/base.fixtures');</span>
+<span class="cm">// test('dashboard loads', async ({ authenticatedPage }) => { ... });</span>
+</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge blue">6.3</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">playwright.config.js — Complete Configuration</div>
+          <div class="subphase-subtitle">Projects, environments, parallel workers, timeouts</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="code-block"><pre>
+<span class="cm">// playwright.config.js</span>
+<span class="kw">const</span> { defineConfig, devices } = <span class="fn">require</span>(<span class="str">'@playwright/test'</span>);
+<span class="fn">require</span>(<span class="str">'dotenv'</span>).<span class="fn">config</span>();
+
+module.exports = <span class="fn">defineConfig</span>({
+  testDir: <span class="str">'./tests'</span>,
+  fullyParallel: <span class="kw">true</span>,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? <span class="num">2</span> : <span class="num">0</span>,
+  workers: process.env.CI ? <span class="num">4</span> : <span class="num">2</span>,
+  reporter: [
+    [<span class="str">'html'</span>, { outputFolder: <span class="str">'reports/html'</span> }],
+    [<span class="str">'allure-playwright'</span>],
+    [<span class="str">'list'</span>]   <span class="cm">// Console reporter for CI logs</span>
+  ],
+  <span class="kw">use</span>: {
+    baseURL: process.env.BASE_URL || <span class="str">'https://sttc.onrender.com'</span>,
+    trace: <span class="str">'on-first-retry'</span>,
+    screenshot: <span class="str">'only-on-failure'</span>,
+    video: <span class="str">'retain-on-failure'</span>,
+    actionTimeout: <span class="num">15000</span>,
+    navigationTimeout: <span class="num">30000</span>
+  },
+  projects: [
+    {
+      name: <span class="str">'web-chrome'</span>,
+      testMatch: <span class="str">'**/tests/web/**'</span>,
+      <span class="kw">use</span>: { ...devices[<span class="str">'Desktop Chrome'</span>] }
+    },
+    {
+      name: <span class="str">'web-firefox'</span>,
+      testMatch: <span class="str">'**/tests/web/**'</span>,
+      <span class="kw">use</span>: { ...devices[<span class="str">'Desktop Firefox'</span>] }
+    },
+    {
+      name: <span class="str">'mobile-android'</span>,
+      testMatch: <span class="str">'**/tests/mobile/android/**'</span>,
+      <span class="kw">use</span>: { ...devices[<span class="str">'Pixel 6'</span>] }
+    },
+    {
+      name: <span class="str">'hybrid'</span>,
+      testMatch: <span class="str">'**/tests/hybrid/**'</span>,
+      <span class="kw">use</span>: { ...devices[<span class="str">'Desktop Chrome'</span>] }
+    }
+  ]
+});
+</pre></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════ PHASE 7 ════════════════════ -->
+<div class="phase-detail reveal" id="phase7">
+  <div class="phase-header">
+    <div class="phase-header-num">P7</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 07 · Observability</div>
+      <div class="phase-header-title">Reporting, Debugging & Failure Analysis</div>
+      <div class="phase-header-desc">Implement comprehensive reporting with Allure, custom logging, trace viewer integration, video recording, and systematic failure analysis workflows.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge coral">7.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Allure Reports Integration</div>
+          <div class="subphase-subtitle">Installing, configuring, and enriching Allure reports</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Setup & Commands</div>
+          <div class="code-block"><pre>
+<span class="cm"># Install Allure Playwright reporter</span>
+<span class="kw">npm</span> install -D allure-playwright allure-commandline
+
+<span class="cm"># Add to playwright.config.js reporter array:</span>
+reporter: [
+  [<span class="str">'allure-playwright'</span>, {
+    detail: <span class="kw">true</span>,
+    outputFolder: <span class="str">'allure-results'</span>,
+    suiteTitle: <span class="kw">false</span>
+  }]
+]
+
+<span class="cm"># Generate and open report after test run:</span>
+<span class="kw">npx</span> allure generate allure-results --clean -o allure-report
+<span class="kw">npx</span> allure open allure-report
+
+<span class="cm"># Add to package.json scripts:</span>
+<span class="str">"report:allure"</span>: <span class="str">"allure generate allure-results --clean && allure open"</span>
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Enriching Tests with Allure Annotations</div>
+          <div class="code-block"><pre>
+<span class="kw">const</span> { test } = <span class="fn">require</span>(<span class="str">'@playwright/test'</span>);
+<span class="kw">const</span> { allure } = <span class="fn">require</span>(<span class="str">'allure-playwright'</span>);
+
+test(<span class="str">'login with valid credentials'</span>, <span class="kw">async</span> ({ page }) => {
+  allure.<span class="fn">suite</span>(<span class="str">'Authentication'</span>);
+  allure.<span class="fn">feature</span>(<span class="str">'Login'</span>);
+  allure.<span class="fn">story</span>(<span class="str">'Valid Credentials'</span>);
+  allure.<span class="fn">severity</span>(<span class="str">'critical'</span>);
+  allure.<span class="fn">description</span>(<span class="str">'Verifies that a valid user can login to the TableTennis platform'</span>);
+  allure.<span class="fn">tag</span>(<span class="str">'smoke'</span>);
+  allure.<span class="fn">tag</span>(<span class="str">'login'</span>);
+
+  <span class="kw">await</span> allure.<span class="fn">step</span>(<span class="str">'Navigate to login page'</span>, <span class="kw">async</span> () => {
+    <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">'/login'</span>);
+  });
+
+  <span class="kw">await</span> allure.<span class="fn">step</span>(<span class="str">'Enter credentials'</span>, <span class="kw">async</span> () => {
+    <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="str">'#email'</span>, <span class="str">'test@sttc.com'</span>);
+    <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="str">'#password'</span>, <span class="str">'pass123'</span>);
+  });
+
+  <span class="kw">await</span> allure.<span class="fn">step</span>(<span class="str">'Submit and verify redirect'</span>, <span class="kw">async</span> () => {
+    <span class="kw">await</span> page.<span class="fn">click</span>(<span class="str">'#login-btn'</span>);
+    <span class="kw">await</span> page.<span class="fn">waitForURL</span>(<span class="str">'**/dashboard'</span>);
+  });
+});
+</pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge coral">7.2</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Custom Logger Implementation</div>
+          <div class="subphase-subtitle">Structured logging, log levels, file and console output</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="code-block"><pre>
+<span class="cm">// utils/logger.js — Production-level structured logger</span>
+<span class="kw">const</span> fs = <span class="fn">require</span>(<span class="str">'fs'</span>);
+<span class="kw">const</span> path = <span class="fn">require</span>(<span class="str">'path'</span>);
+
+<span class="kw">const</span> LEVELS = { DEBUG: <span class="num">0</span>, INFO: <span class="num">1</span>, WARN: <span class="num">2</span>, ERROR: <span class="num">3</span> };
+<span class="kw">const</span> COLORS = {
+  DEBUG: <span class="str">'\x1b[36m'</span>, INFO: <span class="str">'\x1b[32m'</span>,
+  WARN:  <span class="str">'\x1b[33m'</span>, ERROR: <span class="str">'\x1b[31m'</span>
+};
+
+<span class="kw">class</span> Logger {
+  <span class="kw">constructor</span>(context = <span class="str">'Test'</span>) {
+    <span class="kw">this</span>.context = context;
+    <span class="kw">this</span>.level = LEVELS[process.env.LOG_LEVEL || <span class="str">'INFO'</span>];
+    <span class="kw">this</span>.logFile = path.<span class="fn">join</span>(<span class="str">'logs'</span>, <span class="str">`run-${Date.now()}.log`</span>);
+    fs.<span class="fn">mkdirSync</span>(<span class="str">'logs'</span>, { recursive: <span class="kw">true</span> });
+  }
+
+  <span class="fn">_log</span>(level, message, meta = {}) {
+    <span class="kw">if</span> (LEVELS[level] < <span class="kw">this</span>.level) <span class="kw">return</span>;
+    <span class="kw">const</span> ts = <span class="kw">new</span> <span class="fn">Date</span>().<span class="fn">toISOString</span>();
+    <span class="kw">const</span> entry = { ts, level, context: <span class="kw">this</span>.context, message, ...meta };
+    <span class="kw">const</span> color = COLORS[level];
+    console.<span class="fn">log</span>(<span class="str">`${color}[${ts}] [${level}] [${<span class="kw">this</span>.context}] ${message}\x1b[0m`</span>);
+    fs.<span class="fn">appendFileSync</span>(<span class="kw">this</span>.logFile, JSON.<span class="fn">stringify</span>(entry) + <span class="str">'\n'</span>);
+  }
+
+  <span class="fn">debug</span>(msg, meta) { <span class="kw">this</span>.<span class="fn">_log</span>(<span class="str">'DEBUG'</span>, msg, meta); }
+  <span class="fn">info</span>(msg, meta)  { <span class="kw">this</span>.<span class="fn">_log</span>(<span class="str">'INFO'</span>,  msg, meta); }
+  <span class="fn">warn</span>(msg, meta)  { <span class="kw">this</span>.<span class="fn">_log</span>(<span class="str">'WARN'</span>,  msg, meta); }
+  <span class="fn">error</span>(msg, meta) { <span class="kw">this</span>.<span class="fn">_log</span>(<span class="str">'ERROR'</span>, msg, meta); }
+}
+
+module.exports = { Logger };
+</pre></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════ PHASE 8 ════════════════════ -->
+<div class="phase-detail reveal" id="phase8">
+  <div class="phase-header">
+    <div class="phase-header-num">P8</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 08 · Mastery</div>
+      <div class="phase-header-title">Advanced Architecture & Optimization</div>
+      <div class="phase-header-desc">Data-driven testing, self-healing locators, Docker execution, secret management, API+UI combined framework, tag-based execution, and cloud scaling strategies.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge pink">8.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Data-Driven Testing Framework</div>
+          <div class="subphase-subtitle">Parameterized tests, JSON/CSV test data, test data factories</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Data-Driven Test Implementation</div>
+          <div class="code-block"><pre>
+<span class="cm">// data/login-scenarios.json</span>
+[
+  { <span class="str">"email"</span>: <span class="str">"admin@sttc.com"</span>,  <span class="str">"password"</span>: <span class="str">"Admin123"</span>,  <span class="str">"expected"</span>: <span class="str">"dashboard"</span>,  <span class="str">"role"</span>: <span class="str">"admin"</span> },
+  { <span class="str">"email"</span>: <span class="str">"player@sttc.com"</span>, <span class="str">"password"</span>: <span class="str">"Player123"</span>, <span class="str">"expected"</span>: <span class="str">"player-home"</span>, <span class="str">"role"</span>: <span class="str">"player"</span> },
+  { <span class="str">"email"</span>: <span class="str">"wrong@email.com"</span>, <span class="str">"password"</span>: <span class="str">"badpass"</span>,  <span class="str">"expected"</span>: <span class="str">"error"</span>,        <span class="str">"role"</span>: <span class="str">"none"</span> }
+]
+
+<span class="cm">// tests/web/login-data-driven.spec.js</span>
+<span class="kw">const</span> scenarios = <span class="fn">require</span>(<span class="str">'../../data/login-scenarios.json'</span>);
+
+<span class="kw">for</span> (<span class="kw">const</span> scenario <span class="kw">of</span> scenarios) {
+  test(<span class="str">`login as ${scenario.role}: should reach ${scenario.expected}`</span>, <span class="kw">async</span> ({ page }) => {
+    <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="fn">LoginPage</span>(page);
+    <span class="kw">await</span> loginPage.<span class="fn">navigate</span>();
+    <span class="kw">await</span> loginPage.<span class="fn">login</span>(scenario.email, scenario.password);
+
+    <span class="kw">if</span> (scenario.expected === <span class="str">'error'</span>) {
+      <span class="kw">await</span> expect(page.<span class="fn">locator</span>(<span class="str">'.error'</span>)).<span class="fn">toBeVisible</span>();
+    } <span class="kw">else</span> {
+      <span class="kw">await</span> expect(page).<span class="fn">toHaveURL</span>(<span class="kw">new</span> <span class="fn">RegExp</span>(scenario.expected));
+    }
+  });
+}
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Advanced Topics in Phase 8</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Self-healing locators</strong> — fallback selector chains; if primary locator fails, try secondary before marking test failed</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Tag-based execution</strong> — <code>@smoke</code>, <code>@regression</code>, <code>@critical</code> tags with grep filtering in CLI</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Environment switching</strong> — single config reads ENV var to switch between dev/staging/prod endpoints</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Docker execution</strong> — containerized test runs using <code>mcr.microsoft.com/playwright</code> official image</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Secret management</strong> — GitHub Secrets, dotenv-vault, or HashiCorp Vault for CI credential injection</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Retry strategies</strong> — smart retry only on specific failure types (network timeout, not assertion errors)</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>Performance metrics</strong> — capture Core Web Vitals via CDP during navigation assertions</div>
+            <div class="topic-item"><div class="topic-dot pink"></div><strong>API + UI combined</strong> — use API to set up test data, UI to verify, API to clean up — fastest pattern</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════ PHASE 9 ════════════════════ -->
+<div class="phase-detail reveal" id="phase9">
+  <div class="phase-header">
+    <div class="phase-header-num">P9</div>
+    <div class="phase-header-content">
+      <div class="phase-header-label">Phase 09 · Production</div>
+      <div class="phase-header-title">CI/CD Integration & Scaling</div>
+      <div class="phase-header-desc">Integrate the full framework into GitHub Actions and Jenkins, configure parallel cloud execution, artifact storage, Slack notifications, PR validation gates, and team collaboration workflows.</div>
+    </div>
+  </div>
+  <div class="subphase-list">
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge green">9.1</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">GitHub Actions Pipeline</div>
+          <div class="subphase-subtitle">Complete workflow YAML, matrix builds, artifact upload</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="content-block">
+          <div class="content-h3">Complete GitHub Actions Workflow</div>
+          <div class="code-block"><pre>
+<span class="cm"># .github/workflows/run-tests.yml</span>
+name: TableTennis Automation Suite
+
+<span class="kw">on</span>:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: <span class="str">'0 6 * * 1-5'</span>   <span class="cm"># Daily at 6am Mon-Fri</span>
+  workflow_dispatch:           <span class="cm"># Manual trigger</span>
+
+jobs:
+  test-web:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: <span class="str">'20'</span>
+          cache: <span class="str">'npm'</span>
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run web tests
+        run: npx playwright test --project=web-${{ matrix.browser }}
+        env:
+          BASE_URL: ${{ secrets.STAGING_URL }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.browser }}
+          path: allure-results/
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: reports/html/
+          retention-days: 30
+
+  notify-slack:
+    needs: test-web
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: <span class="str">'TableTennis automation run completed'</span>
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+</pre></div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">CI/CD Best Practices</div>
+          <div class="topic-grid">
+            <div class="topic-item"><div class="topic-dot green"></div><strong>npm ci over npm install</strong> — ci uses locked versions, making builds fully reproducible</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Cache node_modules</strong> — saves 2-3 min per run by caching based on package-lock hash</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Retries in CI</strong> — set retries: 2 in CI to handle infrastructure flakiness (network blips, slow devices)</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Always upload artifacts</strong> — use <code>if: always()</code> so reports are saved even on test failure</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Matrix builds</strong> — test across multiple browsers in parallel using GitHub Actions matrix strategy</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>PR gates</strong> — configure required status checks so PRs cannot merge with failing tests</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Sharding</strong> — split large test suites across multiple runners: <code>--shard=1/4</code> pattern</div>
+            <div class="topic-item"><div class="topic-dot green"></div><strong>Scheduled smoke tests</strong> — run critical path every 30 min against production to catch incidents</div>
+          </div>
+        </div>
+        <div class="content-block">
+          <div class="content-h3">Playwright Test Sharding for Scale</div>
+          <div class="code-block"><pre>
+<span class="cm"># Split 100 tests across 4 CI machines — each runs 25 tests</span>
+<span class="cm"># Machine 1:</span>
+<span class="kw">npx</span> playwright test --shard=<span class="num">1</span>/4
+
+<span class="cm"># Machine 2:</span>
+<span class="kw">npx</span> playwright test --shard=<span class="num">2</span>/4
+
+<span class="cm"># Machine 3:</span>
+<span class="kw">npx</span> playwright test --shard=<span class="num">3</span>/4
+
+<span class="cm"># Machine 4:</span>
+<span class="kw">npx</span> playwright test --shard=<span class="num">4</span>/4
+
+<span class="cm"># After all shards complete — merge reports:</span>
+<span class="kw">npx</span> playwright merge-reports --reporter=html ./all-blob-reports
+</pre></div>
+        </div>
+        <div class="iq-list">
+          <div class="iq-item"><span class="iq-q">Q→</span>How do you prevent secrets like API keys from being exposed in CI pipeline logs?</div>
+          <div class="iq-item"><span class="iq-q">Q→</span>Describe the difference between parallelism via workers (within one machine) and sharding (across machines). When do you use each?</div>
+          <div class="iq-item"><span class="iq-q">Q→</span>How would you configure a pipeline that runs smoke tests on every PR but full regression only on nightly schedule?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subphase">
+      <div class="subphase-header" onclick="toggleSub(this)">
+        <div class="subphase-num-badge green">9.2</div>
+        <div class="subphase-title-wrap">
+          <div class="subphase-title">Jenkins Pipeline + Docker Execution</div>
+          <div class="subphase-subtitle">Declarative Jenkinsfile, containerized runs, distributed agents</div>
+        </div>
+        <span class="subphase-arrow">›</span>
+      </div>
+      <div class="subphase-body">
+        <div class="code-block"><pre>
+<span class="cm">// ci/jenkins/Jenkinsfile</span>
+pipeline {
+  agent {
+    docker {
+      image <span class="str">'mcr.microsoft.com/playwright:v1.45.0-jammy'</span>
+      args <span class="str">'--ipc=host'</span>   <span class="cm">// Required for Playwright in Docker</span>
+    }
+  }
+
+  environment {
+    BASE_URL     = credentials(<span class="str">'STTC_STAGING_URL'</span>)
+    TEST_EMAIL   = credentials(<span class="str">'TEST_USER_EMAIL'</span>)
+    TEST_PASSWORD = credentials(<span class="str">'TEST_USER_PASSWORD'</span>)
+  }
+
+  stages {
+    stage(<span class="str">'Install'</span>) {
+      steps {
+        sh <span class="str">'npm ci'</span>
+      }
+    }
+
+    stage(<span class="str">'Web Tests'</span>) {
+      steps {
+        sh <span class="str">'npx playwright test --project=web-chrome --reporter=allure-playwright'</span>
+      }
+      post {
+        always {
+          publishHTML([
+            allowMissing: <span class="kw">false</span>,
+            alwaysLinkToLastBuild: <span class="kw">true</span>,
+            keepAll: <span class="kw">true</span>,
+            reportDir: <span class="str">'reports/html'</span>,
+            reportFiles: <span class="str">'index.html'</span>,
+            reportName: <span class="str">'Playwright Report'</span>
+          ])
+        }
+      }
+    }
+
+    stage(<span class="str">'Mobile Tests'</span>) {
+      steps {
+        sh <span class="str">'npx playwright test --project=mobile-android'</span>
+      }
+    }
+  }
+
+  post {
+    failure {
+      slackSend(
+        channel: <span class="str">'#qa-alerts'</span>,
+        color: <span class="str">'danger'</span>,
+        message: <span class="str">"Pipeline FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}"</span>
+      )
+    }
+    always {
+      archiveArtifacts artifacts: <span class="str">'allure-results/**'</span>, fingerprint: <span class="kw">true</span>
+    }
+  }
+}
+</pre></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- END ALL PHASES -->
+    </div><!-- end phases-container -->
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════ PROJECT STRUCTURE QUICK REF -->
+<section id="structure" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="wrap">
+    <div class="section-eyebrow reveal">Final Outcome</div>
+    <h2 class="section-title reveal">What You Will Build</h2>
+    <p class="section-desc reveal">By Phase 9 completion, you will have a production-grade automation framework operating at industry level.</p>
+
+    <div class="info-row reveal" style="margin-top:3rem">
+      <div class="info-card">
+        <div class="info-card-label">Android Automation</div>
+        <div class="info-card-content">Automate TableTennis Android app — login, score entry, navigation, gestures, notifications — running on Appetize cloud Pixel devices</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">iOS Automation</div>
+        <div class="info-card-content">Automate the iOS app on simulated iPhones in Appetize cloud with identical test coverage to Android</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Web Automation</div>
+        <div class="info-card-content">Full cross-browser automation of sttc.onrender.com — login, registration, tournament management, reports</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Hybrid E2E</div>
+        <div class="info-card-content">Multi-platform user journeys connecting mobile app and web in single coordinated test flows</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Framework</div>
+        <div class="info-card-content">POM + COM + service layer + fixtures + hooks + data management — the complete production architecture</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">CI/CD</div>
+        <div class="info-card-content">GitHub Actions + Jenkins pipelines with parallel execution, Allure reports, Slack notifications, and PR gates</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>HybridAutoMastery Training Program · Built for <strong>TableTennis</strong> automation with <strong>Playwright + Appetize</strong></p>
+    <p style="margin-top:8px;font-size:12px">JavaScript · Node.js · Android SDK · ADB · GitHub Actions · Allure · Page Object Model</p>
+  </div>
+</footer>
+
+<script>
+  // ─── Progress bar
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const p = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('progress-bar').style.width = p + '%';
+  });
+
+  // ─── Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .phase-detail').forEach(el => observer.observe(el));
+
+  // ─── Subphase accordion
+  function toggleSub(header) {
+    const body = header.nextElementSibling;
+    const isOpen = header.classList.contains('open');
+    header.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+  }
+
+  // ─── Card mouse tracking for radial gradient
+  document.querySelectorAll('.phase-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    });
+  });
+
+  // ─── Stagger phase detail reveals
+  document.querySelectorAll('.phase-detail').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.05) + 's';
+  });
+</script>
+</body>
+</html>
