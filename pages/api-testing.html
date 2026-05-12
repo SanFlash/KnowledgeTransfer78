@@ -1,0 +1,2902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Testing — Complete Learning Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Literata:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --surface3: #1e2330;
+    --border: #2a3040;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --accent4: #10b981;
+    --accent5: #f43f5e;
+    --text: #e8eaf0;
+    --text-muted: #8892a4;
+    --text-dim: #4a5568;
+    --phase-colors: #00e5ff, #7c3aed, #f59e0b, #10b981, #f43f5e, #3b82f6, #ec4899, #84cc16;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Literata', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,229,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(124,58,237,0.1) 0%, transparent 55%),
+      radial-gradient(ellipse 40% 50% at 10% 70%, rgba(245,158,11,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(0,229,255,0.3);
+    padding: 0.35rem 1rem;
+    border-radius: 2px;
+    margin-bottom: 2rem;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    animation: fadeDown 0.8s 0.1s ease both;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 50%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    animation: fadeDown 0.8s 0.2s ease both;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeDown 0.8s 0.3s ease both;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* ── TOC ── */
+  .toc-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 4rem 2rem;
+  }
+
+  .toc-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .toc-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 2rem;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+  }
+
+  .toc-item:hover {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--text);
+  }
+
+  .toc-num {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    min-width: 2rem;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* ── PHASE HEADER ── */
+  .phase-header {
+    position: relative;
+    margin: 6rem 0 0;
+    padding: 3rem 0 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .phase-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .phase-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .phase-desc {
+    margin-top: 1rem;
+    color: var(--text-muted);
+    max-width: 700px;
+    font-size: 1rem;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  /* ── MODULE CARD ── */
+  .module {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 2rem 0;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .module:hover {
+    border-color: rgba(0,229,255,0.2);
+  }
+
+  .module-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .module-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    padding-top: 0.1rem;
+    white-space: nowrap;
+  }
+
+  .module-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  .module-body {
+    padding: 2rem;
+  }
+
+  /* ── SUBMODULE ── */
+  .submodule {
+    margin: 2rem 0;
+  }
+
+  .submodule-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .submodule-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── EXPLANATION BLOCK ── */
+  .explain {
+    color: var(--text-muted);
+    font-size: 0.97rem;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+  }
+
+  .explain strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ── TOPIC LIST ── */
+  .topic-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 1rem 0;
+  }
+
+  .topic-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 3px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-block pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #c9d1d9;
+    white-space: pre;
+  }
+
+  .code-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .code-block .kw { color: #ff7b72; }
+  .code-block .str { color: #a5d6ff; }
+  .code-block .num { color: #79c0ff; }
+  .code-block .cmt { color: #8b949e; font-style: italic; }
+  .code-block .fn { color: #d2a8ff; }
+  .code-block .prop { color: #ffa657; }
+  .code-block .val { color: #a5d6ff; }
+  .code-block .tag { color: #7ee787; }
+  .code-block .attr { color: #ff7b72; }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    display: flex;
+    gap: 1rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.25rem 0;
+  }
+
+  .info-box.tip { border-left: 3px solid var(--accent4); }
+  .info-box.warn { border-left: 3px solid var(--accent3); }
+  .info-box.danger { border-left: 3px solid var(--accent5); }
+  .info-box.note { border-left: 3px solid var(--accent); }
+  .info-box.purple { border-left: 3px solid var(--accent2); }
+
+  .info-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+    padding-top: 0.15rem;
+    flex-shrink: 0;
+  }
+
+  .info-body { flex: 1; }
+
+  .info-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .info-box.tip .info-title { color: var(--accent4); }
+  .info-box.warn .info-title { color: var(--accent3); }
+  .info-box.danger .info-title { color: var(--accent5); }
+  .info-box.note .info-title { color: var(--accent); }
+  .info-box.purple .info-title { color: var(--accent2); }
+
+  .info-text { font-size: 0.92rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 0.88rem;
+  }
+
+  .compare-table th {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    background: var(--surface2);
+  }
+
+  .compare-table td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid rgba(42,48,64,0.5);
+    color: var(--text-muted);
+    vertical-align: top;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child { color: var(--text); font-weight: 500; }
+
+  /* ── STATUS CODE GRID ── */
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+  }
+
+  .status-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+  }
+
+  .status-code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .status-name {
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .status-desc {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .s2xx .status-code { color: var(--accent4); }
+  .s3xx .status-code { color: var(--accent3); }
+  .s4xx .status-code { color: var(--accent5); }
+  .s5xx .status-code { color: #ef4444; }
+  .s1xx .status-code { color: var(--accent); }
+
+  /* ── STEP LIST ── */
+  .steps {
+    counter-reset: step;
+    margin: 1rem 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 1.75rem;
+    height: 1.75rem;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .step-body { flex: 1; }
+  .step-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .step-text { color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+    margin: 2rem 0;
+  }
+
+  /* ── TOOL CHIPS ── */
+  .tool-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+  }
+
+  .tool-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 20px;
+    border: 1px solid;
+    font-weight: 500;
+  }
+
+  .chip-cyan { color: var(--accent); border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.05); }
+  .chip-purple { color: #a78bfa; border-color: rgba(124,58,237,0.35); background: rgba(124,58,237,0.05); }
+  .chip-amber { color: #fbbf24; border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.05); }
+  .chip-green { color: #34d399; border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.05); }
+  .chip-rose { color: #fb7185; border-color: rgba(244,63,94,0.35); background: rgba(244,63,94,0.05); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    background: linear-gradient(135deg, rgba(0,229,255,0.04), rgba(124,58,237,0.04));
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    margin: 1.5rem 0;
+  }
+
+  .callout-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .callout p {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  /* ── FINAL BANNER ── */
+  .final-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4rem 2rem;
+    text-align: center;
+    margin: 6rem 0 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,229,255,0.07), transparent 60%);
+    pointer-events: none;
+  }
+
+  .final-banner h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  .final-banner p {
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+
+  .role-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .role-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 4px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── BACK TO TOP ── */
+  .back-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    z-index: 100;
+  }
+
+  .back-top:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,229,255,0.06);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MISC ── */
+  h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 1.25rem 0 0.5rem;
+  }
+
+  ul, ol {
+    padding-left: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.93rem;
+    line-height: 1.9;
+  }
+
+  li { margin-bottom: 0.1rem; }
+
+  p { margin-bottom: 0.75rem; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  @media (max-width: 640px) {
+    .two-col { grid-template-columns: 1fr; }
+    .hero-stats { gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-badge">Complete Professional Curriculum</div>
+  <h1>API Testing<br><span>Learning Roadmap</span></h1>
+  <p class="hero-sub">From absolute fresher to senior-level SDET. Every module, every concept, every tool — with explanations and real-world examples.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">28</span><span class="stat-label">Phases</span></div>
+    <div class="stat"><span class="stat-num">3+</span><span class="stat-label">Bonus Modules</span></div>
+    <div class="stat"><span class="stat-num">4</span><span class="stat-label">Industry Projects</span></div>
+    <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Examples</span></div>
+  </div>
+</section>
+
+<!-- TOC -->
+<section class="toc-section">
+  <div class="toc-inner">
+    <div class="toc-title">// Table of Contents</div>
+    <div class="toc-grid">
+      <a class="toc-item" href="#phase1"><span class="toc-num">01</span> Foundation of APIs & Web Architecture</a>
+      <a class="toc-item" href="#phase2"><span class="toc-num">02</span> HTTP Deep Dive</a>
+      <a class="toc-item" href="#phase3"><span class="toc-num">03</span> Request & Response Structures</a>
+      <a class="toc-item" href="#phase4"><span class="toc-num">04</span> Manual API Testing</a>
+      <a class="toc-item" href="#phase5"><span class="toc-num">05</span> Postman Complete Mastery</a>
+      <a class="toc-item" href="#phase6"><span class="toc-num">06</span> REST API Testing</a>
+      <a class="toc-item" href="#phase7"><span class="toc-num">07</span> Authentication & Authorization</a>
+      <a class="toc-item" href="#phase8"><span class="toc-num">08</span> Database Validation for APIs</a>
+      <a class="toc-item" href="#phase9"><span class="toc-num">09</span> API Automation Fundamentals</a>
+      <a class="toc-item" href="#phase10"><span class="toc-num">10</span> Automation with JavaScript</a>
+      <a class="toc-item" href="#phase11"><span class="toc-num">11</span> Automation with Python</a>
+      <a class="toc-item" href="#phase12"><span class="toc-num">12</span> Automation with Java</a>
+      <a class="toc-item" href="#phase13"><span class="toc-num">13</span> Contract Testing</a>
+      <a class="toc-item" href="#phase14"><span class="toc-num">14</span> GraphQL API Testing</a>
+      <a class="toc-item" href="#phase15"><span class="toc-num">15</span> SOAP API Testing</a>
+      <a class="toc-item" href="#phase16"><span class="toc-num">16</span> Performance Testing</a>
+      <a class="toc-item" href="#phase17"><span class="toc-num">17</span> Security Testing</a>
+      <a class="toc-item" href="#phase18"><span class="toc-num">18</span> CI/CD Integration</a>
+      <a class="toc-item" href="#phase19"><span class="toc-num">19</span> Docker & Containerization</a>
+      <a class="toc-item" href="#phase20"><span class="toc-num">20</span> Microservices Testing</a>
+      <a class="toc-item" href="#phase21"><span class="toc-num">21</span> Cloud API Testing</a>
+      <a class="toc-item" href="#phase22"><span class="toc-num">22</span> Mobile API Testing</a>
+      <a class="toc-item" href="#phase23"><span class="toc-num">23</span> Real Industry Projects</a>
+      <a class="toc-item" href="#phase24"><span class="toc-num">24</span> Reporting & Monitoring</a>
+      <a class="toc-item" href="#phase25"><span class="toc-num">25</span> Git & Collaboration</a>
+      <a class="toc-item" href="#phase26"><span class="toc-num">26</span> Interview Preparation</a>
+      <a class="toc-item" href="#phase27"><span class="toc-num">27</span> Industry Best Practices</a>
+      <a class="toc-item" href="#phase28"><span class="toc-num">28</span> AI + Modern API Ecosystem</a>
+      <a class="toc-item" href="#bonus"><span class="toc-num">★</span> Bonus Modules</a>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- ══════════════════════════════════════
+     PHASE 1
+══════════════════════════════════════ -->
+<div id="phase1" class="phase-header">
+  <div class="phase-label" style="color:#00e5ff">Phase 01</div>
+  <h2 class="phase-title">Foundation of APIs &amp; Web Architecture</h2>
+  <p class="phase-desc">Before you test anything, you must understand what an API is, why it exists, and how the internet fundamentally works. This phase builds the mental model that every future module rests upon.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 01</span>
+    <span class="module-title">Introduction to APIs</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">What is an API?</div>
+      <p class="explain">
+        <strong>API</strong> stands for <strong>Application Programming Interface</strong>. Think of it as a formal contract between two software systems that defines how they can communicate with each other. Just as a waiter in a restaurant takes your order to the kitchen and brings back food — without you ever seeing the kitchen — an API takes your request to a server and delivers the response back to your application.
+      </p>
+      <p class="explain">
+        Every time you check the weather on your phone, your app is hitting a Weather API. When you pay online, a Payment API is invoked behind the scenes. When Google Maps shows up on a third-party site, the Maps API is at work. APIs are the invisible glue of the modern digital world.
+      </p>
+      <div class="info-box note">
+        <div class="info-icon">📌</div>
+        <div class="info-body">
+          <div class="info-title">Real-World Analogy</div>
+          <div class="info-text">You (the client) place an order (HTTP Request) with a waiter (API). The waiter goes to the kitchen (server/backend) and returns with your food (HTTP Response). You don't need to know how the kitchen operates — the waiter abstracts all of that complexity.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Why APIs Exist — The Business Case</div>
+      <p class="explain">APIs exist because it's both inefficient and dangerous to expose entire systems. Instead, a business creates a defined interface that:</p>
+      <ul>
+        <li>Exposes only the required functionality (not the entire database)</li>
+        <li>Enforces authentication before any data is returned</li>
+        <li>Allows different clients (web, mobile, IoT) to consume the same backend</li>
+        <li>Lets third parties integrate with your platform without accessing your code</li>
+      </ul>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">API vs UI Testing vs Backend Testing</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Dimension</th><th>UI Testing</th><th>API Testing</th><th>Backend Testing</th></tr></thead>
+          <tbody>
+            <tr><td>Level</td><td>Presentation layer</td><td>Service/Business layer</td><td>Database/Logic layer</td></tr>
+            <tr><td>Tools</td><td>Selenium, Cypress</td><td>Postman, Rest Assured</td><td>SQL queries, DB tools</td></tr>
+            <tr><td>Speed</td><td>Slow (browser rendering)</td><td>Fast</td><td>Very fast</td></tr>
+            <tr><td>Stability</td><td>Brittle (UI changes often)</td><td>Stable</td><td>Very stable</td></tr>
+            <tr><td>Coverage</td><td>User workflows</td><td>Business logic, data flow</td><td>Data integrity</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box tip">
+        <div class="info-icon">💡</div>
+        <div class="info-body">
+          <div class="info-title">Industry Insight</div>
+          <div class="info-text">The famous "Testing Pyramid" recommends having the most unit tests, a large middle layer of API tests, and a thin layer of UI tests. API tests are faster, cheaper, and catch bugs earlier than UI tests.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Client-Server Architecture &amp; Request-Response Cycle</div>
+      <p class="explain">Every API interaction follows the same fundamental pattern:</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Client Initiates</div><div class="step-text">Your browser or app sends an HTTP request to a specific URL (endpoint) with headers, optional body data, and authentication.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Server Receives</div><div class="step-text">The web server (nginx, Apache) receives the request and routes it to the appropriate application handler.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Application Processes</div><div class="step-text">Business logic executes — queries a database, calls another service, computes a result.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Response Sent</div><div class="step-text">The server returns an HTTP response with a status code, headers, and a response body (usually JSON).</div></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Client Renders</div><div class="step-text">The client parses the response and presents data to the user, or uses it to trigger further actions.</div></div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">1.2 — Types of APIs</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Type</th><th>Who Can Access</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Public API</td><td>Anyone on the internet</td><td>Twitter API, OpenWeather API</td></tr>
+            <tr><td>Private API</td><td>Internal teams only</td><td>Company's internal HR system API</td></tr>
+            <tr><td>Partner API</td><td>Specific business partners</td><td>Stripe's merchant integration API</td></tr>
+            <tr><td>Internal API</td><td>Within a single product/team</td><td>Microservices communicating internally</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">1.3 — API Protocols</div>
+      <p class="explain">Different situations call for different communication protocols. Understanding when to use each is crucial for any API tester.</p>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Protocol</th><th>Format</th><th>Use Case</th><th>Common In</th></tr></thead>
+          <tbody>
+            <tr><td>REST</td><td>JSON/XML</td><td>Standard web/mobile APIs</td><td>90% of modern APIs</td></tr>
+            <tr><td>SOAP</td><td>XML only</td><td>Legacy enterprise systems</td><td>Banking, healthcare</td></tr>
+            <tr><td>GraphQL</td><td>JSON</td><td>Flexible query-based APIs</td><td>GitHub, Shopify</td></tr>
+            <tr><td>gRPC</td><td>Protobuf (binary)</td><td>High-performance microservices</td><td>Google internal, Kubernetes</td></tr>
+            <tr><td>WebSocket</td><td>Any</td><td>Real-time bidirectional</td><td>Chat, trading platforms</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">1.4 — HTTP Basics &amp; URL Anatomy</div>
+      <p class="explain">Every API request is an HTTP request. Understanding URLs at a granular level is fundamental.</p>
+      <div class="code-block">
+        <div class="code-label">// URL Anatomy</div>
+        <pre><span class="cmt">https://api.example.com:443/v1/users/42/orders?status=active&limit=10#results</span>
+
+<span class="kw">Protocol</span>   : <span class="str">https</span>                  → secure HTTP
+<span class="kw">Host</span>       : <span class="str">api.example.com</span>        → domain name
+<span class="kw">Port</span>       : <span class="str">443</span>                    → HTTPS default (80 for HTTP)
+<span class="kw">Path</span>       : <span class="str">/v1/users/42/orders</span>    → resource path
+<span class="kw">Path Param</span> : <span class="str">42</span>                     → user ID embedded in path
+<span class="kw">Query Str</span>  : <span class="str">status=active&amp;limit=10</span> → filters / options
+<span class="kw">Fragment</span>   : <span class="str">#results</span>               → client-side anchor</pre>
+      </div>
+      <div class="info-box note">
+        <div class="info-icon">🔒</div>
+        <div class="info-body">
+          <div class="info-title">HTTPS vs HTTP</div>
+          <div class="info-text">HTTPS encrypts the entire request/response using TLS (Transport Layer Security). In API testing, always check that sensitive endpoints enforce HTTPS. Sending auth tokens over plain HTTP is a critical security vulnerability.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Monolithic vs Microservices Architecture</div>
+      <p class="explain">Modern APIs live in one of two architectural worlds. As a tester, understanding this context changes your testing strategy significantly.</p>
+      <div class="two-col">
+        <div class="info-box warn">
+          <div class="info-body">
+            <div class="info-title">Monolithic</div>
+            <div class="info-text">All features in one deployable unit. A single API gateway. Simpler to test initially, but changes affect everything. Example: A single Java WAR file containing Auth, Orders, Payments, and Inventory.</div>
+          </div>
+        </div>
+        <div class="info-box tip">
+          <div class="info-body">
+            <div class="info-title">Microservices</div>
+            <div class="info-text">Each feature is its own service with its own API. Requires service-to-service testing, contract testing, and resilience testing. Example: Netflix has 700+ microservices each with independent APIs.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PHASE 2
+══════════════════════════════════════ -->
+<div id="phase2" class="phase-header">
+  <div class="phase-label" style="color:#7c3aed">Phase 02</div>
+  <h2 class="phase-title">HTTP Deep Dive</h2>
+  <p class="phase-desc">HTTP is the language APIs speak. You must know every verb, every status code, and every nuance of how requests and responses are structured.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 02</span>
+    <span class="module-title">HTTP Methods &amp; Status Codes</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">HTTP Methods — The Verbs</div>
+      <p class="explain">HTTP methods define the intended action of an API request. They map directly to CRUD operations in most REST APIs.</p>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Method</th><th>CRUD</th><th>Idempotent?</th><th>Has Body?</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>GET</td><td>Read</td><td>Yes</td><td>No</td><td>Fetch a user's profile</td></tr>
+            <tr><td>POST</td><td>Create</td><td>No</td><td>Yes</td><td>Register a new user</td></tr>
+            <tr><td>PUT</td><td>Replace</td><td>Yes</td><td>Yes</td><td>Replace entire user record</td></tr>
+            <tr><td>PATCH</td><td>Update</td><td>Sometimes</td><td>Yes</td><td>Update only user's email</td></tr>
+            <tr><td>DELETE</td><td>Delete</td><td>Yes</td><td>Optional</td><td>Delete a user account</td></tr>
+            <tr><td>OPTIONS</td><td>—</td><td>Yes</td><td>No</td><td>Check allowed methods (CORS preflight)</td></tr>
+            <tr><td>HEAD</td><td>Read</td><td>Yes</td><td>No</td><td>Check if resource exists without downloading it</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box warn">
+        <div class="info-icon">⚠️</div>
+        <div class="info-body">
+          <div class="info-title">Idempotency Explained</div>
+          <div class="info-text">An idempotent method produces the same result no matter how many times you call it with the same input. DELETE /users/5 called 3 times: first call deletes the user, subsequent calls return 404 — but the server state is the same. POST is NOT idempotent — calling POST /orders 3 times creates 3 orders.</div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-label">// Real REST API Examples</div>
+        <pre><span class="cmt">GET</span>    <span class="str">/api/products</span>           <span class="cmt">→ list all products</span>
+<span class="cmt">GET</span>    <span class="str">/api/products/101</span>       <span class="cmt">→ get product with id 101</span>
+<span class="cmt">POST</span>   <span class="str">/api/products</span>           <span class="cmt">→ create a new product</span>
+<span class="cmt">PUT</span>    <span class="str">/api/products/101</span>       <span class="cmt">→ replace product 101 entirely</span>
+<span class="cmt">PATCH</span>  <span class="str">/api/products/101</span>       <span class="cmt">→ update product 101's price only</span>
+<span class="cmt">DELETE</span> <span class="str">/api/products/101</span>       <span class="cmt">→ delete product 101</span></pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">HTTP Status Codes — Complete Reference</div>
+      <p class="explain">Status codes are 3-digit numbers that tell the client what happened to their request. A great API tester can diagnose issues just from status codes.</p>
+
+      <h4>1xx — Informational</h4>
+      <div class="status-grid">
+        <div class="status-card s1xx"><div class="status-code">100</div><div class="status-name">Continue</div><div class="status-desc">Server acknowledges partial request, client should continue</div></div>
+        <div class="status-card s1xx"><div class="status-code">101</div><div class="status-name">Switching Protocols</div><div class="status-desc">Used when upgrading to WebSocket from HTTP</div></div>
+      </div>
+
+      <h4>2xx — Success</h4>
+      <div class="status-grid">
+        <div class="status-card s2xx"><div class="status-code">200</div><div class="status-name">OK</div><div class="status-desc">Request succeeded. Standard success for GET, PUT, PATCH</div></div>
+        <div class="status-card s2xx"><div class="status-code">201</div><div class="status-name">Created</div><div class="status-desc">Resource successfully created. Use after POST requests</div></div>
+        <div class="status-card s2xx"><div class="status-code">204</div><div class="status-name">No Content</div><div class="status-desc">Success but no body returned. Common after DELETE</div></div>
+        <div class="status-card s2xx"><div class="status-code">206</div><div class="status-name">Partial Content</div><div class="status-desc">Returning a range of a resource (video streaming)</div></div>
+      </div>
+
+      <h4>3xx — Redirection</h4>
+      <div class="status-grid">
+        <div class="status-card s3xx"><div class="status-code">301</div><div class="status-name">Moved Permanently</div><div class="status-desc">Resource has permanently moved to new URL</div></div>
+        <div class="status-card s3xx"><div class="status-code">302</div><div class="status-name">Found (Temporary)</div><div class="status-desc">Temporary redirect; use original URL next time</div></div>
+        <div class="status-card s3xx"><div class="status-code">304</div><div class="status-name">Not Modified</div><div class="status-desc">Client's cached version is still valid</div></div>
+      </div>
+
+      <h4>4xx — Client Errors</h4>
+      <div class="status-grid">
+        <div class="status-card s4xx"><div class="status-code">400</div><div class="status-name">Bad Request</div><div class="status-desc">Malformed request, invalid JSON, missing required fields</div></div>
+        <div class="status-card s4xx"><div class="status-code">401</div><div class="status-name">Unauthorized</div><div class="status-desc">No valid authentication provided. Send credentials</div></div>
+        <div class="status-card s4xx"><div class="status-code">403</div><div class="status-name">Forbidden</div><div class="status-desc">Authenticated but not authorized for this resource</div></div>
+        <div class="status-card s4xx"><div class="status-code">404</div><div class="status-name">Not Found</div><div class="status-desc">Resource doesn't exist or URL is wrong</div></div>
+        <div class="status-card s4xx"><div class="status-code">405</div><div class="status-name">Method Not Allowed</div><div class="status-desc">HTTP method not supported by this endpoint</div></div>
+        <div class="status-card s4xx"><div class="status-code">409</div><div class="status-name">Conflict</div><div class="status-desc">Duplicate resource, version conflict</div></div>
+        <div class="status-card s4xx"><div class="status-code">422</div><div class="status-name">Unprocessable Entity</div><div class="status-desc">Valid JSON but fails business logic validation</div></div>
+        <div class="status-card s4xx"><div class="status-code">429</div><div class="status-name">Too Many Requests</div><div class="status-desc">Rate limit exceeded. Check Retry-After header</div></div>
+      </div>
+
+      <h4>5xx — Server Errors</h4>
+      <div class="status-grid">
+        <div class="status-card s5xx"><div class="status-code">500</div><div class="status-name">Internal Server Error</div><div class="status-desc">Unexpected error on server. Always a bug</div></div>
+        <div class="status-card s5xx"><div class="status-code">502</div><div class="status-name">Bad Gateway</div><div class="status-desc">Upstream server (backend, microservice) returned invalid response</div></div>
+        <div class="status-card s5xx"><div class="status-code">503</div><div class="status-name">Service Unavailable</div><div class="status-desc">Server overloaded or in maintenance. Temporary</div></div>
+        <div class="status-card s5xx"><div class="status-code">504</div><div class="status-name">Gateway Timeout</div><div class="status-desc">Upstream service took too long to respond</div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Rate Limiting, Throttling &amp; Retry Strategies</div>
+      <p class="explain">
+        <strong>Rate limiting</strong> is a server-side mechanism to prevent abuse by restricting how many requests a client can make in a given time window. As a tester, you should always validate rate limiting behavior.
+      </p>
+      <div class="code-block">
+        <div class="code-label">// Rate Limit Response Headers</div>
+        <pre><span class="prop">X-RateLimit-Limit</span>:     <span class="num">1000</span>      <span class="cmt">← max requests per hour</span>
+<span class="prop">X-RateLimit-Remaining</span>: <span class="num">45</span>        <span class="cmt">← requests left this window</span>
+<span class="prop">X-RateLimit-Reset</span>:     <span class="num">1699284400</span> <span class="cmt">← Unix timestamp when window resets</span>
+<span class="prop">Retry-After</span>:           <span class="num">60</span>        <span class="cmt">← seconds to wait (with 429)</span></pre>
+      </div>
+      <div class="info-box tip">
+        <div class="info-icon">🎯</div>
+        <div class="info-body">
+          <div class="info-title">Test Scenario</div>
+          <div class="info-text">Deliberately exceed the rate limit in your test suite and verify: (a) the server returns 429, (b) the Retry-After header is present, (c) the system recovers after the window resets and allows traffic again.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PHASE 3
+══════════════════════════════════════ -->
+<div id="phase3" class="phase-header">
+  <div class="phase-label" style="color:#f59e0b">Phase 03</div>
+  <h2 class="phase-title">API Request &amp; Response Structures</h2>
+  <p class="phase-desc">Data formats are the vocabulary of APIs. Learn to read, write, and validate JSON, XML, and every payload shape you'll encounter in real systems.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 03</span>
+    <span class="module-title">Data Formats &amp; Payload Handling</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">JSON Fundamentals</div>
+      <p class="explain">JSON (JavaScript Object Notation) is the universal language of modern APIs. It is lightweight, human-readable, and natively supported by almost every programming language.</p>
+      <div class="code-block">
+        <div class="code-label">// JSON Structure — Full Example</div>
+        <pre>{
+  <span class="prop">"id"</span>: <span class="num">12345</span>,                      <span class="cmt">← number</span>
+  <span class="prop">"name"</span>: <span class="str">"Priya Sharma"</span>,             <span class="cmt">← string</span>
+  <span class="prop">"isActive"</span>: <span class="kw">true</span>,               <span class="cmt">← boolean</span>
+  <span class="prop">"profileImage"</span>: <span class="kw">null</span>,           <span class="cmt">← null</span>
+  <span class="prop">"address"</span>: {                       <span class="cmt">← nested object</span>
+    <span class="prop">"city"</span>: <span class="str">"Mumbai"</span>,
+    <span class="prop">"pincode"</span>: <span class="str">"400001"</span>
+  },
+  <span class="prop">"orders"</span>: [                        <span class="cmt">← array of objects</span>
+    { <span class="prop">"orderId"</span>: <span class="str">"ORD001"</span>, <span class="prop">"amount"</span>: <span class="num">599.99</span> },
+    { <span class="prop">"orderId"</span>: <span class="str">"ORD002"</span>, <span class="prop">"amount"</span>: <span class="num">1299.00</span> }
+  ],
+  <span class="prop">"tags"</span>: [<span class="str">"premium"</span>, <span class="str">"verified"</span>]   <span class="cmt">← array of strings</span>
+}</pre>
+      </div>
+      <div class="info-box warn">
+        <div class="info-icon">⚠️</div>
+        <div class="info-body">
+          <div class="info-title">Common JSON Validation Checks</div>
+          <div class="info-text">When testing API responses: (1) Verify required fields are present. (2) Verify data types match (string vs number). (3) Verify arrays are not unexpectedly empty. (4) Verify nested objects have correct structure. (5) Check that sensitive data (passwords, SSN) is NOT returned.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">JSON Schema Validation</div>
+      <p class="explain">JSON Schema defines the contract for what a JSON response must look like. It lets you validate the structure, types, and constraints programmatically.</p>
+      <div class="code-block">
+        <div class="code-label">// JSON Schema Example — User Object</div>
+        <pre>{
+  <span class="prop">"$schema"</span>: <span class="str">"http://json-schema.org/draft-07/schema"</span>,
+  <span class="prop">"type"</span>: <span class="str">"object"</span>,
+  <span class="prop">"required"</span>: [<span class="str">"id"</span>, <span class="str">"name"</span>, <span class="str">"email"</span>],
+  <span class="prop">"properties"</span>: {
+    <span class="prop">"id"</span>:    { <span class="prop">"type"</span>: <span class="str">"integer"</span>, <span class="prop">"minimum"</span>: <span class="num">1</span> },
+    <span class="prop">"name"</span>:  { <span class="prop">"type"</span>: <span class="str">"string"</span>, <span class="prop">"minLength"</span>: <span class="num">2</span> },
+    <span class="prop">"email"</span>: { <span class="prop">"type"</span>: <span class="str">"string"</span>, <span class="prop">"format"</span>: <span class="str">"email"</span> },
+    <span class="prop">"age"</span>:   { <span class="prop">"type"</span>: <span class="str">"integer"</span>, <span class="prop">"minimum"</span>: <span class="num">18</span>, <span class="prop">"maximum"</span>: <span class="num">120</span> }
+  },
+  <span class="prop">"additionalProperties"</span>: <span class="kw">false</span>
+}</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">XML Fundamentals &amp; SOAP Payloads</div>
+      <p class="explain">XML (eXtensible Markup Language) is verbose but still widely used in enterprise/banking APIs and SOAP services.</p>
+      <div class="code-block">
+        <div class="code-label">// XML Structure Example</div>
+        <pre><span class="tag">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;user</span> <span class="attr">id</span>=<span class="str">"12345"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;name&gt;</span>Priya Sharma<span class="tag">&lt;/name&gt;</span>
+  <span class="tag">&lt;email&gt;</span>priya@example.com<span class="tag">&lt;/email&gt;</span>
+  <span class="tag">&lt;address&gt;</span>
+    <span class="tag">&lt;city&gt;</span>Mumbai<span class="tag">&lt;/city&gt;</span>
+    <span class="tag">&lt;pincode&gt;</span>400001<span class="tag">&lt;/pincode&gt;</span>
+  <span class="tag">&lt;/address&gt;</span>
+  <span class="tag">&lt;orders&gt;</span>
+    <span class="tag">&lt;order</span> <span class="attr">id</span>=<span class="str">"ORD001"</span> <span class="attr">amount</span>=<span class="str">"599.99"</span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/orders&gt;</span>
+<span class="tag">&lt;/user&gt;</span></pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Other Content Types — form-data, multipart, url-encoded</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Content-Type</th><th>When Used</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>application/json</td><td>Most REST APIs</td><td>{"name": "product"}</td></tr>
+            <tr><td>application/x-www-form-urlencoded</td><td>HTML form POST, OAuth token exchange</td><td>name=product&price=100</td></tr>
+            <tr><td>multipart/form-data</td><td>File uploads with metadata</td><td>Profile picture + username together</td></tr>
+            <tr><td>application/xml</td><td>SOAP APIs, legacy systems</td><td>&lt;request&gt;...&lt;/request&gt;</td></tr>
+            <tr><td>text/plain</td><td>Simple text body</td><td>Raw log data</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PHASE 4
+══════════════════════════════════════ -->
+<div id="phase4" class="phase-header">
+  <div class="phase-label" style="color:#10b981">Phase 04</div>
+  <h2 class="phase-title">API Testing Fundamentals</h2>
+  <p class="phase-desc">Before writing a single line of automation code, you must master manual API testing. This is where your QA mindset is built.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 04</span>
+    <span class="module-title">Manual API Testing</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">The Three Pillars of API Validation</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Request Validation</div><div class="step-text">Validate that you're sending the correct URL, headers (Content-Type, Authorization), and payload structure before even looking at the response.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Response Validation</div><div class="step-text">Check status code, response body structure (schema), data values, response headers, and response time (should be under SLA, e.g. 500ms).</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Business Logic Validation</div><div class="step-text">Verify the API enforces business rules. E.g., an order API should not allow placing an order for out-of-stock items, or for quantities exceeding warehouse capacity.</div></div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Test Design Techniques</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Technique</th><th>Description</th><th>API Example</th></tr></thead>
+          <tbody>
+            <tr><td>Positive Testing</td><td>Valid inputs, expect success</td><td>POST /login with correct credentials → 200</td></tr>
+            <tr><td>Negative Testing</td><td>Invalid inputs, expect errors</td><td>POST /login with wrong password → 401</td></tr>
+            <tr><td>Boundary Testing</td><td>Edge values at min/max</td><td>Order quantity: 0, 1, 999, 1000, 1001</td></tr>
+            <tr><td>Error Handling</td><td>Malformed input</td><td>Send string where integer expected → 400/422</td></tr>
+            <tr><td>Data-Driven</td><td>Multiple data sets</td><td>Test login with 50 different credential combinations</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Critical API Test Scenarios</div>
+      <div class="two-col">
+        <ul>
+          <li>No auth token sent (expect 401)</li>
+          <li>Expired JWT token (expect 401)</li>
+          <li>Token for different user (expect 403)</li>
+          <li>Missing required field in body (expect 400/422)</li>
+          <li>Wrong data type (string → integer field)</li>
+          <li>Empty string where value required</li>
+        </ul>
+        <ul>
+          <li>Duplicate creation (POST same record twice)</li>
+          <li>SQL injection in parameters</li>
+          <li>XSS payload in string fields</li>
+          <li>Very large payloads (memory/timeout testing)</li>
+          <li>Accessing other user's resource by ID guessing</li>
+          <li>Delete already-deleted resource (expect 404)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Practical Example — Full Order API Test Checklist</div>
+      <div class="callout">
+        <div class="callout-title">Test Scenario: POST /api/orders</div>
+        <p>✅ &nbsp;Valid order with all required fields → 201 Created, order ID returned<br>
+        ✅ &nbsp;Missing "productId" field → 400 Bad Request, descriptive error message<br>
+        ✅ &nbsp;quantity: 0 → 422 Unprocessable Entity (business rule)<br>
+        ✅ &nbsp;No Authorization header → 401 Unauthorized<br>
+        ✅ &nbsp;Customer's token placing order for another customer → 403 Forbidden<br>
+        ✅ &nbsp;Product out of stock → 409 Conflict or custom 422<br>
+        ✅ &nbsp;Order created → verify in database that record was actually inserted<br>
+        ✅ &nbsp;Response time should be &lt; 500ms</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PHASE 5
+══════════════════════════════════════ -->
+<div id="phase5" class="phase-header">
+  <div class="phase-label" style="color:#f43f5e">Phase 05</div>
+  <h2 class="phase-title">Postman Complete Mastery</h2>
+  <p class="phase-desc">Postman is the industry's most widely used API testing tool. Complete mastery here is non-negotiable for any API QA engineer.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 05</span>
+    <span class="module-title">Postman End-to-End</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Collections, Environments &amp; Variables</div>
+      <p class="explain">A <strong>Collection</strong> is an organized folder of API requests. An <strong>Environment</strong> stores variables (like base URLs or tokens) that change between dev/staging/prod. <strong>Variables</strong> prevent duplication and enable dynamic testing.</p>
+      <div class="code-block">
+        <div class="code-label">// Postman Variable Scopes (highest to lowest priority)</div>
+        <pre><span class="prop">Global</span>     → available in all collections and environments
+<span class="prop">Collection</span> → scoped to one collection
+<span class="prop">Environment</span>→ set per environment (dev / staging / prod)
+<span class="prop">Local</span>      → set within a single pre-request or test script
+<span class="prop">Data</span>       → provided by CSV/JSON in Collection Runner
+
+<span class="cmt">// Usage in request URL:</span>
+<span class="str">{{baseUrl}}/api/users/{{userId}}</span>
+
+<span class="cmt">// Setting a variable in a test script:</span>
+<span class="fn">pm.environment.set</span>(<span class="str">"authToken"</span>, <span class="fn">pm.response.json</span>().token);</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Pre-Request Scripts &amp; Test Scripts (JavaScript)</div>
+      <p class="explain">Postman uses JavaScript for scripting. Pre-request scripts run before the request (set up dynamic data), test scripts run after (validate response).</p>
+      <div class="code-block">
+        <div class="code-label">// Pre-Request Script — Generate dynamic timestamp</div>
+        <pre><span class="kw">const</span> timestamp = <span class="kw">new</span> <span class="fn">Date</span>().getTime();
+<span class="fn">pm.environment.set</span>(<span class="str">"uniqueEmail"</span>, <span class="str">`test_${timestamp}@test.com`</span>);
+<span class="fn">pm.environment.set</span>(<span class="str">"requestTime"</span>, timestamp);</pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">// Test Script — Assertions after response</div>
+        <pre><span class="cmt">// 1. Check status code</span>
+<span class="fn">pm.test</span>(<span class="str">"Status is 200"</span>, () => {
+  <span class="fn">pm.response.to.have.status</span>(<span class="num">200</span>);
+});
+
+<span class="cmt">// 2. Response time under 500ms</span>
+<span class="fn">pm.test</span>(<span class="str">"Response time OK"</span>, () => {
+  <span class="fn">pm.expect</span>(pm.response.responseTime).<span class="fn">to.be.below</span>(<span class="num">500</span>);
+});
+
+<span class="cmt">// 3. Body contains expected fields</span>
+<span class="kw">const</span> body = <span class="fn">pm.response.json</span>();
+<span class="fn">pm.test</span>(<span class="str">"User has id and name"</span>, () => {
+  <span class="fn">pm.expect</span>(body).to.have.property(<span class="str">"id"</span>);
+  <span class="fn">pm.expect</span>(body.name).<span class="fn">to.be.a</span>(<span class="str">"string"</span>);
+});
+
+<span class="cmt">// 4. Save token for next request</span>
+<span class="fn">pm.environment.set</span>(<span class="str">"token"</span>, body.accessToken);</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Chaining Requests — The Login → CRUD Workflow</div>
+      <p class="explain">Real-world API testing requires chaining — using the output of one request as input to the next. This mirrors actual user workflows.</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">POST /auth/login</div><div class="step-text">Send credentials. Extract <code>access_token</code> and <code>user_id</code> into environment variables.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">GET /users/{{user_id}}</div><div class="step-text">Use the token in Authorization header. Verify user profile returned matches login.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">POST /orders</div><div class="step-text">Create an order using the authenticated token. Save the returned <code>order_id</code>.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">GET /orders/{{order_id}}</div><div class="step-text">Fetch the order we just created and verify all fields match what was sent.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">DELETE /orders/{{order_id}}</div><div class="step-text">Clean up test data. Verify 204. Then GET the deleted order and confirm 404.</div></div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Newman CLI — Running Postman from Terminal</div>
+      <p class="explain">Newman is Postman's command-line runner. It lets you run entire collections in CI/CD pipelines without opening the Postman GUI.</p>
+      <div class="code-block">
+        <div class="code-label">// Newman CLI Commands</div>
+        <pre><span class="cmt"># Install Newman globally</span>
+npm install -g newman
+
+<span class="cmt"># Run a collection with an environment</span>
+newman run MyCollection.json \
+  --environment staging.json \
+  --reporters cli,html \
+  --reporter-html-export report.html
+
+<span class="cmt"># Run with data file (data-driven)</span>
+newman run MyCollection.json \
+  --iteration-data testdata.csv \
+  --iterations 10</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PHASE 6
+══════════════════════════════════════ -->
+<div id="phase6" class="phase-header">
+  <div class="phase-label" style="color:#3b82f6">Phase 06</div>
+  <h2 class="phase-title">REST API Testing</h2>
+  <p class="phase-desc">REST is not just a protocol — it's an architectural style with specific constraints. Understanding these constraints helps you validate whether an API truly behaves as a REST API should.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 06</span>
+    <span class="module-title">REST API Architecture &amp; Principles</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">The 6 REST Constraints</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Statelessness</div><div class="step-text">Each request must contain all the information needed to process it. The server stores NO session state. This means every request must include the auth token — the server can't remember you from the previous request.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Uniform Interface</div><div class="step-text">Resources are identified by URIs. Manipulation through representations. Self-descriptive messages. HATEOAS (links to related actions in response).</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Client-Server Separation</div><div class="step-text">Client and server evolve independently. The client doesn't know how data is stored; the server doesn't know how data is displayed.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Cacheability</div><div class="step-text">Responses must define themselves as cacheable or non-cacheable via headers (Cache-Control, ETag). Caching reduces server load and improves performance.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Layered System</div><div class="step-text">Client can't tell if it's talking directly to the server or through intermediaries (CDN, load balancer, API gateway). This enables scaling and security.</div></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-body"><div class="step-title">Code on Demand (optional)</div><div class="step-text">Server can send executable code to client (JavaScript). Rarely used but valid REST constraint.</div></div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">REST Best Practices — URL Design</div>
+      <div class="code-block">
+        <div class="code-label">// Good vs Bad REST URL Design</div>
+        <pre><span class="cmt">❌ Bad — verb in URL (not resource-oriented)</span>
+<span class="kw">GET</span>  /getUsers
+<span class="kw">POST</span> /createOrder
+<span class="kw">POST</span> /deleteProduct?id=5
+
+<span class="cmt">✅ Good — noun-based, versioned, hierarchical</span>
+<span class="kw">GET</span>    /v1/users
+<span class="kw">POST</span>   /v1/orders
+<span class="kw">DELETE</span> /v1/products/5
+
+<span class="cmt">✅ Relationships expressed as nested resources</span>
+<span class="kw">GET</span>  /v1/users/42/orders        <span class="cmt">← orders for user 42</span>
+<span class="kw">GET</span>  /v1/orders/99/items        <span class="cmt">← items in order 99</span>
+
+<span class="cmt">✅ Filtering, sorting, pagination via query params</span>
+<span class="kw">GET</span>  /v1/products?category=shoes&sort=price&page=2&limit=20</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">API Versioning Strategies</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Strategy</th><th>Example</th><th>Pros / Cons</th></tr></thead>
+          <tbody>
+            <tr><td>URL Path</td><td>/v1/users, /v2/users</td><td>Simple, visible. Most common approach</td></tr>
+            <tr><td>Header</td><td>API-Version: 2</td><td>Clean URLs. Harder to test manually</td></tr>
+            <tr><td>Query Param</td><td>/users?version=2</td><td>Easy to test. Not RESTful purist</td></tr>
+            <tr><td>Accept Header</td><td>Accept: application/vnd.api.v2+json</td><td>Standard, powerful. Complex to implement</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 7 -->
+<div id="phase7" class="phase-header">
+  <div class="phase-label" style="color:#ec4899">Phase 07</div>
+  <h2 class="phase-title">Authentication &amp; Authorization</h2>
+  <p class="phase-desc">Security is the most critical dimension of API testing. Understanding auth mechanisms and knowing how to test them is what separates junior testers from senior SDETs.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 07</span>
+    <span class="module-title">API Security Basics</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Authentication vs Authorization</div>
+      <div class="two-col">
+        <div class="info-box note">
+          <div class="info-body">
+            <div class="info-title">Authentication (AuthN)</div>
+            <div class="info-text"><strong>Who are you?</strong> — Verifying identity. You prove you're the right person using credentials (username/password), a token, or a certificate. Returns 401 if it fails.</div>
+          </div>
+        </div>
+        <div class="info-box purple">
+          <div class="info-body">
+            <div class="info-title">Authorization (AuthZ)</div>
+            <div class="info-text"><strong>What can you do?</strong> — After identity is proven, checking permissions. A valid user might not have permission to access admin endpoints. Returns 403 if it fails.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">JWT (JSON Web Token) — Deep Dive</div>
+      <p class="explain">JWT is the most widely used token format for API authentication. It's a compact, self-contained token that carries claims (user info, permissions) in a verifiable format.</p>
+      <div class="code-block">
+        <div class="code-label">// JWT Structure — 3 Base64URL-encoded parts separated by dots</div>
+        <pre><span class="str">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span>.      <span class="cmt">← Header</span>
+<span class="str">eyJ1c2VySWQiOiI0MiIsInJvbGUiOiJhZG1pbiJ9</span>. <span class="cmt">← Payload</span>
+<span class="str">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span> <span class="cmt">← Signature</span>
+
+<span class="cmt">// Decoded Header:</span>
+{ <span class="prop">"alg"</span>: <span class="str">"HS256"</span>, <span class="prop">"typ"</span>: <span class="str">"JWT"</span> }
+
+<span class="cmt">// Decoded Payload (public claims):</span>
+{
+  <span class="prop">"userId"</span>: <span class="str">"42"</span>,
+  <span class="prop">"role"</span>: <span class="str">"admin"</span>,
+  <span class="prop">"iat"</span>: <span class="num">1699200000</span>,   <span class="cmt">← issued at</span>
+  <span class="prop">"exp"</span>: <span class="num">1699286400</span>    <span class="cmt">← expires at</span>
+}</pre>
+      </div>
+      <div class="info-box danger">
+        <div class="info-icon">🔴</div>
+        <div class="info-body">
+          <div class="info-title">JWT Testing Scenarios</div>
+          <div class="info-text">
+            (1) <strong>No token</strong> → expect 401<br>
+            (2) <strong>Expired token</strong> → expect 401 with "Token expired" message<br>
+            (3) <strong>Tampered payload</strong> (change userId) → expect 401 (signature mismatch)<br>
+            (4) <strong>Algorithm confusion</strong> (change alg to "none") → server MUST reject<br>
+            (5) <strong>Admin token on regular endpoint</strong> → should work<br>
+            (6) <strong>Regular token on admin endpoint</strong> → expect 403
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">OAuth 2.0 Flows</div>
+      <p class="explain">OAuth 2.0 is the standard authorization framework that powers "Login with Google," payment authorizations, and API access delegation.</p>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Flow</th><th>Use Case</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Authorization Code</td><td>Web apps with backend</td><td>Login with Google on a website</td></tr>
+            <tr><td>Client Credentials</td><td>Machine-to-machine (no user)</td><td>Cron job calling a payment API</td></tr>
+            <tr><td>Implicit (deprecated)</td><td>SPA (legacy)</td><td>Mostly replaced by PKCE flow</td></tr>
+            <tr><td>PKCE</td><td>Mobile / SPA</td><td>Native mobile app using Google Auth</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 8 -->
+<div id="phase8" class="phase-header">
+  <div class="phase-label" style="color:#84cc16">Phase 08</div>
+  <h2 class="phase-title">Database Validation for APIs</h2>
+  <p class="phase-desc">A response saying "Order created" means nothing until you verify the database. Backend validation is the gold standard of API test completeness.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 08</span>
+    <span class="module-title">API + Database Testing</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Why Database Validation Matters</div>
+      <p class="explain">
+        An API can return a successful 201 response but fail to persist data if there's a transaction rollback, bug in the ORM, or race condition. <strong>Never trust the API response alone.</strong> Always verify the side effect in the database.
+      </p>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">SQL Fundamentals for Testers</div>
+      <div class="code-block">
+        <div class="code-label">// Essential SQL for API Validation</div>
+        <pre><span class="cmt">-- Verify user was created after POST /users</span>
+<span class="kw">SELECT</span> id, email, created_at
+<span class="kw">FROM</span> users
+<span class="kw">WHERE</span> email = <span class="str">'test@example.com'</span>
+<span class="kw">ORDER BY</span> created_at <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">1</span>;
+
+<span class="cmt">-- Verify order was stored with correct amount</span>
+<span class="kw">SELECT</span> o.id, o.total, o.status, u.email
+<span class="kw">FROM</span> orders o
+<span class="kw">JOIN</span> users u <span class="kw">ON</span> o.user_id = u.id
+<span class="kw">WHERE</span> o.id = <span class="str">'ORD001'</span>;
+
+<span class="cmt">-- Check audit log for GDPR compliance</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> audit_logs
+<span class="kw">WHERE</span> entity_type = <span class="str">'user'</span>
+  <span class="kw">AND</span> action = <span class="str">'DELETE'</span>
+  <span class="kw">AND</span> created_at > <span class="fn">NOW</span>() - <span class="kw">INTERVAL</span> <span class="str">'5 minutes'</span>;</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">API → DB Validation Workflow</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Call API</div><div class="step-text">Make the API request (POST /orders with full payload).</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Capture Response</div><div class="step-text">Extract the created resource ID from the response body.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Query Database</div><div class="step-text">Run SQL query using the captured ID to fetch the row directly from the database.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Compare</div><div class="step-text">Assert that DB values match the API request payload and that calculated fields (totals, timestamps) are correct.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Clean Up</div><div class="step-text">Delete the test record from the DB or use test-specific data that gets rolled back.</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 9 -->
+<div id="phase9" class="phase-header">
+  <div class="phase-label" style="color:#00e5ff">Phase 09</div>
+  <h2 class="phase-title">API Automation Fundamentals</h2>
+  <p class="phase-desc">Automation multiplies your testing capacity by 100x. This phase builds the programming foundation before you pick a specific language or framework.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 09</span>
+    <span class="module-title">Automation Basics &amp; Framework Architecture</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Choosing Your Automation Language</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Language</th><th>Primary Framework</th><th>Best For</th><th>Industry Demand</th></tr></thead>
+          <tbody>
+            <tr><td>JavaScript/Node.js</td><td>Supertest, Playwright API</td><td>Frontend-heavy teams, full-stack</td><td>Very High</td></tr>
+            <tr><td>Python</td><td>Pytest + Requests</td><td>Data teams, AI/ML adjacent, scripting</td><td>Very High</td></tr>
+            <tr><td>Java</td><td>Rest Assured + TestNG</td><td>Enterprise, banking, healthcare</td><td>Highest (enterprise)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Framework Architecture Principles</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Separation of Concerns</div><div class="step-text">Keep test logic, request utilities, config, and test data in separate files. Your test should read like a business scenario, not HTTP boilerplate.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Reusable Request Layer</div><div class="step-text">Create helper methods for common operations (login, CRUD) so each test doesn't repeat HTTP setup code.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Environment Config</div><div class="step-text">Base URLs, credentials, and timeouts should come from environment variables or config files — never hardcoded in tests.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Rich Assertions</div><div class="step-text">Use libraries like Chai, Jest, or AssertJ for readable assertions. Tests should fail with descriptive messages.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Reporting</div><div class="step-text">Integrate with Allure or HTML reporters so test results are visible to non-technical stakeholders.</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 10 -->
+<div id="phase10" class="phase-header">
+  <div class="phase-label" style="color:#f59e0b">Phase 10</div>
+  <h2 class="phase-title">API Automation with JavaScript</h2>
+  <p class="phase-desc">Node.js-based API automation is fast, lightweight, and perfect for teams already working in the JS ecosystem.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 10</span>
+    <span class="module-title">API Automation Using JavaScript / Node.js</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Supertest + Jest — Complete Example</div>
+      <div class="code-block">
+        <div class="code-label">// utils/apiClient.js — Reusable request layer</div>
+        <pre><span class="kw">const</span> axios = <span class="fn">require</span>(<span class="str">'axios'</span>);
+
+<span class="kw">const</span> client = axios.create({
+  baseURL: process.env.BASE_URL || <span class="str">'https://api.example.com'</span>,
+  timeout: <span class="num">10000</span>,
+  headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> }
+});
+
+<span class="cmt">// Intercept to add auth token automatically</span>
+client.interceptors.request.use(config => {
+  <span class="kw">const</span> token = process.env.AUTH_TOKEN;
+  <span class="kw">if</span> (token) config.headers.Authorization = <span class="str">`Bearer ${token}`</span>;
+  <span class="kw">return</span> config;
+});
+
+module.exports = client;</pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">// tests/users.test.js — Jest test suite</div>
+        <pre><span class="kw">const</span> api = <span class="fn">require</span>(<span class="str">'../utils/apiClient'</span>);
+
+describe(<span class="str">'Users API'</span>, () => {
+
+  test(<span class="str">'GET /users returns array'</span>, <span class="kw">async</span> () => {
+    <span class="kw">const</span> res = <span class="kw">await</span> api.<span class="fn">get</span>(<span class="str">'/users'</span>);
+    expect(res.status).<span class="fn">toBe</span>(<span class="num">200</span>);
+    expect(<span class="fn">Array.isArray</span>(res.data)).<span class="fn">toBe</span>(<span class="kw">true</span>);
+  });
+
+  test(<span class="str">'POST /users creates user'</span>, <span class="kw">async</span> () => {
+    <span class="kw">const</span> payload = { name: <span class="str">'Test User'</span>, email: <span class="str">`user_${Date.now()}@test.com`</span> };
+    <span class="kw">const</span> res = <span class="kw">await</span> api.<span class="fn">post</span>(<span class="str">'/users'</span>, payload);
+    expect(res.status).<span class="fn">toBe</span>(<span class="num">201</span>);
+    expect(res.data).toHaveProperty(<span class="str">'id'</span>);
+    expect(res.data.email).<span class="fn">toBe</span>(payload.email);
+  });
+
+  test(<span class="str">'GET /users/invalid returns 404'</span>, <span class="kw">async</span> () => {
+    <span class="kw">try</span> { <span class="kw">await</span> api.<span class="fn">get</span>(<span class="str">'/users/9999999'</span>); }
+    <span class="kw">catch</span> (err) { expect(err.response.status).<span class="fn">toBe</span>(<span class="num">404</span>); }
+  });
+
+});</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Tools Overview</div>
+      <div class="tool-chips">
+        <span class="tool-chip chip-cyan">Node.js</span>
+        <span class="tool-chip chip-amber">Axios</span>
+        <span class="tool-chip chip-green">Supertest</span>
+        <span class="tool-chip chip-purple">Jest</span>
+        <span class="tool-chip chip-cyan">Chai</span>
+        <span class="tool-chip chip-rose">Mocha</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 11 -->
+<div id="phase11" class="phase-header">
+  <div class="phase-label" style="color:#10b981">Phase 11</div>
+  <h2 class="phase-title">API Automation with Python</h2>
+  <p class="phase-desc">Python's simplicity and pytest's power make this stack beloved by QA engineers worldwide. Perfect for rapid test development.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 11</span>
+    <span class="module-title">Python API Automation — Pytest + Requests</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Pytest Fixtures &amp; Parameterization</div>
+      <div class="code-block">
+        <div class="code-label">// conftest.py — Shared fixtures</div>
+        <pre><span class="kw">import</span> pytest
+<span class="kw">import</span> requests
+
+BASE_URL = <span class="str">"https://api.example.com/v1"</span>
+
+<span class="fn">@pytest.fixture</span>(scope=<span class="str">"session"</span>)
+<span class="kw">def</span> <span class="fn">auth_token</span>():
+    <span class="cmt">"""Login once, share token for entire test session"""</span>
+    res = requests.<span class="fn">post</span>(f<span class="str">"{BASE_URL}/auth/login"</span>, json={
+        <span class="str">"email"</span>: <span class="str">"test@example.com"</span>,
+        <span class="str">"password"</span>: <span class="str">"securepass123"</span>
+    })
+    <span class="kw">return</span> res.json()[<span class="str">"access_token"</span>]
+
+<span class="fn">@pytest.fixture</span>
+<span class="kw">def</span> <span class="fn">api_session</span>(auth_token):
+    <span class="cmt">"""HTTP session with auth header pre-configured"""</span>
+    session = requests.<span class="fn">Session</span>()
+    session.headers.update({
+        <span class="str">"Authorization"</span>: f<span class="str">"Bearer {auth_token}"</span>,
+        <span class="str">"Content-Type"</span>: <span class="str">"application/json"</span>
+    })
+    <span class="kw">yield</span> session
+    session.<span class="fn">close</span>()</pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">// test_products.py — Parameterized test</div>
+        <pre><span class="kw">import</span> pytest
+
+<span class="fn">@pytest.mark.parametrize</span>(<span class="str">"product_id,expected_status"</span>, [
+    (<span class="num">1</span>, <span class="num">200</span>),
+    (<span class="num">999</span>, <span class="num">404</span>),
+    (<span class="str">"abc"</span>, <span class="num">400</span>),
+    (-<span class="num">1</span>, <span class="num">400</span>),
+])
+<span class="kw">def</span> <span class="fn">test_get_product</span>(api_session, product_id, expected_status):
+    res = api_session.<span class="fn">get</span>(f<span class="str">"{BASE_URL}/products/{product_id}"</span>)
+    <span class="kw">assert</span> res.status_code == expected_status</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Parallel Execution</div>
+      <div class="code-block">
+        <div class="code-label">// Running tests in parallel with pytest-xdist</div>
+        <pre><span class="cmt"># Install</span>
+pip install pytest-xdist
+
+<span class="cmt"># Run 4 tests in parallel</span>
+pytest tests/ -n 4
+
+<span class="cmt"># Run on all available CPU cores</span>
+pytest tests/ -n auto
+
+<span class="cmt"># Generate Allure report</span>
+pytest tests/ --alluredir=./allure-results
+allure serve ./allure-results</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 12 -->
+<div id="phase12" class="phase-header">
+  <div class="phase-label" style="color:#f43f5e">Phase 12</div>
+  <h2 class="phase-title">Enterprise API Automation with Java</h2>
+  <p class="phase-desc">Rest Assured is the gold standard for Java-based API automation in enterprise environments. If you want to work in banking or large-scale engineering, this is non-negotiable.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 12</span>
+    <span class="module-title">Rest Assured + TestNG</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Rest Assured — Fluent DSL</div>
+      <div class="code-block">
+        <div class="code-label">// Java — Rest Assured Test Example</div>
+        <pre><span class="kw">import</span> io.restassured.RestAssured;
+<span class="kw">import static</span> io.restassured.RestAssured.*;
+<span class="kw">import static</span> org.hamcrest.Matchers.*;
+
+<span class="kw">public class</span> <span class="fn">UserApiTest</span> {
+
+    <span class="fn">@BeforeClass</span>
+    <span class="kw">public static void</span> <span class="fn">setup</span>() {
+        RestAssured.baseURI = <span class="str">"https://api.example.com"</span>;
+        RestAssured.basePath = <span class="str">"/v1"</span>;
+    }
+
+    <span class="fn">@Test</span>
+    <span class="kw">public void</span> <span class="fn">testGetUser</span>() {
+        given()
+            .header(<span class="str">"Authorization"</span>, <span class="str">"Bearer "</span> + getToken())
+        .when()
+            .get(<span class="str">"/users/42"</span>)
+        .then()
+            .statusCode(<span class="num">200</span>)
+            .body(<span class="str">"id"</span>, equalTo(<span class="num">42</span>))
+            .body(<span class="str">"name"</span>, notNullValue())
+            .time(lessThan(<span class="num">2000L</span>));  <span class="cmt">// response &lt; 2 sec</span>
+    }
+
+    <span class="fn">@Test</span>
+    <span class="kw">public void</span> <span class="fn">testCreateUser</span>() {
+        String body = <span class="str">"""
+            {"name": "Test User", "email": "test@example.com"}
+        """</span>;
+
+        given()
+            .contentType(<span class="str">"application/json"</span>)
+            .body(body)
+        .when()
+            .post(<span class="str">"/users"</span>)
+        .then()
+            .statusCode(<span class="num">201</span>)
+            .body(<span class="str">"id"</span>, notNullValue());
+    }
+}</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">POJO Classes &amp; Serialization</div>
+      <p class="explain">POJOs (Plain Old Java Objects) let you map API requests/responses to Java objects, enabling type-safe testing and eliminating raw JSON string manipulation.</p>
+      <div class="code-block">
+        <div class="code-label">// UserRequest POJO</div>
+        <pre><span class="kw">public class</span> <span class="fn">UserRequest</span> {
+    <span class="kw">private</span> String name;
+    <span class="kw">private</span> String email;
+    <span class="kw">private int</span> age;
+
+    <span class="cmt">// Constructor, getters, setters via Lombok @Data</span>
+}
+
+<span class="cmt">// In test — no raw JSON string needed</span>
+UserRequest user = <span class="kw">new</span> <span class="fn">UserRequest</span>(<span class="str">"Raj"</span>, <span class="str">"raj@test.com"</span>, <span class="num">28</span>);
+
+given()
+    .contentType(ContentType.JSON)
+    .body(user)                        <span class="cmt">// auto-serialized to JSON</span>
+.when()
+    .post(<span class="str">"/users"</span>)
+.then()
+    .statusCode(<span class="num">201</span>);</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 13 -->
+<div id="phase13" class="phase-header">
+  <div class="phase-label" style="color:#3b82f6">Phase 13</div>
+  <h2 class="phase-title">Contract Testing</h2>
+  <p class="phase-desc">In a microservices world, services change independently. Contract testing prevents one team's changes from silently breaking another team's consumers.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 13</span>
+    <span class="module-title">API Contract Validation — OpenAPI &amp; Pact</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">What is Contract Testing?</div>
+      <p class="explain">
+        A <strong>contract</strong> is a formal agreement between a consumer (the service calling the API) and the provider (the service exposing the API) about what the API looks like: its endpoints, request structures, response schemas, and status codes.
+      </p>
+      <p class="explain">
+        Without contract testing: Team A ships a new version of their User Service that renames <code>user_id</code> to <code>id</code>. Team B's Order Service (which reads <code>user_id</code>) breaks in production. No one noticed because each service's unit tests passed in isolation.
+      </p>
+      <div class="info-box tip">
+        <div class="info-icon">💡</div>
+        <div class="info-body">
+          <div class="info-title">Contract Testing vs Integration Testing</div>
+          <div class="info-text">Integration tests require both services to be running simultaneously. Contract tests run independently — the consumer defines its expectations, the provider verifies it can meet them. Contract tests are faster and don't require a live environment.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">OpenAPI/Swagger — API Contract as Documentation</div>
+      <div class="code-block">
+        <div class="code-label">// openapi.yaml — API Contract Definition</div>
+        <pre>openapi: <span class="str">"3.0.0"</span>
+info:
+  title: <span class="str">User API</span>
+  version: <span class="str">"1.0"</span>
+paths:
+  /users/{id}:
+    get:
+      summary: <span class="str">Get user by ID</span>
+      parameters:
+        - name: id
+          in: path
+          required: <span class="kw">true</span>
+          schema: { type: integer }
+      responses:
+        <span class="str">"200"</span>:
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [id, name, email]
+                properties:
+                  id:    { type: integer }
+                  name:  { type: string }
+                  email: { type: string, format: email }</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 14 -->
+<div id="phase14" class="phase-header">
+  <div class="phase-label" style="color:#ec4899">Phase 14</div>
+  <h2 class="phase-title">GraphQL API Testing</h2>
+  <p class="phase-desc">GraphQL flips the REST model — clients define exactly what data they need. Testing GraphQL requires a fundamentally different mindset.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 14</span>
+    <span class="module-title">GraphQL Complete Testing</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">GraphQL vs REST</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Dimension</th><th>REST</th><th>GraphQL</th></tr></thead>
+          <tbody>
+            <tr><td>Endpoint</td><td>Many (/users, /orders, /products)</td><td>Single (/graphql)</td></tr>
+            <tr><td>Data shape</td><td>Fixed by server</td><td>Defined by client query</td></tr>
+            <tr><td>Over-fetching</td><td>Common (get all fields)</td><td>Never (request only what you need)</td></tr>
+            <tr><td>Under-fetching</td><td>Requires multiple requests</td><td>One query, nested data</td></tr>
+            <tr><td>Status codes</td><td>200, 404, 400, 500 etc.</td><td>Almost always 200 (errors in body)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">GraphQL Queries &amp; Mutations</div>
+      <div class="code-block">
+        <div class="code-label">// GraphQL Query — Fetch user with their orders</div>
+        <pre><span class="fn">query</span> GetUserWithOrders {
+  user(id: <span class="num">42</span>) {
+    id
+    name
+    email
+    orders(status: <span class="str">ACTIVE</span>) {
+      id
+      total
+      createdAt
+      items {
+        product { name }
+        quantity
+      }
+    }
+  }
+}
+
+<span class="cmt">// Mutation — Create an order</span>
+<span class="fn">mutation</span> PlaceOrder($input: OrderInput!) {
+  createOrder(input: $input) {
+    id
+    status
+    total
+  }
+}</pre>
+      </div>
+      <div class="info-box warn">
+        <div class="info-icon">⚠️</div>
+        <div class="info-body">
+          <div class="info-title">Critical GraphQL Test: Error in 200</div>
+          <div class="info-text">Unlike REST, GraphQL returns HTTP 200 even for logical errors. Always check the <code>errors</code> array in the response body, not just the status code. A response can be 200 OK but contain <code>{"errors": [{"message": "Not authorized"}]}</code>.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 15 -->
+<div id="phase15" class="phase-header">
+  <div class="phase-label" style="color:#84cc16">Phase 15</div>
+  <h2 class="phase-title">SOAP API Testing</h2>
+  <p class="phase-desc">Legacy enterprise systems — particularly in banking, insurance, and government — still rely heavily on SOAP. You must know it to work in these sectors.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 15</span>
+    <span class="module-title">SOAP Web Services &amp; SOAPUI</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">SOAP Envelope Structure</div>
+      <div class="code-block">
+        <div class="code-label">// SOAP Request Envelope</div>
+        <pre><span class="tag">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;soap:Envelope</span>
+  <span class="attr">xmlns:soap</span>=<span class="str">"http://schemas.xmlsoap.org/soap/envelope/"</span>
+  <span class="attr">xmlns:tns</span>=<span class="str">"http://tempuri.org/"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;soap:Header&gt;</span>
+    <span class="tag">&lt;tns:AuthHeader&gt;</span>
+      <span class="tag">&lt;tns:Username&gt;</span>testuser<span class="tag">&lt;/tns:Username&gt;</span>
+      <span class="tag">&lt;tns:Password&gt;</span>secret<span class="tag">&lt;/tns:Password&gt;</span>
+    <span class="tag">&lt;/tns:AuthHeader&gt;</span>
+  <span class="tag">&lt;/soap:Header&gt;</span>
+
+  <span class="tag">&lt;soap:Body&gt;</span>
+    <span class="tag">&lt;tns:GetUserDetails&gt;</span>
+      <span class="tag">&lt;tns:UserId&gt;</span>12345<span class="tag">&lt;/tns:UserId&gt;</span>
+    <span class="tag">&lt;/tns:GetUserDetails&gt;</span>
+  <span class="tag">&lt;/soap:Body&gt;</span>
+
+<span class="tag">&lt;/soap:Envelope&gt;</span></pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">WSDL — The API Contract of SOAP</div>
+      <p class="explain">
+        WSDL (Web Services Description Language) is an XML document that describes everything about a SOAP service: available operations, input/output message formats, data types, and endpoints. Think of it as the SOAP equivalent of an OpenAPI spec. Always start SOAP testing by importing the WSDL into SoapUI.
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 16 -->
+<div id="phase16" class="phase-header">
+  <div class="phase-label" style="color:#00e5ff">Phase 16</div>
+  <h2 class="phase-title">API Performance Testing</h2>
+  <p class="phase-desc">A feature that works for 1 user must work for 10,000 concurrent users. Performance testing tells you where your system breaks and why.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 16</span>
+    <span class="module-title">Load &amp; Performance Testing</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Types of Performance Tests</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Test Type</th><th>Goal</th><th>Example Scenario</th></tr></thead>
+          <tbody>
+            <tr><td>Load Testing</td><td>Does it work under expected load?</td><td>Simulate 1000 concurrent users for 30 min</td></tr>
+            <tr><td>Stress Testing</td><td>Where does it break?</td><td>Ramp users to 5000, find breaking point</td></tr>
+            <tr><td>Spike Testing</td><td>Handle sudden traffic burst?</td><td>0 → 2000 users in 10 seconds (flash sale)</td></tr>
+            <tr><td>Soak/Endurance</td><td>Any leaks over long duration?</td><td>500 users for 8 hours (memory leak detection)</td></tr>
+            <tr><td>Volume Testing</td><td>Handle large data volumes?</td><td>GET /orders with 10 million records in DB</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">k6 — Modern Performance Testing</div>
+      <div class="code-block">
+        <div class="code-label">// k6 load test script — test.js</div>
+        <pre><span class="kw">import</span> http <span class="kw">from</span> <span class="str">'k6/http'</span>;
+<span class="kw">import</span> { check, sleep } <span class="kw">from</span> <span class="str">'k6'</span>;
+
+<span class="kw">export const</span> options = {
+  stages: [
+    { duration: <span class="str">'2m'</span>, target: <span class="num">100</span> },  <span class="cmt">// ramp up to 100 users</span>
+    { duration: <span class="str">'5m'</span>, target: <span class="num">100</span> },  <span class="cmt">// stay at 100 for 5 min</span>
+    { duration: <span class="str">'2m'</span>, target: <span class="num">0</span> },    <span class="cmt">// ramp down</span>
+  ],
+  thresholds: {
+    http_req_duration: [<span class="str">'p(95)&lt;500'</span>], <span class="cmt">// 95% of requests &lt; 500ms</span>
+    http_req_failed:   [<span class="str">'rate&lt;0.01'</span>], <span class="cmt">// error rate &lt; 1%</span>
+  },
+};
+
+<span class="kw">export default function</span>() {
+  <span class="kw">const</span> res = http.<span class="fn">get</span>(<span class="str">'https://api.example.com/v1/products'</span>);
+
+  <span class="fn">check</span>(res, {
+    <span class="str">'status is 200'</span>: r => r.status === <span class="num">200</span>,
+    <span class="str">'response &lt; 500ms'</span>: r => r.timings.duration &lt; <span class="num">500</span>,
+  });
+
+  <span class="fn">sleep</span>(<span class="num">1</span>);
+}</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Key Performance Metrics</div>
+      <div class="topic-list">
+        <span class="topic-tag">Throughput (RPS)</span>
+        <span class="topic-tag">Avg Response Time</span>
+        <span class="topic-tag">P90/P95/P99 Latency</span>
+        <span class="topic-tag">Error Rate (%)</span>
+        <span class="topic-tag">Concurrent Users</span>
+        <span class="topic-tag">CPU Utilization</span>
+        <span class="topic-tag">Memory Usage</span>
+        <span class="topic-tag">Database Connection Pool</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 17 -->
+<div id="phase17" class="phase-header">
+  <div class="phase-label" style="color:#f43f5e">Phase 17</div>
+  <h2 class="phase-title">API Security Testing</h2>
+  <p class="phase-desc">APIs are the #1 attack surface in modern applications. Security testing is no longer optional — it is a core QA responsibility.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 17</span>
+    <span class="module-title">Advanced API Security — OWASP Top 10</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">OWASP API Security Top 10</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Broken Object Level Authorization (BOLA)</div><div class="step-text">The most common API vulnerability. User A accesses User B's data by changing an ID in the URL: GET /users/43 when logged in as user 42. Test: always check that resource IDs belong to the authenticated user.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Broken Authentication</div><div class="step-text">Weak tokens, no rate limiting on login, accepting expired tokens. Test: try logging in 1000 times rapidly (brute force), check that expired JWTs are rejected.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Excessive Data Exposure</div><div class="step-text">API returns more fields than the client needs (including sensitive ones like password hashes, SSNs, internal IDs). Test: analyze all response fields and flag any unexpected sensitive data.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Lack of Resource & Rate Limiting</div><div class="step-text">No throttling on expensive operations. Test: send 1000 requests rapidly and verify 429 responses kick in.</div></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><div class="step-title">Injection Attacks</div><div class="step-text">SQL injection, NoSQL injection, command injection via API parameters. Test: send payloads like <code>' OR '1'='1</code>, <code>{"$where": "sleep(5000)"}</code> in string fields.</div></div></div>
+      </div>
+      <div class="code-block">
+        <div class="code-label">// Security Test Payloads to Try in String Fields</div>
+        <pre><span class="cmt">// SQL Injection</span>
+<span class="str">"' OR '1'='1"</span>
+<span class="str">"'; DROP TABLE users; --"</span>
+<span class="str">"1 UNION SELECT password FROM users"</span>
+
+<span class="cmt">// XSS</span>
+<span class="str">"&lt;script&gt;alert('XSS')&lt;/script&gt;"</span>
+<span class="str">"javascript:alert(1)"</span>
+
+<span class="cmt">// Path Traversal</span>
+<span class="str">"../../../etc/passwd"</span>
+<span class="str">"%2e%2e%2f%2e%2e%2fetc%2fpasswd"</span>
+
+<span class="cmt">// BOLA Test</span>
+<span class="cmt">// Logged in as user 42, try accessing user 43's data:</span>
+<span class="kw">GET</span> /api/users/<span class="num">43</span>/bank-details   <span class="cmt">← should return 403, not 200</span></pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 18 -->
+<div id="phase18" class="phase-header">
+  <div class="phase-label" style="color:#7c3aed">Phase 18</div>
+  <h2 class="phase-title">CI/CD Integration</h2>
+  <p class="phase-desc">Your tests only provide value if they run automatically. CI/CD integration ensures every code change is validated before reaching production.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 18</span>
+    <span class="module-title">DevOps for API Testing</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">GitHub Actions — Complete Pipeline Example</div>
+      <div class="code-block">
+        <div class="code-label">// .github/workflows/api-tests.yml</div>
+        <pre><span class="prop">name</span>: API Test Suite
+
+<span class="prop">on</span>:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: <span class="str">'0 */6 * * *'</span>  <span class="cmt"># every 6 hours</span>
+
+<span class="prop">jobs</span>:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    <span class="prop">steps</span>:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: <span class="str">'18'</span>
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        env:
+          BASE_URL: <span class="str">${{ secrets.STAGING_API_URL }}</span>
+          AUTH_TOKEN: <span class="str">${{ secrets.TEST_AUTH_TOKEN }}</span>
+        run: npm test
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: reports/
+
+      - name: Notify Slack on failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 19 -->
+<div id="phase19" class="phase-header">
+  <div class="phase-label" style="color:#00e5ff">Phase 19</div>
+  <h2 class="phase-title">Docker &amp; Containerization</h2>
+  <p class="phase-desc">Containers solve the "works on my machine" problem. Running APIs and tests in Docker ensures reproducible environments across dev, CI, and production.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 19</span>
+    <span class="module-title">Container-Based API Testing</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Docker Compose — Run API + DB + Tests Together</div>
+      <div class="code-block">
+        <div class="code-label">// docker-compose.yml — Full test stack</div>
+        <pre><span class="prop">version</span>: <span class="str">'3.8'</span>
+<span class="prop">services</span>:
+
+  api:
+    image: myapp:latest
+    environment:
+      - DB_HOST=postgres
+      - DB_PASSWORD=testpass
+    ports:
+      - <span class="str">"3000:3000"</span>
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_PASSWORD: testpass
+
+  api-tests:
+    build: ./tests
+    environment:
+      - BASE_URL=http://api:3000
+    depends_on:
+      - api
+    command: npm test</pre>
+      </div>
+      <div class="code-block">
+        <div class="code-label">// Run the full test stack</div>
+        <pre><span class="cmt"># Start everything and run tests</span>
+docker-compose up --abort-on-container-exit --exit-code-from api-tests
+
+<span class="cmt"># Clean up</span>
+docker-compose down -v</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 20 -->
+<div id="phase20" class="phase-header">
+  <div class="phase-label" style="color:#f59e0b">Phase 20</div>
+  <h2 class="phase-title">Microservices Testing</h2>
+  <p class="phase-desc">Modern enterprises run hundreds of microservices. Testing them requires understanding distributed systems, service meshes, and event-driven architectures.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 20</span>
+    <span class="module-title">Enterprise Microservices Validation</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Testing Challenges in Microservices</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Service Dependencies</div><div class="step-text">Service A calls Service B which calls Service C. A bug in C may manifest as a 500 in A. Use distributed tracing (Jaeger, Zipkin) to trace the entire request chain.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Asynchronous APIs</div><div class="step-text">An API might return 202 Accepted immediately, but the actual work happens asynchronously via Kafka or RabbitMQ. You must poll or subscribe to verify eventual completion.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Service Discovery</div><div class="step-text">Services discover each other dynamically. In tests, ensure you're pointing at the correct service instance, not a stale registry entry.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Circuit Breakers</div><div class="step-text">Test that circuit breakers open when a dependent service is down and that the API returns a graceful fallback response rather than hanging.</div></div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Kafka Event Testing</div>
+      <div class="code-block">
+        <div class="code-label">// Python — Verify Kafka event was published after API call</div>
+        <pre><span class="kw">from</span> kafka <span class="kw">import</span> KafkaConsumer
+<span class="kw">import</span> json, requests
+
+<span class="kw">def</span> <span class="fn">test_order_publishes_kafka_event</span>():
+    <span class="cmt"># Set up consumer BEFORE calling API</span>
+    consumer = <span class="fn">KafkaConsumer</span>(
+        <span class="str">'order.created'</span>,
+        bootstrap_servers=[<span class="str">'localhost:9092'</span>],
+        auto_offset_reset=<span class="str">'latest'</span>,
+        consumer_timeout_ms=<span class="num">5000</span>
+    )
+
+    <span class="cmt"># Call the API</span>
+    res = requests.<span class="fn">post</span>(<span class="str">'/api/orders'</span>, json={<span class="str">"productId"</span>: <span class="num">1</span>})
+    order_id = res.json()[<span class="str">"id"</span>]
+
+    <span class="cmt"># Wait for Kafka event</span>
+    events = [<span class="fn">json.loads</span>(msg.value) <span class="kw">for</span> msg <span class="kw">in</span> consumer]
+    <span class="kw">assert</span> <span class="fn">any</span>(e[<span class="str">'orderId'</span>] == order_id <span class="kw">for</span> e <span class="kw">in</span> events)</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 21 -->
+<div id="phase21" class="phase-header">
+  <div class="phase-label" style="color:#10b981">Phase 21</div>
+  <h2 class="phase-title">Cloud API Testing</h2>
+  <p class="phase-desc">Most modern APIs live in the cloud — on AWS, Azure, or GCP. Understanding cloud-native API patterns is essential for testing production-grade systems.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 21</span>
+    <span class="module-title">Cloud &amp; Modern API Systems</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">AWS API Gateway + Lambda Testing</div>
+      <p class="explain">AWS Lambda functions are invoked via API Gateway. Testing serverless APIs involves cold start latency, IAM permission testing, and API Gateway throttling validation.</p>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Cloud Pattern</th><th>What to Test</th></tr></thead>
+          <tbody>
+            <tr><td>API Gateway throttling</td><td>Default 10,000 RPS limit — verify 429 when exceeded</td></tr>
+            <tr><td>Lambda cold starts</td><td>First invocation latency (100-3000ms) vs warm (1-10ms)</td></tr>
+            <tr><td>IAM Authorization</td><td>Requests without correct IAM role return 403</td></tr>
+            <tr><td>Cognito Auth</td><td>Unauthenticated requests to protected endpoints return 401</td></tr>
+            <tr><td>VPC endpoints</td><td>Private APIs unreachable from outside VPC</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 22 -->
+<div id="phase22" class="phase-header">
+  <div class="phase-label" style="color:#f43f5e">Phase 22</div>
+  <h2 class="phase-title">Mobile API Testing</h2>
+  <p class="phase-desc">Mobile apps use the same backend APIs but with different patterns — certificate pinning, compressed payloads, and device-specific headers add complexity to testing.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 22</span>
+    <span class="module-title">Mobile Backend APIs</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Intercepting Mobile Traffic</div>
+      <p class="explain">To test mobile APIs, you need to intercept traffic between the device and server. Tools like Charles Proxy act as a man-in-the-middle proxy that decrypts HTTPS traffic.</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Configure Device Proxy</div><div class="step-text">Set your phone's WiFi proxy to point to your machine running Charles Proxy (port 8888).</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Install Charles Certificate</div><div class="step-text">Install the Charles root certificate on the device and trust it in device settings to enable SSL decryption.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Observe &amp; Modify</div><div class="step-text">Capture API calls as you use the app. Replay requests with modified payloads to test edge cases.</div></div></div>
+      </div>
+      <div class="info-box warn">
+        <div class="info-icon">⚠️</div>
+        <div class="info-body">
+          <div class="info-title">Certificate Pinning</div>
+          <div class="info-text">Production apps often use certificate pinning — the app only accepts its specific server certificate and rejects proxy certificates. To test these apps in a QA environment, pinning must be disabled in the debug build. Never bypass pinning in production apps.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 23 -->
+<div id="phase23" class="phase-header">
+  <div class="phase-label" style="color:#7c3aed">Phase 23</div>
+  <h2 class="phase-title">Real Industry Projects</h2>
+  <p class="phase-desc">Theory without practice is hollow. These four projects simulate real production systems across different industries, each with unique testing challenges.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 23</span>
+    <span class="module-title">End-to-End Project Implementations</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Project 1 — Ecommerce API Automation</div>
+      <div class="callout">
+        <div class="callout-title">Complete Ecommerce Test Workflow</div>
+        <p>
+          <strong>Scope:</strong> User Auth → Product Catalog → Cart Management → Order Placement → Payment Processing → Order Status Tracking<br><br>
+          <strong>Test Coverage:</strong><br>
+          ✅ User registration, login, logout, token refresh<br>
+          ✅ Product CRUD (admin only), search, filtering, pagination<br>
+          ✅ Cart: add item, update quantity, remove item, clear cart<br>
+          ✅ Order placement: successful, out of stock, invalid promo code<br>
+          ✅ Payment: success, card decline, timeout simulation<br>
+          ✅ DB validation: order records, inventory decrement, payment logs<br>
+          ✅ Security: BOLA on order IDs, payment tampering, SQL injection<br>
+          ✅ Performance: Black Friday load simulation (5000 concurrent users)
+        </p>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Project 2 — Healthcare API System</div>
+      <div class="callout">
+        <div class="callout-title">Healthcare & HIPAA Compliance Testing</div>
+        <p>
+          <strong>Unique Challenges:</strong> PHI (Protected Health Information) must never be exposed without authorization. HIPAA audit requirements mandate that all access is logged.<br><br>
+          ✅ Patient registration with PII validation<br>
+          ✅ Appointment booking with doctor availability check<br>
+          ✅ EMR access: patient reads own records, doctor reads assigned patients<br>
+          ✅ Cross-patient access attempts → must return 403<br>
+          ✅ All PHI access logged in audit trail → DB verification<br>
+          ✅ Data encryption in transit (HTTPS) and at rest verification<br>
+          ✅ Role-based access: patient vs nurse vs doctor vs admin
+        </p>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Project 3 — Banking APIs</div>
+      <div class="callout">
+        <div class="callout-title">Financial System API Testing</div>
+        <p>
+          <strong>Critical Scenarios:</strong><br>
+          ✅ Fund transfer: successful, insufficient balance, invalid account<br>
+          ✅ Concurrent transactions: race condition testing (transfer same amount twice simultaneously)<br>
+          ✅ Balance verification: API response vs DB vs transaction log<br>
+          ✅ Idempotency keys: duplicate payment requests must not double-charge<br>
+          ✅ Transaction rollback: partial failures must fully revert<br>
+          ✅ Encryption: sensitive data must be masked in responses (card****1234)<br>
+          ✅ Fraud detection API: suspicious transaction flagging
+        </p>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Project 4 — Social Media APIs</div>
+      <div class="callout">
+        <div class="callout-title">Social Platform Testing</div>
+        <p>
+          ✅ Post CRUD: create, edit, delete, visibility settings (public/private/friends)<br>
+          ✅ Comment threading: nested replies, max depth validation<br>
+          ✅ Real-time notifications via WebSocket<br>
+          ✅ Feed algorithm: verify only followed users' posts appear<br>
+          ✅ Block functionality: blocked users cannot see posts or send messages<br>
+          ✅ Rate limiting: comment spam prevention<br>
+          ✅ Content moderation API: flagging inappropriate content
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 24 -->
+<div id="phase24" class="phase-header">
+  <div class="phase-label" style="color:#00e5ff">Phase 24</div>
+  <h2 class="phase-title">Reporting &amp; Monitoring</h2>
+  <p class="phase-desc">Test results are only valuable if they're visible, understandable, and actionable by the entire team — not just engineers.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 24</span>
+    <span class="module-title">Reporting Ecosystem</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Allure Reports — Enterprise-Grade Test Reporting</div>
+      <p class="explain">Allure generates beautiful, interactive HTML reports with test history, trend analysis, and failure screenshots. It's the industry standard for SDET reporting.</p>
+      <div class="code-block">
+        <div class="code-label">// Python + Allure annotations</div>
+        <pre><span class="kw">import</span> allure
+
+<span class="fn">@allure.feature</span>(<span class="str">"Orders"</span>)
+<span class="fn">@allure.story</span>(<span class="str">"Place Order"</span>)
+<span class="fn">@allure.severity</span>(allure.severity_level.CRITICAL)
+<span class="kw">def</span> <span class="fn">test_place_order</span>(api_session):
+    <span class="kw">with</span> <span class="fn">allure.step</span>(<span class="str">"Authenticate user"</span>):
+        token = <span class="fn">get_auth_token</span>()
+
+    <span class="kw">with</span> <span class="fn">allure.step</span>(<span class="str">"Place order"</span>):
+        res = api_session.<span class="fn">post</span>(<span class="str">'/orders'</span>, json={<span class="str">"productId"</span>: <span class="num">1</span>})
+
+    <span class="kw">with</span> <span class="fn">allure.step</span>(<span class="str">"Verify response"</span>):
+        <span class="kw">assert</span> res.status_code == <span class="num">201</span>
+        allure.<span class="fn">attach</span>(<span class="fn">str</span>(res.json()), name=<span class="str">"Response Body"</span>)</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">API Health Monitoring — Production</div>
+      <p class="explain">Testing doesn't stop at deployment. Production APIs must be continuously monitored with synthetic checks that run your test scenarios against live endpoints every few minutes.</p>
+      <div class="tool-chips">
+        <span class="tool-chip chip-cyan">Grafana</span>
+        <span class="tool-chip chip-amber">Kibana</span>
+        <span class="tool-chip chip-green">Prometheus</span>
+        <span class="tool-chip chip-purple">Datadog</span>
+        <span class="tool-chip chip-rose">PagerDuty</span>
+        <span class="tool-chip chip-cyan">New Relic</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 25 -->
+<div id="phase25" class="phase-header">
+  <div class="phase-label" style="color:#84cc16">Phase 25</div>
+  <h2 class="phase-title">Git &amp; Collaboration</h2>
+  <p class="phase-desc">Your automation code is production code. It must be version-controlled, reviewed, and maintained like any other software artifact.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 25</span>
+    <span class="module-title">Version Control for QA Engineers</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Essential Git Workflow for SDETs</div>
+      <div class="code-block">
+        <div class="code-label">// Daily Git workflow for a QA engineer</div>
+        <pre><span class="cmt"># Create feature branch for new test suite</span>
+git checkout -b feature/payment-api-tests
+
+<span class="cmt"># Stage, commit with descriptive message</span>
+git add tests/payment/
+git commit -m "test: add payment API tests for charge, refund, dispute flows"
+
+<span class="cmt"># Push and open PR for code review</span>
+git push origin feature/payment-api-tests
+
+<span class="cmt"># After review approval, merge to main</span>
+git checkout main
+git merge feature/payment-api-tests
+
+<span class="cmt"># Tag a release</span>
+git tag -a v2.1.0 -m "Payment API test suite complete"
+git push --tags</pre>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Branching Strategy</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Branch</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td>main</td><td>Stable, always passing tests. CI/CD deploys from here</td></tr>
+            <tr><td>develop</td><td>Integration branch, latest merged features</td></tr>
+            <tr><td>feature/xxx</td><td>New test suite or framework feature</td></tr>
+            <tr><td>hotfix/xxx</td><td>Urgent fix to a test that's blocking CI</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 26 -->
+<div id="phase26" class="phase-header">
+  <div class="phase-label" style="color:#ec4899">Phase 26</div>
+  <h2 class="phase-title">Interview Preparation</h2>
+  <p class="phase-desc">Knowing the material is only half the battle. You must also be able to articulate it confidently under pressure, live-code in Postman, and design frameworks on a whiteboard.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 26</span>
+    <span class="module-title">API Testing Interview Mastery</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Fresher-Level Interview Questions</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">Q</div><div class="step-body"><div class="step-title">What is the difference between PUT and PATCH?</div><div class="step-text"><strong>Answer:</strong> PUT replaces the entire resource. PATCH makes a partial update. If a user has {name, email, age} and you PUT with only {name}, the email and age are erased. With PATCH, only name changes.</div></div></div>
+        <div class="step"><div class="step-num">Q</div><div class="step-body"><div class="step-title">What is the difference between 401 and 403?</div><div class="step-text"><strong>Answer:</strong> 401 means "you haven't identified yourself" (no/invalid token). 403 means "I know who you are, but you're not allowed to do this" (valid token, insufficient permissions).</div></div></div>
+        <div class="step"><div class="step-num">Q</div><div class="step-body"><div class="step-title">What is API testing? Why is it better than UI testing?</div><div class="step-text"><strong>Answer:</strong> API testing validates the service layer directly, without UI. It's faster (no browser rendering), more stable (APIs change less frequently than UI), catches bugs earlier in the cycle, and provides better coverage of edge cases.</div></div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Intermediate-Level Interview Questions</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">Q</div><div class="step-body"><div class="step-title">How do you handle authentication in API automation?</div><div class="step-text"><strong>Answer:</strong> I create a login fixture/utility that runs once per test session, extracts the JWT from the response, and stores it. All subsequent requests include it in the Authorization header. Token refresh logic handles expiry gracefully.</div></div></div>
+        <div class="step"><div class="step-num">Q</div><div class="step-body"><div class="step-title">What is contract testing? Why do you need it in microservices?</div><div class="step-text"><strong>Answer:</strong> Contract testing verifies that a consumer and provider agree on the API interface. In microservices, teams deploy independently. Without contract tests, Team A could rename a response field and break Team B's service in production without any tests failing locally.</div></div></div>
+        <div class="step"><div class="step-num">Q</div><div class="step-body"><div class="step-title">How do you test an asynchronous API?</div><div class="step-text"><strong>Answer:</strong> Poll the status endpoint until the operation completes (with a timeout), or subscribe to a WebSocket/webhook/Kafka topic and wait for the completion event. Always assert both that the initial call returns 202 and that the eventual state is correct.</div></div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Advanced / Live Coding Round</div>
+      <div class="callout">
+        <div class="callout-title">Typical Live Challenge</div>
+        <p>"Here's the Swagger doc for a simple TODO API. In 30 minutes, write tests in Postman or your language of choice that cover: creating a TODO, listing all TODOs, updating a TODO, deleting it, and three negative test cases of your choosing."</p>
+      </div>
+      <div class="info-box tip">
+        <div class="info-icon">🎯</div>
+        <div class="info-body">
+          <div class="info-title">Pro Tips for Live Rounds</div>
+          <div class="info-text">
+            (1) Start with the happy path to get something working, then add negative tests.<br>
+            (2) Always chain: create → verify → cleanup. Idempotent tests are professional.<br>
+            (3) Comment your assertions — explain WHY you're checking what you're checking.<br>
+            (4) Pick 3 meaningful negative cases: missing field, unauthorized access, invalid type.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 27 -->
+<div id="phase27" class="phase-header">
+  <div class="phase-label" style="color:#3b82f6">Phase 27</div>
+  <h2 class="phase-title">Real Industry Best Practices</h2>
+  <p class="phase-desc">Technical skills without professional processes won't get you far in enterprise teams. This phase teaches you how senior QA engineers operate.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 27</span>
+    <span class="module-title">Professional QA Engineering Standards</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Test Strategy Document</div>
+      <p class="explain">Before writing a single test, a senior QA engineer writes a Test Strategy. This answers: What are we testing? What are we NOT testing? What are the risks? What environments do we need? What is the automation vs manual ratio?</p>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Agile QA Workflow in a Sprint</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Sprint Planning</div><div class="step-text">Review user stories, raise questions ("what if the payment gateway is down?"), identify edge cases developers might not have considered, estimate test effort.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Shift-Left Testing</div><div class="step-text">Review API design (Swagger/OpenAPI spec) before development starts. Catch design flaws early — a naming inconsistency in a spec costs 0 to fix; a naming inconsistency in production costs a migration.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Test Execution</div><div class="step-text">Run manual exploratory testing alongside automated test execution. Log bugs with reproduction steps, request/response payloads, environment details, and severity.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Sprint Review</div><div class="step-text">Report test coverage, bugs found vs resolved, automation percentage, and remaining risks to the team and stakeholders.</div></div></div>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">Bug Report Quality Standard</div>
+      <div class="code-block">
+        <div class="code-label">// Professional Bug Report Template</div>
+        <pre><span class="prop">Title</span>:       POST /orders returns 201 but no DB record created
+<span class="prop">Severity</span>:    Critical
+<span class="prop">Environment</span>: Staging | API v2.3.1 | 2024-01-15
+
+<span class="prop">Steps to Reproduce</span>:
+1. POST /v1/orders with valid payload (see below)
+2. Receive 201 Created response with order ID "ORD-9981"
+3. Query database: SELECT * FROM orders WHERE id='ORD-9981'
+4. Result: 0 rows returned
+
+<span class="prop">Request</span>:
+POST /v1/orders
+Authorization: Bearer eyJhbGci...
+{ "productId": 5, "quantity": 2, "addressId": "addr-123" }
+
+<span class="prop">Expected</span>: Order record present in database
+<span class="prop">Actual</span>:   Database record missing; order appears to be rolled back
+
+<span class="prop">Impact</span>: Customer charged but order not fulfilled — P0 blocker</pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 28 -->
+<div id="phase28" class="phase-header">
+  <div class="phase-label" style="color:#f59e0b">Phase 28</div>
+  <h2 class="phase-title">AI + Modern API Ecosystem</h2>
+  <p class="phase-desc">The frontier of API testing. AI-powered APIs introduce entirely new failure modes that traditional testing approaches don't address.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Module 28</span>
+    <span class="module-title">Future of API Testing</span>
+  </div>
+  <div class="module-body">
+
+    <div class="submodule">
+      <div class="submodule-title">Testing AI/LLM APIs</div>
+      <p class="explain">LLM APIs (like OpenAI, Anthropic's Claude) present unique testing challenges because responses are non-deterministic — the same input can produce different outputs. Traditional assertion-based testing must be augmented with semantic evaluation.</p>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>AI API Testing Challenge</th><th>Testing Approach</th></tr></thead>
+          <tbody>
+            <tr><td>Non-deterministic responses</td><td>Semantic similarity scoring, not exact match</td></tr>
+            <tr><td>Hallucination detection</td><td>Fact-check responses against known ground truth</td></tr>
+            <tr><td>Response consistency</td><td>Same prompt N times → measure variance in key fields</td></tr>
+            <tr><td>Latency variability</td><td>Set P99 latency threshold, not just average</td></tr>
+            <tr><td>Token limit testing</td><td>Send max-length inputs, verify graceful handling</td></tr>
+            <tr><td>Prompt injection</td><td>Adversarial prompts that try to jailbreak the model</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="submodule">
+      <div class="submodule-title">API Virtualization &amp; Service Mocking</div>
+      <p class="explain">When a dependent service isn't available (third-party payment gateway, SMS provider), you mock it. API virtualization creates a simulation that behaves like the real service, enabling testing without actual external calls.</p>
+      <div class="tool-chips">
+        <span class="tool-chip chip-cyan">WireMock</span>
+        <span class="tool-chip chip-purple">MockServer</span>
+        <span class="tool-chip chip-green">Prism</span>
+        <span class="tool-chip chip-amber">Postman Mock Servers</span>
+      </div>
+      <div class="code-block">
+        <div class="code-label">// WireMock — Mock a payment gateway</div>
+        <pre><span class="cmt">// Stub: when POST /payments called with card 4111..., return success</span>
+stubFor(post(urlEqualTo(<span class="str">"/payments"</span>))
+    .withRequestBody(containing(<span class="str">"4111111111111111"</span>))
+    .willReturn(aResponse()
+        .withStatus(<span class="num">200</span>)
+        .withHeader(<span class="str">"Content-Type"</span>, <span class="str">"application/json"</span>)
+        .withBody(<span class="str">"""{"transactionId":"TXN-001","status":"SUCCESS"}"""</span>)
+        .withFixedDelay(<span class="num">200</span>)));   <span class="cmt">// simulate 200ms latency</span></pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BONUS MODULES -->
+<div id="bonus" class="phase-header">
+  <div class="phase-label" style="color:#f59e0b">Bonus Modules</div>
+  <h2 class="phase-title">Linux, Networking &amp; Advanced Debugging</h2>
+  <p class="phase-desc">The tools that separate good testers from great ones — command-line fluency, network understanding, and the ability to diagnose issues at any layer.</p>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Bonus 1</span>
+    <span class="module-title">Linux for API Testers</span>
+  </div>
+  <div class="module-body">
+    <div class="submodule">
+      <div class="submodule-title">Essential CLI Commands for API Testing</div>
+      <div class="code-block">
+        <div class="code-label">// cURL — The universal API testing CLI tool</div>
+        <pre><span class="cmt"># GET request with auth header</span>
+curl -X GET https://api.example.com/users \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Accept: application/json"
+
+<span class="cmt"># POST with JSON body</span>
+curl -X POST https://api.example.com/users \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"test@test.com"}' \
+  -v  <span class="cmt">← verbose: shows request + response headers</span>
+
+<span class="cmt"># Test with self-signed certificate (dev environments)</span>
+curl -k https://dev-api.example.com/health
+
+<span class="cmt"># Save response to file</span>
+curl https://api.example.com/export -o data.json
+
+<span class="cmt"># Check response time</span>
+curl -o /dev/null -s -w "%{time_total}" https://api.example.com/health</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Bonus 2</span>
+    <span class="module-title">Networking for QA Engineers</span>
+  </div>
+  <div class="module-body">
+    <div class="submodule">
+      <div class="submodule-title">Key Networking Concepts Every API Tester Needs</div>
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Concept</th><th>Why It Matters for API Testing</th></tr></thead>
+          <tbody>
+            <tr><td>TCP/IP</td><td>Understanding connection establishment helps diagnose timeout vs refused connection errors</td></tr>
+            <tr><td>DNS</td><td>Slow DNS lookups inflate response times; test APIs by IP to isolate DNS latency</td></tr>
+            <tr><td>TLS/SSL</td><td>Certificate errors are common in test environments; understand handshake to debug them</td></tr>
+            <tr><td>Ports</td><td>80 (HTTP), 443 (HTTPS), 5432 (PostgreSQL), 6379 (Redis) — know what's running where</td></tr>
+            <tr><td>Load Balancer</td><td>Sticky sessions, round-robin, health checks affect test reliability in cluster environments</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header">
+    <span class="module-num">Bonus 3</span>
+    <span class="module-title">Advanced Debugging Techniques</span>
+  </div>
+  <div class="module-body">
+    <div class="submodule">
+      <div class="submodule-title">HAR Files — Capturing Full Browser API Traffic</div>
+      <p class="explain">A HAR (HTTP Archive) file captures all network requests from a browser session with full request/response details, timing, and headers. Invaluable for debugging production issues that only happen in the browser.</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Capture HAR</div><div class="step-text">Open Chrome DevTools → Network tab → Reproduce the bug → Right-click → "Save all as HAR with content"</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Analyze</div><div class="step-text">Use haranalyzer.io or import into Postman to replay individual requests and inspect headers, cookies, and timings.</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Reproduce in Automation</div><div class="step-text">Extract the failing request from the HAR and write an automated test around it to prevent regression.</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOOL STACK SUMMARY ── -->
+<div style="margin:4rem 0;">
+  <div class="phase-header" style="margin-top:2rem">
+    <div class="phase-label" style="color:#00e5ff">Reference</div>
+    <h2 class="phase-title">Recommended Tool Stack</h2>
+  </div>
+  <div class="module">
+    <div class="module-body">
+      <div class="compare-table" style="overflow-x:auto">
+        <table class="compare-table">
+          <thead><tr><th>Category</th><th>Primary Tool</th><th>Alternatives</th></tr></thead>
+          <tbody>
+            <tr><td>Manual API Testing</td><td>Postman</td><td>Insomnia, Hoppscotch</td></tr>
+            <tr><td>JS Automation</td><td>Supertest + Jest</td><td>Playwright API, Axios + Mocha</td></tr>
+            <tr><td>Python Automation</td><td>Pytest + Requests</td><td>HTTPX, Robot Framework</td></tr>
+            <tr><td>Java Automation</td><td>Rest Assured + TestNG</td><td>JUnit 5, Karate DSL</td></tr>
+            <tr><td>Performance Testing</td><td>k6</td><td>JMeter, Gatling, Locust</td></tr>
+            <tr><td>Security Testing</td><td>Burp Suite</td><td>OWASP ZAP, Nikto</td></tr>
+            <tr><td>CI/CD</td><td>GitHub Actions</td><td>Jenkins, GitLab CI, CircleCI</td></tr>
+            <tr><td>Mocking</td><td>WireMock</td><td>Postman Mock Servers, Prism</td></tr>
+            <tr><td>Reporting</td><td>Allure</td><td>Extent Reports, HTML Reporter</td></tr>
+            <tr><td>API Docs / Contract</td><td>Swagger / OpenAPI</td><td>Pact, API Blueprint</td></tr>
+            <tr><td>Monitoring</td><td>Grafana + Prometheus</td><td>Datadog, New Relic, Kibana</td></tr>
+            <tr><td>Version Control</td><td>Git + GitHub</td><td>GitLab, Bitbucket</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FINAL OUTCOME ── -->
+<div class="final-banner">
+  <h2>Final Outcome After Completion</h2>
+  <p>By completing this roadmap, you can test any API at any level — from simple CRUD to distributed microservices in production — and work effectively in any modern engineering team.</p>
+  <div class="topic-list" style="justify-content:center; margin:1.5rem 0">
+    <span class="topic-tag">✅ Manual API Testing</span>
+    <span class="topic-tag">✅ Automation Frameworks</span>
+    <span class="topic-tag">✅ Database Validation</span>
+    <span class="topic-tag">✅ Security Testing</span>
+    <span class="topic-tag">✅ Performance Testing</span>
+    <span class="topic-tag">✅ CI/CD Integration</span>
+    <span class="topic-tag">✅ Microservices</span>
+    <span class="topic-tag">✅ Cloud-Native APIs</span>
+    <span class="topic-tag">✅ Interview Ready</span>
+  </div>
+  <p style="margin-top:1.5rem; font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:var(--text-dim)">You are qualified to work as:</p>
+  <div class="role-grid">
+    <span class="role-chip">QA Engineer</span>
+    <span class="role-chip">SDET</span>
+    <span class="role-chip">Automation Engineer</span>
+    <span class="role-chip">API Automation Engineer</span>
+    <span class="role-chip">Backend QA Engineer</span>
+    <span class="role-chip">Performance Tester</span>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<a href="#top" class="back-top" title="Back to top">↑</a>
+
+</body>
+</html>
